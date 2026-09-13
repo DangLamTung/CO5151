@@ -2,9 +2,9 @@
 
 **Course**: CO5151 — Advanced Agentic AI | **Track**: Application Track | **Semester**: HK261 (Sep 2026)  
 **Team**:
-* **Dang Lam Tung (Lead & Multi-Agent Orchestrator)**: MAS architecture design, orchestrator loop & retrieval-decision policy implementation, web UI integration, and reproducible repo packaging (`run.sh`/Docker).
-* **Nguyen Trung Phong (LegalGraph & Memory Engineer)**: Neo4j/Qdrant graph construction, permissioned MCP toolset development, selective edge traversal algorithm, and enterprise SQLite memory management.
-* **Vu Viet Hung (Safety Verification & Evaluation Engineer)**: Claim Auditor engine development, Guarded Actions gate with audit logging, Threat Model v0 testing ($\ge 10$ injection cases), and 20-task benchmark execution across 3 seeds.
+* **Dang Lam Tung**: Agent architecture design, orchestrator loop & retrieval-decision policy implementation, web UI integration, and reproducible repo packaging (`run.sh`/Docker).
+* **Nguyen Trung Phong**: Neo4j/Qdrant graph construction, permissioned MCP toolset development, selective edge traversal algorithm, and enterprise SQLite memory management.
+* **Vu Viet Hung**: Claim Auditor engine development, Guarded Actions gate with audit logging, Threat Model v0 testing ($\ge 10$ injection cases), and 20-task benchmark execution across 3 seeds.
 
 ---
 
@@ -38,14 +38,6 @@
 
 ```mermaid
 flowchart TD
-    subgraph SBV-LawGraph Pipeline [Prior Work: SBV-LawGraph ACIIDS 2026 - Static 1-Pass Pipeline]
-        Q1[User Query] --> LR[Hybrid Retrieval: BM25 + Dense Qdrant]
-        LR --> RR[Mechanical 1-Hop Graph Dump\nPrecision@2 = 0.37-0.39 Noise]
-        RR --> PromptConcat[Rigid Prompt Concat: Query + Raw Text + 1-Hop Graph]
-        PromptConcat --> LLMGen[Single-Pass LLM Generation]
-        LLMGen --> Ans1[Static Answer Text\nRegex Citation Presence Check Only]
-    end
-
     subgraph Our System [Our Solution: Autonomous Multi-Agent Compliance System with Google ADK]
         Q2[Enterprise Compliance Scenario] --> ContextMgr[(Enterprise Context\nEntity Tier & Capital in SQLite)]
         ContextMgr --> Orchestrator[Orchestrator Agent\nGoogle ADK Coordinator & Supervisor]
@@ -58,7 +50,7 @@ flowchart TD
 
         Orchestrator -->|Verify Real-Time Validity| Agent2[Legal Web Search Agent\nTra cứu vbpl.vn & congbao.chinhphu.vn]
         Agent2 -->|Scoped Google Search| Tool2[Official Portal Search MCP\nsite:vbpl.vn OR site:congbao.chinhphu.vn]
-        Tool2 -->|In-Force Status & Gazette Records| Agent2
+        Tool2 -->|In-Force Status & Legal Law Update Records| Agent2
         Agent2 -->|Validity Confirmation| Orchestrator
         
         %% Drafting Phase
@@ -81,7 +73,7 @@ flowchart TD
 ### 3.2 Role-Segregated Agent Specialization
 1. **Orchestrator Agent (Supervisor)**: Evaluates user compliance inquiries against enterprise memory, executes the **retrieval-decision policy**, coordinates specialist agents via a shared LangGraph state, and controls iterative backtracking.
 2. **LawGraph Research Agent (Structural Retrieval Specialist)**: Executes targeted queries on Qdrant and Neo4j. Instead of mechanical 1-hop dumping, it performs **selective edge traversal**: following only the specific *Amend* or *Guide* relationship connected to the queried sub-clause, dramatically reducing context noise.
-3. **Live Gazette Agent (Real-Time Status Specialist)**: Queries the National Database of Legal Documents (VBPL) to confirm current legal effectiveness, catching newly issued circulars or suspensions issued after the offline graph was indexed.
+3. **Live Legal Law Update Agent (Real-Time Status Specialist)**: Queries the National Database of Legal Documents (VBPL) to confirm current legal effectiveness, catching newly issued circulars or suspensions issued after the offline graph was indexed.
 4. **Claim Auditor Agent (Grounding Verifier - Critic)**: Decomposes candidate compliance guidance into atomic propositions and audits each claim against the retrieved statutory text. Refuses unverified claims before they reach the user.
 5. **Compliance Dossier Drafter (Synthesizer & Actor)**: Formats verified conclusions into standardized SME administrative and legal compliance matrices (Markdown/DOCX) and drafts administrative filing payloads.
 
@@ -91,8 +83,8 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | **LawGraph Agent** | `query_lawgraph` | **Read-only** | Executes targeted hybrid search over Qdrant vectors and filtered Neo4j subgraphs. |
 | **LawGraph Agent** | `trace_selective_edge` | **Read-only** | Follows specific *Amend* or *Guide* relationships for a designated legal clause. |
-| **Gazette Agent** | `verify_vbpl_status` | **Read-only** | Queries the National Database of Legal Documents (VBPL) for official in-force status. |
-| **Gazette Agent** | `search_gazette_portal`| **Read-only** | Searches ministerial portals for recent decrees and official guidance circulars. |
+| **Legal Law Update Agent** | `verify_vbpl_status` | **Read-only** | Queries the National Database of Legal Documents (VBPL) for official in-force status. |
+| **Legal Law Update Agent** | `search_Legal Law Update_portal`| **Read-only** | Searches ministerial portals for recent decrees and official guidance circulars. |
 | **Dossier Drafter** | `export_compliance_matrix`| **Reversible-write** | Saves structured audit matrices (Markdown/DOCX) to `./workspace/dossiers/`. |
 | **Dossier Drafter** | `submit_portal_filing` | **Irreversible-write** | Submits administrative filing payload to mock SBV portal. **Guarded by human confirmation.** |
 
@@ -109,7 +101,7 @@ flowchart TD
 
 1. **Typical (Chained Amendment Resolution for Foreign Currency Reserves)**:
    - *Scenario*: An HR manager at an SME asks: *"What are the qualification and document requirements to sponsor an internal transfer work permit for a foreign technical specialist in 2026?"*
-   - *Agent Execution*: The Orchestrator checks enterprise memory (confirming the firm's corporate structure and operational lines), directs the LegalGraph Agent to query Decree No. 152/2020/ND-CP, selectively follows the outgoing Amends edge to Decree No. 70/2023/ND-CP, and isolates the revised specialist criteria. The Gazette Agent verifies via the VBPL portal that Decree 70 remains in active legal force. The Claim Auditor cross-checks the required years of verified experience against the statutory text. Finally, the Dossier Drafter synthesizes the procedural compliance checklist and document templates.
+   - *Agent Execution*: The Orchestrator checks enterprise memory (confirming the firm's corporate structure and operational lines), directs the LegalGraph Agent to query Decree No. 152/2020/ND-CP, selectively follows the outgoing Amends edge to Decree No. 70/2023/ND-CP, and isolates the revised specialist criteria. The Legal Law Update Agent verifies via the VBPL portal that Decree 70 remains in active legal force. The Claim Auditor cross-checks the required years of verified experience against the statutory text. Finally, the Dossier Drafter synthesizes the procedural compliance checklist and document templates.
 2. **Edge Case (Multi-Condition Scenario Audit with Missing Information)**:
    - *Scenario*: An SME business owner asks whether their company qualifies for statutory corporate income tax (CIT) reductions and tax deferrals under current SME support decrees.
    - *Agent Execution*: The Orchestrator retrieves the governing Decree and identifies three cumulative statutory requirements: (a) annual gross revenue below 200 billion VND, (b) average annual headcount participating in compulsory social insurance, and (c) not operating in excluded real estate or financial service sectors. The agent queries enterprise memory, confirms the revenue ceiling is satisfied, but identifies that headcount and business sector classification are unrecorded. Rather than fabricating assumptions, the agent halts the pipeline, prompts the user for the missing organizational data, and resumes the compliance assessment once verified.
@@ -147,7 +139,7 @@ The system is evaluated simultaneously across four operational metric groups:
 * **Single-Agent ReAct Baseline:** A monolithic agent invoking all tools directly without role segregation or critic auditing.
 
 ### Ablation Configurations (Isolating individual architectural mechanisms)
-* **Configuration 1 (Full Multi-Agent System):** The complete pipeline (Orchestrator + LegalGraph + Live Gazette + Claim Auditor).
+* **Configuration 1 (Full Multi-Agent System):** The complete pipeline (Orchestrator + LegalGraph + Live Legal Law Update + Claim Auditor).
 * **Configuration 2 (w/o Claim Auditor):** Disabling atomic proposition auditing to measure the surge in citation hallucinations.
 * **Configuration 3 (w/o Selective Edge Traversal):** Replacing targeted edge filtering with unguided 1-hop graph dumps to measure the drop in Precision@2 and context dilution.
 
@@ -176,6 +168,15 @@ Executed across $\ge 3$ random seeds per task, reporting empirical means alongsi
 
 ---
 
+| Milestone | Member 1 (Lead & Orchestrator) | Member 2 (LawGraph Tool Engineer) | Member 3 (Verification & Memory) | Member 4 (Security & Eval) |
+| :--- | :--- | :--- | :--- | :--- |
+| **W2–3: Setup** | Design LangGraph MAS state machine & agent protocols | Deploy Neo4j graph & Qdrant as MCP tool | Build VBPL Legal Law Update scraper & SQLite enterprise schema | Set up evaluation harness with 100-QA SBV dataset |
+| **W4–6: Build** | Implement retrieval-decision policy & message handoffs | Build `trace_selective_edge` tool for Neo4j Cypher | Build per-claim proposition extractor & verifier | Build 10 prompt injection test cases & audit logger |
+| **W7: Checkpoint (D2)** | Deliver working MAS demo on 5 scenario audits | Measure latency and Precision@2 of selective traversal | Connect Claim Auditor to LawGraph & Legal Law Update outputs | Report preliminary numbers vs. SBV-LawGraph baseline |
+| **W8–10: Hardening** | Optimize Neo4j graph queries for multi-tier statutory laws | Refine per-claim proposition extractor & error handling | Run full 10-test injection suite; SME compliance officer walkthrough | 
+| **W11–12: Defense (D3/D4)** | Package reproducible repo (`run.sh`, Docker) | Finalize MCP wrappers and caching | Benchmark ablations (no Auditor / no selective traversal) | Run full 100-QA benchmark across 3 seeds; lead defense |
+
+---
 ## 7. Related Systems & References
 
 [1] K. N. Phan, X.-B. Le, and T. T. Quan, "SBV-LawGraph: A Hybrid RAG Approach Integrating Knowledge Graph for the State Bank of Vietnam Legal Documents," in *Proceedings of the 18th Asian Conference on Intelligent Information and Database Systems (ACIIDS 2026)*, Springer, 2026.
@@ -202,15 +203,6 @@ Executed across $\ge 3$ random seeds per task, reporting empirical means alongsi
 
 [12] H. Pham, N. Duong, and H. Pham, "Agentic RAG-Based Legal Advisory Chatbot: A Knowledge-Driven Approach for Vietnamese Legal System," in *Proceedings of the 17th International Joint Conference on Knowledge Discovery, Knowledge Engineering and Knowledge Management (IC3K/KDIR 2025)*, pp. 354–361, 2025. [Online]. Available: https://doi.org/10.5220/0013735400004000
 
----
-
-| Milestone | Member 1 (Lead & Orchestrator) | Member 2 (LawGraph Tool Engineer) | Member 3 (Verification & Memory) | Member 4 (Security & Eval) |
-| :--- | :--- | :--- | :--- | :--- |
-| **W2–3: Setup** | Design LangGraph MAS state machine & agent protocols | Deploy SBV-LawGraph Neo4j graph & Qdrant as MCP tool | Build VBPL gazette scraper & SQLite enterprise schema | Set up evaluation harness with 100-QA SBV dataset |
-| **W4–6: Build** | Implement retrieval-decision policy & message handoffs | Build `trace_selective_edge` tool for Neo4j Cypher | Build per-claim proposition extractor & verifier | Build 10 prompt injection test cases & audit logger |
-| **W7: Checkpoint (D2)** | Deliver working MAS demo on 5 scenario audits | Measure latency and Precision@2 of selective traversal | Connect Claim Auditor to LawGraph & Gazette outputs | Report preliminary numbers vs. SBV-LawGraph baseline |
-| **W8–10: Hardening** | Connect guarded filing tool & confirmation modal | Optimize Neo4j graph queries for multi-tier statutory laws | Refine per-claim proposition extractor & error handling | Run full 10-test injection suite; SME compliance officer walkthrough |
-| **W11–12: Defense (D3/D4)** | Package reproducible repo (`run.sh`, Docker) | Finalize MCP wrappers and caching | Benchmark ablations (no Auditor / no selective traversal) | Run full 100-QA benchmark across 3 seeds; lead defense |
 
 ### 8.1 Risks & Fallbacks
 - *Google Search API Rate Limits*: Cache frequent statutory status lookups locally in SQLite (`statute_cache`); fall back to static Neo4j metadata if the external portal times out.
@@ -222,11 +214,11 @@ Executed across $\ge 3$ random seeds per task, reporting empirical means alongsi
 
 | Agent Role | Model Target | Invocations / Query | Avg. Input Tokens | Avg. Output Tokens | Total Tokens / Query |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **Orchestrator Agent** | Gemini 2.5 Flash / Qwen 2.5 | 2.0 | 1,200 | 250 | 2,900 |
-| **LawGraph Agent** | Gemini 2.5 Flash / Qwen 2.5 | 1.5 | 1,800 (Graph/Chunks) | 300 (Sub-clauses) | 3,150 |
-| **Web Search Agent** | Gemini 2.5 Flash / Qwen 2.5 | 1.0 | 1,100 (Snippets) | 150 (In-force status) | 1,250 |
-| **Compliance Drafter** | Gemini 2.5 Flash / Qwen 2.5 | 1.2 | 2,500 (Aggregated laws) | 650 (Draft matrix) | 3,780 |
-| **Claim Auditor Agent**| Gemini 2.5 Flash / Qwen 2.5 | 1.2 | 2,800 (Draft + Statutes) | 350 (Audit report) | 3,780 |
+| **Orchestrator Agent** | Deepseek 4.1 Flash / Qwen 2.5 | 2.0 | 1,200 | 250 | 2,900 |
+| **LawGraph Agent** | Deepseek 4.1 Flash / Qwen 2.5 | 1.5 | 1,800 (Graph/Chunks) | 300 (Sub-clauses) | 3,150 |
+| **Web Search Agent** | Deepseek 4.1 Flash / Qwen 2.5 | 1.0 | 1,100 (Snippets) | 150 (In-force status) | 1,250 |
+| **Compliance Drafter** | Deepseek 4.1 Flash / Qwen 2.5 | 1.2 | 2,500 (Aggregated laws) | 650 (Draft matrix) | 3,780 |
+| **Claim Auditor Agent**| Deepseek 4.1 Flash / Qwen 2.5 | 1.2 | 2,800 (Draft + Statutes) | 350 (Audit report) | 3,780 |
 | **Total per Query** | — | **~6.9 turns** | **~9,400 input** | **~1,700 output** | **~11,100 tokens** |
 
 #### B. Full Benchmark Suite Token & API Cost Estimation
@@ -250,7 +242,7 @@ Executed across $\ge 3$ random seeds per task, reporting empirical means alongsi
   - Generation Speed: ~38 tokens/sec
   - End-to-end multi-agent scenario latency: ~6.2 – 8.5 seconds per query
   - RAM Footprint: ~5.8 GB (Ollama model weights + Neo4j Docker container)
-- **Cloud Production Runtime (Google Cloud Vertex AI / Gemini 2.5 Flash via Google ADK Runner)**:
+- **Cloud Production Runtime (Google Cloud Vertex AI / Deepseek 4.1 Flash via Google ADK Runner)**:
   - Time-To-First-Token (TTFT): ~210 ms
   - Generation Speed: ~115 tokens/sec
   - End-to-end multi-agent scenario latency: ~2.4 – 3.8 seconds per query
