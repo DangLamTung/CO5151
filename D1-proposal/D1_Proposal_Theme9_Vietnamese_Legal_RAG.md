@@ -1,7 +1,7 @@
 # D1 Proposal: Autonomous Legal Compliance & Verification Agent
 
 **Course**: CO5151 — Advanced Agentic AI | **Track**: Application Track | **Semester**: HK261 (Sep 2026)  
-**Team**: 4 members (Lead & Multi-Agent Orchestrator, LawGraph Tool Engineer, Verification & Memory Engineer, Security & Evaluation Engineer)
+**Team**: 3 members (Lead & Multi-Agent Orchestrator, LegalGraph & Memory Engineer, Safety Verification & Evaluation Engineer)
 
 ---
 
