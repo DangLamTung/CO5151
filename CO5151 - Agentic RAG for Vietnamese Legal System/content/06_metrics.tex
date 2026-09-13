@@ -1,0 +1,14 @@
+\section{Độ đo đánh giá}
+
+Vì bài toán là phân loại cân bằng giữa hai lớp, độ chính xác (\textit{accuracy}) là độ đo tự nhiên và mang nhiều thông tin nhất. Tuy nhiên, để có một bức tranh đầy đủ và để cẩn trọng trước khả năng phân bố nhãn lệch nhẹ trong dữ liệu thực tế mà mô hình sẽ gặp khi triển khai, ta đồng thời báo cáo độ chính xác chi tiết (\textit{precision}), độ phủ (\textit{recall}) và $F_1$ score, đều được tính cho lớp tích cực (quy ước $y=1$):
+
+\begin{align}
+\text{Accuracy} &= \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} \\[1ex]
+\text{Precision} &= \frac{\text{TP}}{\text{TP} + \text{FP}} \\[1ex]
+\text{Recall} &= \frac{\text{TP}}{\text{TP} + \text{FN}} \\[1ex]
+F_1 &= 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{align}
+
+Trong đó $\text{TP}$, $\text{TN}$, $\text{FP}$, $\text{FN}$ lần lượt là số trường hợp \textit{true positive}, \textit{true negative}, \textit{false positive} và \textit{false negative}. $F_1$ là trung bình điều hòa của \textit{precision} và \textit{recall}; nó phạt mạnh các mô hình có sự mất cân bằng lớn giữa hai đại lượng này, đặc biệt hữu ích khi cần đảm bảo mô hình không bỏ sót quá nhiều mẫu của lớp dương cũng như không tạo ra quá nhiều cảnh báo sai.
+
+Ma trận nhầm lẫn $C \in \mathbb{Z}_{\geq 0}^{2 \times 2}$ với phần tử $C_{ij}$ là số mẫu thuộc lớp thật $i$ nhưng được dự đoán là lớp $j$ cung cấp một biểu diễn trực quan đầy đủ và là cơ sở để tính ba độ đo trên.

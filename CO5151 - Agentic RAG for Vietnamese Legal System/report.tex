@@ -1,0 +1,213 @@
+% 'draft' mode can be used to speed up compilation
+\documentclass[twoside]{hcmut-report}
+\usepackage{codespace}
+\usepackage{fvextra}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, matrix, positioning}
+\setcounter{secnumdepth}{4}
+% \usepackage[vietnamese,english]{babel}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\usepackage{subcaption}
+\usepackage{float}
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\small\bfseries}{\thesubsubsection}{0.5em}{}
+% Draft watermark
+% https://github.com/callegar/LaTeX-draftwatermark
+
+% Encodings
+\usepackage{gensymb,textcomp}
+
+% Better tables
+% Wide tables go to https://tex.stackexchange.com/q/332902
+\usepackage{array,longtable,multicol,multirow,siunitx,tabularx}
+
+% Better enum
+\usepackage{enumitem}
+
+% Graphics
+\usepackage{caption,float}
+
+% Add options for figures, like max width, framing, etc.
+\usepackage[export]{adjustbox}
+
+% References
+% Use \Cref{} instead of \ref{}
+\usepackage[nameinlink]{cleveref}
+
+% FOR DEMONSTRATION PURPOSES, REMOVE IN PRODUCTION
+\usepackage{mwe}
+
+
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{breaklines,formatcom=\color{black},fontsize=\small}
+\hbadness=10000
+\vbadness=10000
+\hfuzz=100pt
+\vfuzz=100pt
+\emergencystretch=3em
+
+% Comfortable layout with moderate page count
+\geometry{
+  paper=a4paper,
+  left=2.1cm,
+  right=2.1cm,
+  top=1.9cm,
+  bottom=1.9cm,
+  includeheadfoot=true,
+  headheight=0pt,
+  headsep=0pt,
+  footskip=16pt
+}
+\setstretch{1.2}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.1em}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\setlist{nosep,leftmargin=*}
+\captionsetup{font=small,skip=3pt}
+\setlength{\floatsep}{9pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{9pt plus 1pt minus 1pt}
+\setlength{\intextsep}{9pt plus 1pt minus 1pt}
+\setlength{\abovedisplayskip}{8pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{8pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{5pt plus 1pt minus 1pt}
+\setlength{\belowdisplayshortskip}{5pt plus 1pt minus 1pt}
+\titlespacing*{\section}{0pt}{1.8ex plus .3ex minus .2ex}{0.9ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{1.3ex plus .2ex minus .1ex}{0.7ex plus .1ex}
+\titlespacing*{\subsubsection}{0pt}{1.0ex plus .2ex minus .1ex}{0.5ex plus .1ex}
+\titlespacing*{\paragraph}{0pt}{0.8ex plus .1ex minus .1ex}{0.9em}
+
+
+% Sub-preambles
+% https://github.com/MartinScharrer/standalone
+
+% Configurations
+\coursename{\huge{CO5151: Advanced Agentic AI}}
+\reporttype{\huge{Project Proposal (D1)}}
+\title{THEME 9: AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM\\{\normalsize Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency \& Verifiable Compliance}}
+\advisor{& Dr. Lê Xuân Bách &}
+\stuname{%
+  & Đặng Lâm Tùng & \\
+  & Nguyễn Trung Phong & \\
+  & Vũ Việt Hùng & \\
+}
+
+% Allow page breaks inside align* environment
+%\allowdisplaybreaks{}
+
+% Makes a lot of things blue, avoid at all costs
+%\everymath{\color{blue}}
+
+% Set depth of numbering for counters
+\AtBeginDocument{\counterwithin{lstlisting}{section}}
+
+% Rename some sections
+%\AtBeginDocument{\renewcommand*{\contentsname}{Contents}}
+%\AtBeginDocument{\renewcommand*{\refname}{References}}
+%\AtBeginDocument{\renewcommand*{\bibname}{References}}
+\AtBeginDocument{\renewcommand*{\abstractname}{Tóm tắt}}
+\AtBeginDocument{\renewcommand*{\figurename}{Hình}}
+\AtBeginDocument{\renewcommand*{\tablename}{Table}}
+\AtBeginDocument{\renewcommand*{\listfigurename}{Danh sách hình}}
+\AtBeginDocument{\renewcommand*{\listtablename}{Danh sách bảng}}
+
+% Custom commands
+%\newcommand*\mean[1]{\bar{#1}}
+
+\AtBeginDocument{\hfuzz=100pt\vfuzz=100pt\hbadness=10000\vbadness=10000}
+\begin{document}
+\coverpage%
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize{CO5151: Advanced Agentic AI --- HK261}}
+\fancyfoot[R]{\thepage}
+\fontsize{10pt}{12pt}\selectfont
+
+\pagenumbering{roman}
+
+% \section*{Danh sách thành viên \& Phân công công việc}
+% \newcounter{memberrowno}
+% \setcounter{memberrowno}{0}
+% \begin{center}
+%   \begin{tabular}{>{\stepcounter{memberrowno}\thememberrowno}l l c p{5cm} c}
+%     \toprule
+%     \multicolumn{1}{c}{\textbf{No.}} & \textbf{Full name} & \textbf{Student ID} & \textbf{Task} & \textbf{Contribution} \\
+%     \midrule
+%     & Phạm Tuấn Anh      & 2370690 & Làm phần 1 (Tổng quan) \& phần 3 (Kiến trúc EDA) \& phần 5 (Kết luận) & 100\% \\
+%     & Ủ Minh Quân        & 2470691 & Làm phần 2 (Architecture Characteristics) & 100\% \\
+%     & Lô Hoàng Bảo      & 2252066 & Làm phần 3 (Kiến trúc Layered, Microservices) & 100\% \\
+%     & Nguyễn Trung Phong & 2570047 & Làm phần 3 (Kiến trúc Serverless, Edge-Cloud Hybrid) & 100\% \\
+%     & Nguyễn Thiên Hải   & 2252189 & Làm phần 4 (Nghiên cứu Case Studies) & 100\% \\
+%     \bottomrule
+%   \end{tabular}
+% \end{center}
+% \clearpage
+
+% \tableofcontents
+% \listoffigures
+% \listoftables
+% \lstlistoflistings{}
+
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% \input{content/01_overview}
+
+\newgeometry{left=1.3cm,right=1.3cm,top=1.2cm,bottom=1.2cm,includeheadfoot,headheight=0pt,headsep=0pt,footskip=16pt}
+\begingroup
+\setstretch{1}
+\fontsize{10pt}{11pt}\selectfont
+\renewcommand{\small}{\fontsize{9.5pt}{10.5pt}\selectfont}
+\titleformat{\section}{\normalfont\fontsize{11pt}{12pt}\selectfont\bfseries}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{5pt}{3pt}
+\setlength{\parindent}{1em}
+\setlength{\columnsep}{14pt}
+\setlength{\multicolsep}{4pt}
+\setlist{nosep,leftmargin=*}
+\renewcommand{\arraystretch}{1}
+\setlength{\LTpre}{3pt}
+\setlength{\LTpost}{3pt}
+\setlength{\defaultaddspace}{2pt}
+\captionsetup{font=small,skip=2pt}
+\hfuzz=0.1pt
+\vfuzz=0.1pt
+\input{content/02_problem}
+\clearpage
+\endgroup
+\restoregeometry
+
+% \input{content/03_dataset}
+
+% \input{content/04_methodology}
+
+% \input{content/05-hyperparameter-study}
+
+% \input{content/06_metrics}
+
+% \input{content/07_result}
+
+% \input{content/08_advanced}
+
+% \input{content/09_discuss}
+
+% \input{content/conclusion.tex}
+
+\newpage
+\begingroup
+\small
+\setlength{\bibsep}{1pt}
+\bibliographystyle{plain}
+\bibliography{refs/characteristic}
+\endgroup
+\nocite{*}
+\end{document}

@@ -1,0 +1,5 @@
+\section{Kết luận}
+
+Báo cáo đã trình bày một hệ thống phân loại cảm xúc sử dụng mạng hồi quy GRU hoàn chỉnh trên tập dữ liệu IMDB Reviews, tuân thủ chặt chẽ mười ràng buộc kỹ thuật của đề bài. Trên $25\,000$ mẫu kiểm thử, mô hình đạt độ chính xác $0,8697$ và điểm $F_1$ đạt $0,8682$ trên lớp tích cực. Phân tích chi tiết các trường hợp dự đoán sai đã chỉ ra bốn nhóm nguyên nhân chính, trong đó hai nhóm lớn, châm biếm và cắt cụt thông tin do giới hạn độ dài, có thể được khắc phục hiệu quả bởi cơ chế \textit{self-attention} đã được trình bày kèm hệ thống công thức toán học ở chương cuối. 
+
+Đóng góp chính của báo cáo nằm ở sự kết hợp hài hòa giữa một quy trình huấn luyện được kiểm soát nghiêm ngặt về mặt phương pháp (đặc biệt là cơ chế đóng băng từ vựng nhằm chống rò rỉ dữ liệu) và một phần phân tích lý thuyết liên kết chặt chẽ từng quyết định thiết kế hệ thống với cơ sở toán học của nó. Kết quả này tạo nên một nền tảng thực nghiệm vững chắc và mở ra những hướng đi rõ ràng cho các nghiên cứu mở rộng tiếp theo hướng tới kiến trúc Transformer toàn diện.
