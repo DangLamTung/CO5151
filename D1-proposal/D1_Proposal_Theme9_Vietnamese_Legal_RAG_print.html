@@ -13,6 +13,19 @@
         content: counter(page);
       }
     }
+    @page:first {
+      margin: 10mm 12mm 10mm 12mm;
+      @bottom-right {
+        content: none;
+      }
+    }
+    @page {
+      size: A4 portrait;
+      margin: 11mm 13mm 11mm 13mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
 
     * {
       box-sizing: border-box;
@@ -201,9 +214,207 @@
     .page-break {
       page-break-before: always;
     }
-  </style>
+  
+    /* HCMUT Cover Page Styling */
+    .hcmut-cover-page {
+      height: 267mm;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      page-break-after: always;
+    }
+    .cover-border-outer {
+      border: 2px solid #1e3a8a;
+      padding: 3.5mm;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .cover-border-inner {
+      border: 0.8px solid #1e3a8a;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 8mm 10mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .cover-header .uni-name-vn {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 0.2px;
+    }
+    .cover-header .school-name-vn {
+      font-size: 12.5pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-top: 2px;
+      letter-spacing: 0.3px;
+    }
+    .cover-header .faculty-name-vn {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 2px;
+    }
+    .cover-header .divider-stars {
+      color: #1e3a8a;
+      font-size: 7.5pt;
+      margin: 4px 0;
+      letter-spacing: 4px;
+    }
+    .cover-header .uni-name-en {
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .cover-logo {
+      margin: 12px 0 8px 0;
+    }
+    .cover-logo img {
+      width: 105px;
+      height: auto;
+    }
+    .cover-title-section {
+      margin: 8px 0;
+    }
+    .course-label {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .doc-type {
+      font-size: 12pt;
+      font-weight: 800;
+      color: #2563eb;
+      margin-top: 3px;
+      letter-spacing: 1px;
+    }
+    .project-theme {
+      font-size: 11pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-top: 6px;
+    }
+    .project-title {
+      font-size: 15pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      line-height: 1.25;
+      margin-top: 4px;
+      text-transform: uppercase;
+      padding: 0 10px;
+    }
+    .project-subtitle {
+      font-size: 9pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 5px;
+      line-height: 1.3;
+      padding: 0 20px;
+    }
+    .cover-info-section {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 8px 15px;
+      text-align: left;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin: 0;
+    }
+    .info-table td {
+      padding: 3.5px 6px;
+      border: none;
+      vertical-align: top;
+    }
+    .info-label {
+      width: 32%;
+      font-weight: 700;
+      color: #1e3a8a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .info-value {
+      color: #0f172a;
+      line-height: 1.35;
+    }
+    .cover-footer {
+      margin-top: 6px;
+    }
+    .location-date {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.3;
+    }
+
+</style>
 </head>
 <body>
+
+  <!-- HCMUT COVER PAGE -->
+  <div class="hcmut-cover-page">
+    <div class="cover-border-outer">
+      <div class="cover-border-inner">
+        <div class="cover-header">
+          <div class="uni-name-vn">ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH</div>
+          <div class="school-name-vn">TRƯỜNG ĐẠI HỌC BÁCH KHOA</div>
+          <div class="faculty-name-vn">KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH</div>
+          <div class="divider-stars">&#9670; &#9670; &#9670;</div>
+          <div class="uni-name-en">VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY<br>HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY<br>FACULTY OF COMPUTER SCIENCE AND ENGINEERING</div>
+        </div>
+
+        <div class="cover-logo">
+          <img src="hcmut_logo.png" alt="HCMUT Logo">
+        </div>
+
+        <div class="cover-title-section">
+          <div class="course-label">CO5151: ADVANCED AGENTIC AI — SEMESTER HK261</div>
+          <div class="doc-type">PROJECT PROPOSAL (D1)</div>
+          <div class="project-theme">THEME 9</div>
+          <div class="project-title">AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM</div>
+          <div class="project-subtitle">Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance</div>
+        </div>
+
+        <div class="cover-info-section">
+          <table class="info-table">
+            <tr>
+              <td class="info-label">Instructor / Advisor:</td>
+              <td class="info-value"><strong>Dr. Lê Xuân Bách</strong> (Dr. Le Xuan Bach)</td>
+            </tr>
+            <tr>
+              <td class="info-label">Academic Term:</td>
+              <td class="info-value">Semester 1 (HK261) — Academic Year 2026–2027</td>
+            </tr>
+            <tr>
+              <td class="info-label" style="vertical-align: top;">Student Team:</td>
+              <td class="info-value">
+                <strong>1. Đặng Lâm Tùng</strong> &mdash; <em>Lead &amp; Multi-Agent Orchestrator</em><br>
+                <strong>2. Nguyễn Trung Phong</strong> &mdash; <em>LegalGraph &amp; Memory Engineer</em><br>
+                <strong>3. Vũ Việt Hùng</strong> &mdash; <em>Safety Verification &amp; Evaluation Engineer</em>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="cover-footer">
+          <div class="divider-stars">&#9670; &#9670; &#9670;</div>
+          <div class="location-date">THÀNH PHỐ HỒ CHÍ MINH, THÁNG 9/2026<br><span style="font-size: 7.8pt; font-weight: normal; color: #475569;">HO CHI MINH CITY, SEPTEMBER 2026</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- PAGE 1 HEADER -->
   <div class="running-header">
