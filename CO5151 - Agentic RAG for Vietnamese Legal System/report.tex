@@ -112,11 +112,11 @@
 %\AtBeginDocument{\renewcommand*{\contentsname}{Contents}}
 %\AtBeginDocument{\renewcommand*{\refname}{References}}
 %\AtBeginDocument{\renewcommand*{\bibname}{References}}
-\AtBeginDocument{\renewcommand*{\abstractname}{Tóm tắt}}
-\AtBeginDocument{\renewcommand*{\figurename}{Hình}}
+\AtBeginDocument{\renewcommand*{\abstractname}{Abstract}}
+\AtBeginDocument{\renewcommand*{\figurename}{Figure}}
 \AtBeginDocument{\renewcommand*{\tablename}{Table}}
-\AtBeginDocument{\renewcommand*{\listfigurename}{Danh sách hình}}
-\AtBeginDocument{\renewcommand*{\listtablename}{Danh sách bảng}}
+\AtBeginDocument{\renewcommand*{\listfigurename}{List of Figures}}
+\AtBeginDocument{\renewcommand*{\listtablename}{List of Tables}}
 
 % Custom commands
 %\newcommand*\mean[1]{\bar{#1}}
@@ -163,24 +163,25 @@
 
 % \input{content/01_overview}
 
-\newgeometry{left=1.3cm,right=1.3cm,top=1.2cm,bottom=1.2cm,includeheadfoot,headheight=0pt,headsep=0pt,footskip=16pt}
+\newgeometry{left=2.1cm,right=2.1cm,top=2.0cm,bottom=2.0cm,includeheadfoot,headheight=14pt,headsep=12pt,footskip=18pt}
 \begingroup
-\setstretch{1}
-\fontsize{10pt}{11pt}\selectfont
-\renewcommand{\small}{\fontsize{9.5pt}{10.5pt}\selectfont}
-\titleformat{\section}{\normalfont\fontsize{11pt}{12pt}\selectfont\bfseries}{\thesection}{0.6em}{}
-\titlespacing*{\section}{0pt}{5pt}{3pt}
-\setlength{\parindent}{1em}
-\setlength{\columnsep}{14pt}
-\setlength{\multicolsep}{4pt}
-\setlist{nosep,leftmargin=*}
-\renewcommand{\arraystretch}{1}
-\setlength{\LTpre}{3pt}
-\setlength{\LTpost}{3pt}
-\setlength{\defaultaddspace}{2pt}
-\captionsetup{font=small,skip=2pt}
-\hfuzz=0.1pt
-\vfuzz=0.1pt
+\setstretch{1.15}
+\fontsize{10pt}{13.5pt}\selectfont
+\renewcommand{\small}{\fontsize{9pt}{11.5pt}\selectfont}
+\titleformat{\section}{\normalfont\fontsize{11.5pt}{14pt}\selectfont\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalfont\fontsize{10.5pt}{13pt}\selectfont\bfseries}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{9pt}{4.5pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3.5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist{nosep,leftmargin=16pt,itemsep=2.5pt,topsep=2pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTpre}{5pt}
+\setlength{\LTpost}{5pt}
+\setlength{\defaultaddspace}{3pt}
+\captionsetup{font=small,skip=3pt}
+\hfuzz=10pt
+\vfuzz=10pt
 \input{content/02_problem}
 \clearpage
 \endgroup

@@ -1,23 +1,20 @@
-\begin{multicols}{2}
-\raggedright
+% ============================================================
 \section{Problem}
-
+% ============================================================
 
 Vietnamese statutory reasoning is not primarily a document retrieval problem. Legal applicability depends on the interaction between regulatory hierarchy, cross-references, amendments, effective dates, and case-specific facts. A single inquiry may therefore require evidence from multiple Laws, Decrees, Circulars, and their amendment chains.
 
 Existing Vietnamese legal RAG systems demonstrate the value of combining semantic retrieval with legal graphs, but their online execution remains largely predefined. For example, SBV-LawGraph uses top-$k$ retrieval followed by a fixed one-hop graph expansion over amendment, repeal, replacement, and guidance relations. Its results show that graph retrieval improves over Naive RAG, but the traversal policy itself remains fixed~\cite{phan2026sbvlawgraph}. This creates three structural limitations:
 
-\columnbreak
-\begin{itemize}
-    \item \textbf{Context dilution:} fixed retrieval and graph expansion can return related provisions that are not necessary for the current claim, increasing context and citation-selection errors.
+\begin{enumerate}
+    \item \textbf{Context dilution:} Fixed retrieval and graph expansion can return related provisions that are not necessary for the current claim, increasing context and citation-selection errors. In SBV-LawGraph, Precision@2 drops to 0.37--0.39 because an omnibus circular often amends dozens of unrelated articles across earlier decrees, injecting $>60\%$ distracting noise into the prompt.
 
-    \item \textbf{Using the wrong version of a law:} finding a relevant legal rule is not enough. At the time of the transaction, the rule may have changed, no longer applied, or not yet come into force. Recent research on legal AI agents highlights the need to check which version of a rule applied on the date in question~\cite{fan2026timetravel}.
+    \item \textbf{Using the wrong version of a law:} Finding a relevant legal rule is not enough. At the time of the transaction, the rule may have changed, no longer applied, or not yet come into force. Recent research on legal AI agents highlights the need to check which version of a rule applied on the date in question~\cite{fan2026timetravel}.
 
     \item \textbf{Limited adaptive reasoning:} VLegal-Bench contains 10,450 expert-grounded samples covering retrieval, multi-step reasoning, and scenario-based Vietnamese legal tasks, reflecting the need to reason across multiple pieces of evidence rather than answer from a single retrieved passage~\cite{nguyen2026vlegalbench}.
-\end{itemize}
+\end{enumerate}
 
 The core problem is therefore adaptive evidence acquisition under changing legal state and incomplete case information.
-\end{multicols}
 
 % ============================================================
 \section{Users \& Scenarios}
@@ -27,7 +24,7 @@ The core problem is therefore adaptive evidence acquisition under changing legal
 
 \begingroup
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.48\textwidth-3\tabcolsep\relax} >{\raggedright\arraybackslash}p{\dimexpr0.32\textwidth-3\tabcolsep\relax}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}p{0.40\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.38\textwidth-3\tabcolsep\relax}}
 \caption{Representative scenarios and required agent behavior.}
 \label{tab:user-scenarios} \\
 \toprule
@@ -48,24 +45,21 @@ The core problem is therefore adaptive evidence acquisition under changing legal
 &
 An e-commerce platform deploys an in-app E-Wallet with a BNPL micro-lending scheme. The agent must synthesize intersecting requirements across credit, payment, electronic transaction, and data-protection regulations.
 &
-Dynamically identify and traverse relevant legal sources across multiple regulatory regimes. \\ \addlinespace
+Dynamically identify and traverse relevant legal sources across multiple regulatory regimes (\textit{Law on Credit Institutions 2024, Decree 52/2024, Decree 13/2023}). \\ \addlinespace
 
 \textbf{2. Temporal Consistency}
 &
-An agricultural cooperative requests licensing rules for a 25 kg commercial spraying drone in 2026. The agent must distinguish current requirements from obsolete regulations and verify the applicable legal state.
+An agricultural cooperative requests licensing rules for a 25\,kg commercial spraying drone in 2026. The agent must distinguish current requirements from obsolete regulations and verify the applicable legal state.
 &
-Verify effective dates and traverse amendment or replacement relationships before citing provisions. \\ \addlinespace
+Verify effective dates and traverse replacement relationships before citing provisions (\textit{Law on People's Air Defense 2024} replacing legacy \textit{Decree 36/2008}). \\ \addlinespace
 
 \textbf{3. Interactive Disambiguation \& Injection Defense}
 &
 A company asks about corporate tax and specialist work-permit compliance but omits key revenue and headcount information. The agent must request clarification while handling adversarial input.
 &
-Detect missing information, query the user, and resume reasoning after clarification. \\
+Detect missing information, pause to query the user, strip zero-width delimiters, and resume reasoning after clarification. \\
 \end{longtable}
 \endgroup
-
-\begin{multicols}{2}
-\raggedright
 
 % ============================================================
 \section{Why an agent: Dynamic control rather than fixed workflow}
@@ -75,60 +69,114 @@ The distinction is not that a workflow cannot contain loops or branches. A workf
 
 Our system treats the agent as a state-dependent controller with three capabilities:
 
-\begin{itemize}
-    \item \textbf{Dynamic Planning:} decompose the inquiry and determine which legal source, graph relation, or retrieval operation should be executed next. The number and order of retrieval steps are determined during execution.
+\begin{enumerate}
+    \item \textbf{Dynamic Planning:} Decompose the inquiry and determine which legal source, graph relation, or retrieval operation should be executed next. The number and order of retrieval steps are determined during execution.
 
-    \item \textbf{Closed-loop Critique and Backtracking:} a Drafter produces a provisional answer, while an Auditor decomposes it into atomic claims and verifies each claim against retrieved authority. Unsupported or temporally invalid claims trigger targeted re-retrieval and revision. This follows the adaptive retrieval and reflection principle of Self-RAG and the claim-level auditing approach of GANDR~\cite{asai2024selfrag,qian2026gandr}.
+    \item \textbf{Closed-loop Critique and Backtracking:} A Drafter produces a provisional answer, while an Auditor decomposes it into atomic claims and verifies each claim against retrieved authority. Unsupported or temporally invalid claims trigger targeted re-retrieval and revision. This follows the adaptive retrieval and reflection principle of Self-RAG and the claim-level auditing approach of GANDR~\cite{asai2024selfrag,qian2026gandr}.
 
-    \item \textbf{Interactive Disambiguation:} when legal applicability depends on missing variables, the agent pauses and requests the minimum information required to continue instead of applying an implicit assumption.
-\end{itemize}
+    \item \textbf{Interactive Disambiguation:} When legal applicability depends on missing variables (such as enterprise capital tier or foreign equity ratio), the agent pauses and requests the minimum information required to continue instead of applying an implicit assumption.
+\end{enumerate}
 
 The project therefore evaluates whether state-dependent planning and verification improve legal answer quality over fixed RAG and workflow baselines.
 
 % ============================================================
-\columnbreak
 \section{Candidate technical axes}
 % ============================================================
 
-\textbf{Multi-Agent System, Google ADK.}
-Role-segregated execution with a Research Agent for Neo4j/Qdrant retrieval, a Web Agent for authoritative-source lookup, a Drafter Agent for statutory synthesis, and an Auditor Agent for claim verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
+\begin{enumerate}
+    \item \textbf{Multi-Agent System, Google ADK.}
+    Role-segregated execution with a Research Agent for Neo4j/Qdrant retrieval, a Web Agent for authoritative-source lookup, a Drafter Agent for statutory synthesis, and an Auditor Agent for claim verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
 
-\textbf{Planning \& Selective Graph Traversal.}
-Autonomous query decomposition followed by selective traversal of directional legal relationships such as \texttt{Amends}, \texttt{Repeals}, \texttt{Replaces}, and \texttt{Guides}. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query~\cite{phan2026sbvlawgraph}.
+    \item \textbf{Planning \& Selective Graph Traversal.}
+    Autonomous query decomposition followed by selective traversal of directional legal relationships such as \texttt{Amends}, \texttt{Repeals}, \texttt{Replaces}, and \texttt{Guides}. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query~\cite{phan2026sbvlawgraph}.
 
-\textbf{Reflection \& Adversarial Claim Auditing.}
-The Drafter-Auditor loop decomposes generated answers into atomic legal claims and checks each claim against authoritative evidence. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR~\cite{asai2024selfrag,wei2024safe,qian2026gandr}.
+    \item \textbf{Reflection \& Adversarial Claim Auditing.}
+    The Drafter-Auditor loop decomposes generated answers into atomic legal claims and checks each claim against authoritative evidence. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR~\cite{asai2024selfrag,wei2024safe,qian2026gandr}.
 
-\textbf{Security Guardrails \& Gated Actions.}
-Tool access is controlled through permission tiers. External-source content is treated as untrusted input, while irreversible actions such as dossier export require explicit human authorization. Indirect prompt injection is evaluated separately from the legal reasoning task~\cite{debenedetti2024injection}.
-\end{multicols}
+    \item \textbf{Security Guardrails \& Gated Actions.}
+    Tool access is controlled through permission tiers. External-source content is treated as untrusted input, while irreversible actions such as dossier export require explicit human authorization. Indirect prompt injection is evaluated separately from the legal reasoning task~\cite{debenedetti2024injection}.
+\end{enumerate}
 
 % ============================================================
 \section{Proposed Multi-Agent Architecture \& Tool Calls}
 % ============================================================
 
-\begin{multicols}{2}
-\raggedright
 \subsection{System Architecture Overview}
-The system coordinates five specialized agents under a supervisor state machine:
-\begin{itemize}
-  \item \textbf{Orchestrator Agent (Supervisor):} Implemented via Google ADK. Formulates multi-step retrieval plans, executes query decomposition, routes tasks, and manages interactive human dialog.
-  \item \textbf{LawGraph Research Agent:} Interacts with Qdrant vector store and Neo4j graph via MCP. Executes \textbf{selective edge traversal} over \textit{Amends, Guides} relationships, eliminating 1-hop noise.
-  \item \textbf{Live Gazette Agent:} Queries the National Database of Legal Documents (\texttt{vbpl.vn}) to verify in-force validity, capturing post-indexing amendments~\cite{fan2026timetravel}.
-  \item \textbf{Compliance Drafter Agent:} Formats verified statutory findings into actionable enterprise compliance matrices and administrative dossiers.
-  \item \textbf{Claim Auditor Agent:} Adversarially deconstructs candidate drafts into atomic propositions and verifies each against source statutes~\cite{qian2026gandr,wei2024safe}.
-\end{itemize}
+The system coordinates five specialized agent roles managed under an explicit supervisor state machine:
+\begin{enumerate}
+  \item \textbf{Orchestrator Agent (Supervisor):} Implemented via Google Agent Development Kit (\texttt{google-adk}). Formulates multi-step retrieval plans, executes dynamic query decomposition, routes tasks, and manages interactive human dialog.
+  \item \textbf{LawGraph Research Agent (Structural Retrieval):} Interacts with Qdrant vector store and Neo4j graph via Model Context Protocol (MCP). Executes \textbf{selective edge traversal}, following only relevant outgoing relations (\textit{Amends, Guides}) connected to target clauses, eliminating 1-hop neighborhood noise.
+  \item \textbf{Live Gazette Agent (Real-Time Temporal Verification):} Queries the National Database of Legal Documents (\texttt{vbpl.vn}) to verify in-force validity, capturing recent ministerial decrees and amendments post-dating offline indexing~\cite{fan2026timetravel}.
+  \item \textbf{Compliance Drafter Agent (Synthesizer):} Formats verified statutory findings into actionable enterprise compliance memos and administrative dossiers.
+  \item \textbf{Claim Auditor Agent (Adversarial Critic):} Bounded by zero-hallucination guardrails. Deconstructs candidate drafts into atomic propositions and cross-verifies each 1-to-1 against authoritative source statutes before release~\cite{qian2026gandr,wei2024safe}.
+\end{enumerate}
 
-\subsection{Memory Hierarchy Design}
-\begin{itemize}
-  \item \textbf{Short-Term Working Memory:} In-memory ADK execution state tracking active queries, retrieved passages, claim audit logs, and retry counters (capped at 3 refinement loops).
-  \item \textbf{Long-Term Memory:} Persistent SQLite database (\texttt{enterprise\_compliance.db}) maintaining \texttt{enterprise\_profile}, \texttt{audit\_history}, and \texttt{statute\_cache} (24h TTL).
-\end{itemize}
-\end{multicols}
+\subsection{End-to-End Multi-Agent Workflow Sequence}
+
+Figure~\ref{fig:agent-workflow} illustrates the end-to-end execution flow of the system. Execution proceeds through six well-defined operational phases:
+
+\begin{enumerate}[label=\textbf{Phase \arabic*:}, leftmargin=18pt]
+  \item \textbf{Ingestion \& Context Hydration:} The Orchestrator ingests the user query, parses uploaded attachments, and extracts enterprise parameters (charter capital, corporate form, foreign ownership) from persistent SQLite storage.
+  \item \textbf{Dynamic Planning \& Query Decomposition:} The inquiry is split into targeted statutory sub-queries. The Orchestrator evaluates whether cached Gazette metadata is sufficient or if fresh retrieval is required.
+  \item \textbf{Selective Traversal \& Hybrid Retrieval:} The LawGraph Research Agent traverses Neo4j along targeted edges (\texttt{Amends}, \texttt{Guides}), pruning irrelevant branches and retrieving dense clause embeddings from Qdrant.
+  \item \textbf{Live Gazette Temporal Verification:} The Live Gazette Agent verifies candidate provisions against \texttt{vbpl.vn} and the official Gazette to confirm active in-force validity as of the specified transaction date.
+  \item \textbf{Synthesis \& Adversarial Reflection Loop:} The Drafter formats a provisional compliance matrix. The Claim Auditor decomposes the draft into atomic claims, checking each statement against source provisions. Unsupported claims trigger targeted re-retrieval (up to 3 refinement loops).
+  \item \textbf{Guarded Action Execution:} Once claims achieve 100\% grounding, external export or filing actions are gated behind cryptographic human approval tokens.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  >=Stealth,
+  auto,
+  node distance = 1.1cm and 1.6cm,
+  thick,
+  box/.style = {rectangle, draw=black!70, fill=black!3, rounded corners=3pt, minimum height=0.8cm, text width=4.0cm, align=center, font=\footnotesize},
+  agent/.style = {rectangle, draw=blue!70!black, fill=blue!6, rounded corners=4pt, line width=0.9pt, minimum height=0.95cm, text width=3.8cm, align=center, font=\footnotesize\bfseries},
+  audit/.style = {rectangle, draw=red!70!black, fill=red!6, rounded corners=4pt, line width=0.9pt, minimum height=0.95cm, text width=3.8cm, align=center, font=\footnotesize\bfseries},
+  gate/.style = {rectangle, draw=orange!80!black, fill=orange!8, rounded corners=4pt, line width=0.9pt, minimum height=0.8cm, text width=3.4cm, align=center, font=\footnotesize\bfseries},
+  decision/.style = {diamond, draw=red!70!black, fill=yellow!12, aspect=1.6, text width=2.4cm, align=center, font=\scriptsize\bfseries}
+]
+
+  % Nodes
+  \node[box] (input) {\textbf{User Inquiry / Contract}\\+ Enterprise SQLite Profile};
+  \node[agent, below=0.85cm of input] (orch) {Orchestrator Agent\\\scriptsize (Google ADK Supervisor State Machine)};
+  
+  \node[agent, left=1.0cm of orch] (lawgraph) {LawGraph Research Agent\\\scriptsize (Selective Neo4j / Qdrant Traversal)};
+  \node[agent, right=1.0cm of orch] (gazette) {Live Gazette Agent\\\scriptsize (Temporal Validity: vbpl.vn)};
+
+  \node[agent, below=0.85cm of orch] (drafter) {Compliance Drafter Agent\\\scriptsize (Synthesis \& Dossier Construction)};
+  \node[audit, below=0.85cm of drafter] (auditor) {Claim Auditor Agent\\\scriptsize (Atomic Proposition Verification)};
+  \node[decision, below=0.75cm of auditor] (check) {Claims Grounded\\$\ge 100$\%?};
+
+  \node[gate, right=1.4cm of check] (gate) {Guarded Action Gate\\\scriptsize (Human Approval Token)};
+  \node[box, below=0.75cm of gate] (output) {\textbf{Audited Compliance Matrix}\\+ Verified Dossier Export};
+
+  % Edges
+  \draw[->] (input) -- node[right, font=\tiny] {Parsed query \& context} (orch);
+  \draw[<->] (orch) -- node[above, font=\tiny] {Selective Cypher} (lawgraph);
+  \draw[<->] (orch) -- node[above, font=\tiny] {In-force status} (gazette);
+  \draw[->] (orch) -- node[right, font=\tiny] {Verified evidence} (drafter);
+  \draw[->] (drafter) -- node[right, font=\tiny] {Provisional draft} (auditor);
+  \draw[->] (auditor) -- (check);
+  
+  % Feedback loop
+  \draw[->, dashed, color=red!80!black] (check.west) -- ++(-1.4cm,0) |- node[near start, left, font=\tiny, color=red!80!black] {Refinement Loop (max 3)} (orch.west);
+  
+  % Success branch
+  \draw[->, color=green!60!black] (check.east) -- node[above, font=\tiny, color=green!60!black] {Verified In-Force} (gate);
+  \draw[->] (gate) -- node[right, font=\tiny] {Human Confirmed} (output);
+
+\end{tikzpicture}
+\caption{End-to-End Multi-Agent Compliance Workflow: Dynamic Evidence Acquisition, Closed-Loop Claim Auditing, and Human-Gated Actions.}
+\label{fig:agent-workflow}
+\end{figure}
+
+\subsection{Tools \& Permission Tiers by Agent (Requirement R2)}
 
 \begingroup
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.42\textwidth-3\tabcolsep\relax}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.38\textwidth-3\tabcolsep\relax}}
 \caption{Agent tool ownership, authorization levels, and execution scope (Requirement R2).}
 \label{tab:mcp-tools} \\
 \toprule
@@ -145,7 +193,7 @@ The system coordinates five specialized agents under a supervisor state machine:
 \bottomrule
 \endlastfoot
 
-\textbf{LawGraph Agent} & \texttt{query\_lawgraph} & Read-Only & Hybrid sparse-dense vector search over statutory chunks. \\ \addlinespace
+\textbf{LawGraph Agent} & \texttt{query\_lawgraph} & Read-Only & Hybrid sparse-dense vector search over parsed statutory chunks. \\ \addlinespace
 \textbf{LawGraph Agent} & \texttt{trace\_selective\_edge} & Read-Only & Targeted Cypher traversal over specific \textit{Amend/Guide} relationships. \\ \addlinespace
 \textbf{Gazette Agent}  & \texttt{verify\_vbpl\_status}  & Read-Only & Real-time in-force verification on National Legal Database (\texttt{vbpl.vn}). \\ \addlinespace
 \textbf{Gazette Agent}  & \texttt{search\_gazette}       & Read-Only & Targeted portal search for recent ministerial decisions and circulars. \\ \addlinespace
@@ -153,6 +201,17 @@ The system coordinates five specialized agents under a supervisor state machine:
 \textbf{Drafter Agent}  & \texttt{submit\_portal\_filing}& Irreversible-Write & Dispatches administrative payload. \textbf{Guarded by human token gate.} \\
 \end{longtable}
 \endgroup
+
+\subsection{Memory Hierarchy Design}
+\begin{itemize}
+  \item \textbf{Short-Term Working Memory:} In-memory LangGraph/ADK execution state recording multi-turn query history, retrieved statutory passages, claim audit logs, candidate draft states, and retry counters (capped at 3 refinement loops).
+  \item \textbf{Long-Term Memory:} Persistent SQLite database (\texttt{enterprise\_compliance.db}) maintaining:
+    (i) \texttt{enterprise\_profile} (entity form, charter capital, sector classifications, headcount);
+    (ii) \texttt{audit\_history} (timestamped audit trails, verification scores, human approval tokens); and
+    (iii) \texttt{statute\_cache} (time-to-live cached Gazette validation lookups to prevent redundant web API calls).
+\end{itemize}
+
+\subsection{Google Agent Development Kit (ADK) Implementation Blueprint}
 
 \begin{lstlisting}[language=Python, caption={Google Agent Development Kit (ADK) Implementation Blueprint.}, label={lst:adk-runner}]
 from google.adk.agents import Agent
@@ -176,38 +235,34 @@ runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_ser
 \section{Evaluation Plan}
 % ============================================================
 
-\begin{multicols}{2}
-\raggedright
 \subsection{Benchmark Corpora \& Task Suite}
 \begin{itemize}
-  \item \textbf{Statutory Corpus:} 1,703 documents (12 Laws, 84 Decrees, 777 Decisions, 763 Circulars) from the SBV Corpus~\cite{phan2026sbvlawgraph}, indexed into Neo4j (5,221 nodes, 6,019 edges) and Qdrant dense vector store, augmented by corporate and tax regulations.
+  \item \textbf{Statutory Corpus:} 1,703 documents (12 Laws, 84 Decrees, 777 Decisions, 763 Circulars) from the SBV Corpus~\cite{phan2026sbvlawgraph}, indexed into Neo4j (5,221 nodes, 6,019 edges) and Qdrant dense vector store, augmented by corporate, labor, and tax regulations.
   \item \textbf{Task Set (100 Questions from SBV Legal Dataset~\cite{phan2026sbvlawgraph} + 20 Advanced Tasks):}
     (1) 89 single-document factual lookups;
     (2) 11 multi-document chained amendment queries;
-    (3) 10 hierarchical compliance scenarios (Law $\rightarrow$ Decree $\rightarrow$ Circular);
-    (4) 5 administrative contract drafting tasks; and
-    (5) 5 adversarial injection edge cases.
+    (3) 10 hierarchical multi-tier compliance scenarios (Law $\rightarrow$ Decree $\rightarrow$ Circular);
+    (4) 5 contract review and administrative drafting tasks; and
+    (5) 5 adversarial injection and parameter-missing edge cases.
 \end{itemize}
 
 \subsection{Evaluation Metrics \& Formulations}
-\begin{itemize}
+\begin{enumerate}
   \item \textbf{Retrieval Recall, Precision@2, and F2-Score:}
-    $$\text{Precision@}k = \frac{|\hat{R}_i^k \cap R_i|}{k}, \quad \text{Recall@}k = \frac{|\hat{R}_i^k \cap R_i|}{|R_i|}$$
-    $$\text{F2@}k = 5 \times \frac{\text{Precision@}k \times \text{Recall@}k}{4 \times \text{Precision@}k + \text{Recall@}k}$$
+    $$\text{Precision@}k = \frac{|\hat{R}_i^k \cap R_i|}{k}, \quad \text{Recall@}k = \frac{|\hat{R}_i^k \cap R_i|}{|R_i|}, \quad \text{F2@}k = 5 \times \frac{\text{Precision@}k \times \text{Recall@}k}{4 \times \text{Precision@}k + \text{Recall@}k}$$
     measuring whether selective edge traversal eliminates false-positive noise over SBV-LawGraph's 0.37--0.39 baseline~\cite{phan2026sbvlawgraph}.
   \item \textbf{Strict Answer Correctness:} $\text{Correctness} = \frac{1}{N} \sum_{i=1}^N \text{Correct}(a_i, g_i)$, requiring semantic equivalence, exact article citation, and verified in-force statutory validity~\cite{zhou2026lexagent}.
-  \item \textbf{Per-Claim Grounding Rate (SAFE~\cite{wei2024safe} / Ragas~\cite{es2024ragas}):}
+  \item \textbf{Per-Claim Grounding Rate (SAFE~\cite{wei2024safe} / Ragas Faithfulness~\cite{es2024ragas}):}
     $$\text{Grounding Rate} = \frac{\text{Supported Atomic Propositions}}{\text{Total Generated Legal Claims}}$$
-  \item \textbf{Operational Envelope:} End-to-end response latency $\le 12$\,s and API cost $\le \$0.02$ per query.
-\end{itemize}
+  \item \textbf{Operational Envelope:} End-to-end response latency $\le 12$\,s and API cost $\le \$0.02$ per complex query.
+\end{enumerate}
 
-\subsection{Baselines \& Ablations}
+\subsection{Baselines \& Ablation Configurations}
 \begin{itemize}
   \item \textbf{Baselines:} (1) Naive Chunk RAG; (2) Static Graph-RAG (SBV-LawGraph~\cite{phan2026sbvlawgraph}, ViHERMES~\cite{vihermes2024}); (3) Single-Agent ReAct.
-  \item \textbf{Ablations:} (1) Full Multi-Agent System; (2) Without Claim Auditor; (3) Without Selective Traversal; (4) Without Live Gazette Agent.
+  \item \textbf{Ablations:} (1) Full Multi-Agent System; (2) Without Claim Auditor Agent; (3) Without Selective Edge Traversal (mechanical 1-hop dumping); and (4) Without Live Gazette Agent (offline Neo4j only).
   \item \textbf{Protocol:} Evaluated across $\ge 3$ random seeds, reporting mean $\pm$ standard deviation.
 \end{itemize}
-\end{multicols}
 
 % ============================================================
 \section{Threat Model v0 (Requirement R6)}
@@ -218,7 +273,7 @@ runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_ser
 
 \begingroup
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.06\textwidth} >{\raggedright\arraybackslash}p{0.44\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.50\textwidth-3\tabcolsep\relax}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.05\textwidth} >{\raggedright\arraybackslash}p{0.45\textwidth} >{\raggedright\arraybackslash}p{\dimexpr0.50\textwidth-3\tabcolsep\relax}}
 \caption{10-vector security threat analysis and defensive mitigation mechanisms.}
 \label{tab:threat-model} \\
 \toprule
@@ -252,17 +307,13 @@ runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_ser
 \section{Risks, Budget \& Google ADK Resource Estimation}
 % ============================================================
 
-\begin{multicols}{2}
-\raggedright
 \subsection{Risks \& Mitigation Fallbacks}
 \begin{itemize}
-  \item \textit{External Portal Rate Limits:} Caches frequent statutory status lookups locally in SQLite (\texttt{statute\_cache}) with a 24-hour TTL; falls back to offline Neo4j metadata if portal requests exceed 3 seconds.
+  \item \textit{External Portal Rate Limits \& Latency:} Caches frequent statutory status lookups locally in SQLite (\texttt{statute\_cache}) with a 24-hour TTL; falls back to offline Neo4j graph metadata if portal requests exceed 3 seconds.
   \item \textit{Statutory Clause Ambiguity:} If a circular omits quantitative operational thresholds, the Claim Auditor flags the ambiguity and triggers human interaction rather than extrapolating.
 \end{itemize}
 
-\subsection{Budget Compliance Summary}
-Total Cloud evaluation on Google Cloud Vertex AI costs \textbf{$\sim$\$2.61}, utilizing $<11\%$ of the allocated \$25.00 course credit buffer. All local iterative development runs on local Ollama (Qwen 2.5 7B) at \textbf{\$0.00} cost. Parallel cloud benchmarking executes at 5 concurrent requests in \textbf{$\sim$22 minutes}.
-\end{multicols}
+\subsection{Google ADK Token, Compute \& Cloud Cost Estimation}
 
 \begingroup
 \small
@@ -293,3 +344,4 @@ Total Cloud evaluation on Google Cloud Vertex AI costs \textbf{$\sim$\$2.61}, ut
 \end{longtable}
 \endgroup
 
+\textbf{Budget Compliance:} Total Cloud evaluation on Google Cloud Vertex AI costs \textbf{$\sim$\$2.61}, utilizing $<11\%$ of the allocated \$25.00 course credit buffer. All local iterative development runs on local Ollama (Qwen 2.5 7B) at \textbf{\$0.00} cost. Parallel cloud benchmarking executes at 5 concurrent requests in \textbf{$\sim$22 minutes}.

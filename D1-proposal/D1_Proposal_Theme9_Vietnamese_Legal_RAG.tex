@@ -284,8 +284,69 @@ The system coordinates specialized agent roles managed under an explicit supervi
   \item \textbf{LawGraph Research Agent (Structural Retrieval):} Interacts with Qdrant vector store and Neo4j graph via Model Context Protocol (MCP). Executes \textbf{selective edge traversal}, following only relevant outgoing relations (\textit{Amends, Guides}) connected to target clauses, eliminating 1-hop neighborhood noise.
   \item \textbf{Live Gazette Agent (Real-Time Temporal Verification):} Queries the National Database of Legal Documents (\texttt{vbpl.vn}) to verify in-force validity, capturing recent ministerial decrees and amendments post-dating offline indexing.
   \item \textbf{Compliance Drafter Agent (Synthesizer):} Formats verified statutory findings into actionable enterprise compliance memos and administrative dossiers.
-  \item \textbf{Claim Auditor Agent (Adversarial Critic):} Bounded by zero-hallucination guardrails. Deconstructs candidate drafts into atomic propositions and cross-verifies each 1-to-1 against authoritative source statutes before release.
+  \item \textbf{Claim Auditor Agent (Adversarial Critic):} Bounded by zero-hallucination guardrails. Deconstructs candidate drafts into atomic propositions and cross-verifies each 1-to-1 against authoritative source statutes before release~\cite{qian2026gandr,wei2024safe}.
 \end{enumerate}
+
+\subsection{End-to-End Multi-Agent Workflow Sequence}
+
+Figure~\ref{fig:agent-workflow} illustrates the end-to-end execution flow of the system. Execution proceeds through six well-defined operational phases:
+
+\begin{enumerate}[label=\textbf{Phase \arabic*:}, leftmargin=18pt]
+  \item \textbf{Ingestion \& Context Hydration:} The Orchestrator ingests the user query, parses uploaded attachments, and extracts enterprise parameters (charter capital, corporate form, foreign ownership) from persistent SQLite storage.
+  \item \textbf{Dynamic Planning \& Query Decomposition:} The inquiry is split into targeted statutory sub-queries. The Orchestrator evaluates whether cached Gazette metadata is sufficient or if fresh retrieval is required.
+  \item \textbf{Selective Traversal \& Hybrid Retrieval:} The LawGraph Research Agent traverses Neo4j along targeted edges (\texttt{Amends}, \texttt{Guides}), pruning irrelevant branches and retrieving dense clause embeddings from Qdrant.
+  \item \textbf{Live Gazette Temporal Verification:} The Live Gazette Agent verifies candidate provisions against \texttt{vbpl.vn} and the official Gazette to confirm active in-force validity as of the specified transaction date.
+  \item \textbf{Synthesis \& Adversarial Reflection Loop:} The Drafter formats a provisional compliance matrix. The Claim Auditor decomposes the draft into atomic claims, checking each statement against source provisions. Unsupported claims trigger targeted re-retrieval (up to 3 refinement loops).
+  \item \textbf{Guarded Action Execution:} Once claims achieve 100\% grounding, external export or filing actions are gated behind cryptographic human approval tokens.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  >=Stealth,
+  auto,
+  node distance = 1.0cm and 1.4cm,
+  thick,
+  box/.style = {rectangle, draw=black!70, fill=black!3, rounded corners=3pt, minimum height=0.75cm, text width=3.8cm, align=center, font=\scriptsize},
+  agent/.style = {rectangle, draw=blue!70!black, fill=blue!6, rounded corners=4pt, line width=0.8pt, minimum height=0.85cm, text width=3.6cm, align=center, font=\scriptsize\bfseries},
+  audit/.style = {rectangle, draw=red!70!black, fill=red!6, rounded corners=4pt, line width=0.8pt, minimum height=0.85cm, text width=3.6cm, align=center, font=\scriptsize\bfseries},
+  gate/.style = {rectangle, draw=orange!80!black, fill=orange!8, rounded corners=4pt, line width=0.8pt, minimum height=0.75cm, text width=3.2cm, align=center, font=\scriptsize\bfseries},
+  decision/.style = {diamond, draw=red!70!black, fill=yellow!12, aspect=1.6, text width=2.2cm, align=center, font=\tiny\bfseries}
+]
+
+  % Nodes
+  \node[box] (input) {\textbf{User Inquiry / Contract}\\+ Enterprise SQLite Profile};
+  \node[agent, below=0.75cm of input] (orch) {Orchestrator Agent\\\scriptsize (Google ADK Supervisor State Machine)};
+  
+  \node[agent, left=0.8cm of orch] (lawgraph) {LawGraph Research Agent\\\scriptsize (Selective Neo4j / Qdrant Traversal)};
+  \node[agent, right=0.8cm of orch] (gazette) {Live Gazette Agent\\\scriptsize (Temporal Validity: vbpl.vn)};
+
+  \node[agent, below=0.75cm of orch] (drafter) {Compliance Drafter Agent\\\scriptsize (Synthesis \& Dossier Construction)};
+  \node[audit, below=0.75cm of drafter] (auditor) {Claim Auditor Agent\\\scriptsize (Atomic Proposition Verification)};
+  \node[decision, below=0.65cm of auditor] (check) {Claims Grounded\\$\ge 100$\%?};
+
+  \node[gate, right=1.2cm of check] (gate) {Guarded Action Gate\\\scriptsize (Human Approval Token)};
+  \node[box, below=0.65cm of gate] (output) {\textbf{Audited Compliance Matrix}\\+ Verified Dossier Export};
+
+  % Edges
+  \draw[->] (input) -- node[right, font=\tiny] {Parsed query \& context} (orch);
+  \draw[<->] (orch) -- node[above, font=\tiny] {Selective Cypher} (lawgraph);
+  \draw[<->] (orch) -- node[above, font=\tiny] {In-force status} (gazette);
+  \draw[->] (orch) -- node[right, font=\tiny] {Verified evidence} (drafter);
+  \draw[->] (drafter) -- node[right, font=\tiny] {Provisional draft} (auditor);
+  \draw[->] (auditor) -- (check);
+  
+  % Feedback loop
+  \draw[->, dashed, color=red!80!black] (check.west) -- ++(-1.2cm,0) |- node[near start, left, font=\tiny, color=red!80!black] {Refinement Loop (max 3)} (orch.west);
+  
+  % Success branch
+  \draw[->, color=green!60!black] (check.east) -- node[above, font=\tiny, color=green!60!black] {Verified In-Force} (gate);
+  \draw[->] (gate) -- node[right, font=\tiny] {Human Confirmed} (output);
+
+\end{tikzpicture}
+\caption{End-to-End Multi-Agent Compliance Workflow: Dynamic Evidence Acquisition, Closed-Loop Claim Auditing, and Human-Gated Actions.}
+\label{fig:agent-workflow}
+\end{figure}
 
 \subsection{Tools \& Permission Tiers by Agent (Requirement R2)}
 \begin{center}
@@ -426,8 +487,9 @@ runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_ser
 \section{References (Strictly 2024--2026)}
 % ============================================================
 
-\begin{multicols}{2}
-\fontsize{6.8pt}{8.1pt}\selectfont
+\begingroup
+\fontsize{8pt}{10pt}\selectfont
+\setlength{\parskip}{1.5pt}
 \begin{thebibliography}{99}
 \bibitem{phan2026sbvlawgraph} K.\,N. Phan, X.-B. Le, and T.\,T. Quan, ``SBV-LawGraph: A Hybrid RAG Approach Integrating Knowledge Graph for Legal Documents,'' \textit{Proc. ACIIDS 2026}, Springer.
 
@@ -453,6 +515,6 @@ runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_ser
 
 \bibitem{pham2025advisory} H. Pham, N. Duong, and H. Pham, ``Agentic RAG-Based Legal Advisory Chatbot for Vietnamese Legal System,'' in \textit{Proc. IC3K/KDIR 2025}.
 \end{thebibliography}
-\end{multicols}
+\endgroup
 
 \end{document}
