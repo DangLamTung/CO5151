@@ -1,7 +1,10 @@
 # D1 Proposal: Autonomous Legal Compliance & Verification Agent
 
 **Course**: CO5151 — Advanced Agentic AI | **Track**: Application Track | **Semester**: HK261 (Sep 2026)  
-**Team**: 3 members (Lead & Multi-Agent Orchestrator, LegalGraph & Memory Engineer, Safety Verification & Evaluation Engineer)
+**Team**:
+* **Dang Lam Tung (Lead & Multi-Agent Orchestrator)**: MAS architecture design, orchestrator loop & retrieval-decision policy implementation, web UI integration, and reproducible repo packaging (`run.sh`/Docker).
+* **Nguyen Trung Phong (LegalGraph & Memory Engineer)**: Neo4j/Qdrant graph construction, permissioned MCP toolset development, selective edge traversal algorithm, and enterprise SQLite memory management.
+* **Vu Viet Hung (Safety Verification & Evaluation Engineer)**: Claim Auditor engine development, Guarded Actions gate with audit logging, Threat Model v0 testing ($\ge 10$ injection cases), and 20-task benchmark execution across 3 seeds.
 
 ---
 
