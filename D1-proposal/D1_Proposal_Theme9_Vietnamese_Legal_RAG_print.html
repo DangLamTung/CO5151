@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>D1 Proposal: Agentic RAG for Legal System</title>
+  <title>CO5151 Project Proposal (D1) - Agentic RAG for Legal System</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:ital,wght@0,400;0,700;1,400;1,700&family=CMU+Serif:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap');
 
     @page {
       size: A4 portrait;
-      margin: 10mm 12mm 10mm 12mm;
+      margin: 14mm 16mm 14mm 16mm;
     }
 
     * {
@@ -18,10 +18,10 @@
     }
 
     body {
-      font-family: 'Source Serif 4', 'Times New Roman', Times, serif;
-      font-size: 8.3pt;
-      line-height: 1.28;
-      color: #1e293b;
+      font-family: "Latin Modern Roman", "CMU Serif", "Computer Modern", "Times New Roman", Times, serif;
+      font-size: 8.8pt;
+      line-height: 1.25;
+      color: #000000;
       background-color: #ffffff;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
@@ -30,8 +30,8 @@
     /* Page container */
     .page-sheet {
       width: 100%;
-      min-height: 275mm;
-      max-height: 277mm;
+      min-height: 268mm;
+      max-height: 270mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -45,170 +45,110 @@
       flex: 1;
     }
 
-    /* Running Header & Footer */
+    /* Running Header & Footer matching LaTeX fancyhdr */
     .page-header {
-      border-bottom: 0.8px solid #cbd5e1;
-      padding-bottom: 3.5px;
+      height: 12px;
       margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 7.4pt;
-      color: #475569;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .page-header strong {
-      color: #1e3a8a;
     }
 
     .page-footer {
-      border-top: 0.8px solid #cbd5e1;
-      padding-top: 3.5px;
+      border-top: 0.4pt solid #000000;
+      padding-top: 4px;
       margin-top: 6px;
       display: flex;
       justify-content: space-between;
-      font-size: 7.4pt;
-      color: #64748b;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 8pt;
+      color: #000000;
     }
 
-    /* Title Block */
-    .title-block {
-      text-align: center;
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1.5px solid #1e3a8a;
-    }
-    .title-block h1 {
-      font-size: 13pt;
-      font-weight: 700;
-      color: #1e3a8a;
-      letter-spacing: -0.2px;
-      margin-bottom: 2px;
-      text-transform: uppercase;
-    }
-    .title-block .subtitle {
-      font-size: 9.0pt;
-      font-weight: 600;
-      color: #334155;
-      margin-bottom: 5px;
-    }
-    .title-block .authors {
-      font-size: 7.9pt;
-      color: #334155;
-      line-height: 1.3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    .title-block .authors strong {
-      color: #0f172a;
-    }
-
-    /* Section Headings */
+    /* LaTeX Section Headings */
     h2.section-heading {
-      font-size: 9.5pt;
+      font-size: 10.5pt;
       font-weight: 700;
-      color: #1e3a8a;
-      text-transform: uppercase;
-      letter-spacing: 0.2px;
-      border-bottom: 0.8px solid #cbd5e1;
-      padding-bottom: 1.5px;
-      margin-top: 7px;
-      margin-bottom: 3.5px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #000000;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      text-align: left;
     }
     h3.subsection-heading {
-      font-size: 8.6pt;
+      font-size: 9.3pt;
       font-weight: 700;
-      color: #2563eb;
-      margin-top: 5px;
+      color: #000000;
+      margin-top: 6px;
       margin-bottom: 2.5px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
     }
 
     p {
-      margin-bottom: 2.5px;
+      margin-bottom: 3.5px;
       text-align: justify;
       text-justify: inter-word;
+      text-indent: 1.2em;
+    }
+    p.no-indent {
+      text-indent: 0;
     }
 
     ul, ol {
-      margin-left: 16px;
+      margin-left: 18px;
       margin-bottom: 4px;
     }
     li {
       margin-bottom: 2px;
       text-align: justify;
+      text-justify: inter-word;
     }
 
     strong {
-      color: #0f172a;
+      font-weight: 700;
+      color: #000000;
     }
 
-    /* Tables */
+    /* LaTeX booktabs Tables */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 4px 0 6px 0;
-      font-size: 7.9pt;
-      line-height: 1.25;
+      margin: 5px 0 6px 0;
+      font-size: 8.1pt;
+      line-height: 1.22;
+      border-top: 1.2pt solid #000000;
+      border-bottom: 1.2pt solid #000000;
     }
     th, td {
-      padding: 3px 5px;
+      padding: 3px 6px;
       text-align: left;
       vertical-align: top;
     }
     th {
-      border-top: 1.2px solid #0f172a;
-      border-bottom: 1px solid #0f172a;
+      border-bottom: 0.6pt solid #000000;
       font-weight: 700;
-      color: #0f172a;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #000000;
     }
     td {
-      border-bottom: 0.5px solid #e2e8f0;
-    }
-    tr:last-child td {
-      border-bottom: 1.2px solid #0f172a;
+      border: none;
     }
     .table-caption {
-      font-size: 7.7pt;
-      font-weight: 600;
-      color: #334155;
+      font-size: 8.2pt;
+      color: #000000;
       margin-bottom: 2px;
-      font-style: italic;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
     }
-
-    /* Code Snippet */
-    .code-box {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 5px 7px;
-      font-family: 'JetBrains Mono', Consolas, monospace;
-      font-size: 7.0pt;
-      line-height: 1.3;
-      color: #1e293b;
-      margin: 4px 0;
-    }
-    .code-keyword { color: #2563eb; font-weight: 600; }
-    .code-string { color: #b91c1c; }
-    .code-comment { color: #15803d; font-style: italic; }
 
     /* Math Formulas */
     .math-formula {
       text-align: center;
-      margin: 3px 0;
+      margin: 4px 0;
       font-style: italic;
-      font-size: 8.2pt;
+      font-size: 8.6pt;
     }
 
-    /* References Single-Column Layout */
+    /* References */
     .references-list {
       display: flex;
       flex-direction: column;
-      gap: 3.5px;
-      font-size: 7.4pt;
-      line-height: 1.28;
+      gap: 3px;
+      font-size: 7.7pt;
+      line-height: 1.25;
       margin-top: 4px;
     }
     .ref-item {
@@ -218,208 +158,174 @@
     }
     .ref-key {
       font-weight: 700;
-      color: #1e3a8a;
       min-width: 22px;
       flex-shrink: 0;
     }
 
-    /* HCMUT Cover Page Styling */
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 7.6pt;
+    }
+
+    /* ============================================================ */
+    /* HCMUT OFFICIAL COVER PAGE (matching hcmut-report.cls) */
+    /* ============================================================ */
     .hcmut-cover-page {
       width: 100%;
       height: 268mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      page-break-after: always;
-      margin: 0 auto;
-    }
-    .cover-border-outer {
-      border: 2px solid #1e3a8a;
-      padding: 3.5mm;
-      height: 100%;
-      box-sizing: border-box;
-    }
-    .cover-border-inner {
-      border: 0.8px solid #1e3a8a;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 7mm 10mm;
-      display: flex;
-      flex-direction: column;
       justify-content: space-between;
+      page-break-after: always;
       text-align: center;
+      padding: 10mm 15mm 12mm 15mm;
     }
-    .cover-header .uni-name-vn {
-      font-size: 11pt;
+
+    .cover-top-uni {
+      font-size: 11.5pt;
       font-weight: 700;
-      color: #0f172a;
-      letter-spacing: 0.2px;
-    }
-    .cover-header .school-name-vn {
-      font-size: 12.5pt;
-      font-weight: 700;
-      color: #1e3a8a;
-      margin-top: 2px;
-      margin-bottom: 2px;
-    }
-    .cover-header .faculty-name-vn {
-      font-size: 10pt;
-      font-weight: 700;
-      color: #0f172a;
-    }
-    .cover-header .divider-dots {
-      color: #1e3a8a;
-      font-size: 8pt;
-      margin: 4px 0 2px 0;
-    }
-    .cover-header .names-en {
-      font-size: 7.2pt;
-      color: #475569;
-      line-height: 1.25;
       text-transform: uppercase;
       letter-spacing: 0.2px;
+      line-height: 1.35;
     }
-    .cover-logo {
-      margin: 10px 0;
-    }
-    .cover-logo img {
-      width: 88px;
-      height: auto;
-    }
-    .cover-title-block .course-title {
-      font-size: 9.5pt;
+    .cover-top-school {
+      font-size: 13pt;
       font-weight: 700;
-      color: #334155;
-      letter-spacing: 0.3px;
       text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .cover-title-block .report-type {
-      font-size: 13.5pt;
-      font-weight: 700;
-      color: #2563eb;
-      letter-spacing: 0.3px;
-      margin-bottom: 8px;
-    }
-    .cover-title-block .project-main-title {
-      font-size: 15pt;
-      font-weight: 700;
-      color: #1e3a8a;
-      line-height: 1.25;
-      margin-bottom: 6px;
-    }
-    .cover-title-block .project-subtitle {
-      font-size: 8.8pt;
-      font-style: italic;
-      color: #475569;
-      max-width: 86%;
-      margin: 0 auto;
-      line-height: 1.3;
-    }
-    .cover-meta-box {
-      margin: 10px auto;
-      width: 88%;
-      border: 1px solid #cbd5e1;
-      background-color: #f8fafc;
-      border-radius: 6px;
-      padding: 10px 14px;
-      text-align: left;
-      font-size: 8.5pt;
-      line-height: 1.45;
-    }
-    .cover-meta-row {
-      display: flex;
+      letter-spacing: 0.2px;
+      margin-top: 3px;
       margin-bottom: 3px;
     }
-    .cover-meta-label {
-      width: 140px;
+    .cover-top-dept {
+      font-size: 11pt;
       font-weight: 700;
-      color: #1e3a8a;
-      flex-shrink: 0;
-    }
-    .cover-meta-value {
-      color: #0f172a;
-    }
-    .cover-meta-divider {
-      border-bottom: 1px solid #cbd5e1;
-      margin: 6px 0;
-    }
-    .cover-footer {
-      font-size: 8.5pt;
-      color: #334155;
-    }
-    .cover-footer .city-date-vn {
-      font-weight: 700;
-      color: #1e3a8a;
+      text-transform: uppercase;
       letter-spacing: 0.2px;
-      margin-bottom: 2px;
     }
-    .cover-footer .city-date-en {
-      font-size: 7.5pt;
-      color: #64748b;
+
+    .cover-logo-wrapper {
+      margin: 15mm auto;
+    }
+    .cover-logo-wrapper img {
+      width: 95px;
+      height: auto;
+    }
+
+    /* Center Boxed Title block from hcmut-report */
+    .cover-center-box {
+      width: 92%;
+      margin: 0 auto;
+      border-top: 1.2pt solid #000000;
+      border-bottom: 1.2pt solid #000000;
+      padding: 12px 10px;
+    }
+    .cover-coursename {
+      font-size: 12pt;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .cover-box-rule {
+      border: none;
+      border-top: 0.6pt solid #000000;
+      margin: 8px auto;
+      width: 100%;
+    }
+    .cover-reporttype {
+      font-size: 12.5pt;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .cover-project-title {
+      font-size: 15pt;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+    .cover-project-sub {
+      font-size: 9.5pt;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.3;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    /* Advisor & Students Table */
+    .cover-advisor-students {
+      width: 75%;
+      margin: 10mm auto 5mm auto;
+      border: none;
+      font-size: 9.5pt;
+      line-height: 1.45;
+    }
+    .cover-advisor-students td {
+      padding: 2px 4px;
+      border: none;
+    }
+    .cover-advisor-students td.label-col {
+      width: 32%;
+      text-align: right;
+      font-weight: 700;
+      vertical-align: top;
+    }
+    .cover-advisor-students td.val-col {
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .cover-bottom-date {
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
   </style>
 </head>
 <body>
 
   <!-- ============================================================ -->
-  <!-- PAGE 1: HCMUT OFFICIAL COVER PAGE -->
+  <!-- PAGE 1: HCMUT OFFICIAL COVER PAGE (matches hcmut-report.cls) -->
   <!-- ============================================================ -->
   <div class="hcmut-cover-page">
-    <div class="cover-border-outer">
-      <div class="cover-border-inner">
-        <div class="cover-header">
-          <div class="uni-name-vn">ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH</div>
-          <div class="school-name-vn">TRƯỜNG ĐẠI HỌC BÁCH KHOA</div>
-          <div class="faculty-name-vn">KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH</div>
-          <div class="divider-dots">&#9830; &#9830; &#9830;</div>
-          <div class="names-en">
-            Vietnam National University Ho Chi Minh City<br>
-            Ho Chi Minh City University of Technology<br>
-            Faculty of Computer Science and Engineering
-          </div>
-        </div>
+    <div>
+      <div class="cover-top-uni">ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH</div>
+      <div class="cover-top-school">TRƯỜNG ĐẠI HỌC BÁCH KHOA</div>
+      <div class="cover-top-dept">KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH</div>
+    </div>
 
-        <div class="cover-logo">
-          <img src="hcmut_logo.png" alt="HCMUT Logo">
-        </div>
+    <div class="cover-logo-wrapper">
+      <img src="hcmut_logo.png" alt="HCMUT Logo">
+    </div>
 
-        <div class="cover-title-block">
-          <div class="course-title">CO5151: Advanced Agentic AI — Semester HK261</div>
-          <div class="report-type">PROJECT PROPOSAL (D1)</div>
-          <div class="project-main-title">AGENTIC RAG FOR LEGAL SYSTEM</div>
-          <div class="project-subtitle">
-            Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance
-          </div>
-        </div>
-
-        <div class="cover-meta-box">
-          <div class="cover-meta-row">
-            <div class="cover-meta-label">Instructor / Advisor:</div>
-            <div class="cover-meta-value"><strong>Dr. Lê Xuân Bách</strong> (Dr. Le Xuan Bach)</div>
-          </div>
-          <div class="cover-meta-row">
-            <div class="cover-meta-label">Academic Term:</div>
-            <div class="cover-meta-value">Semester 1 (HK261) — Academic Year 2026–2027</div>
-          </div>
-          <div class="cover-meta-row">
-            <div class="cover-meta-label">Student Team:</div>
-            <div class="cover-meta-value">
-              <strong>1. Đặng Lâm Tùng</strong><br>
-              <strong>2. Nguyễn Trung Phong</strong><br>
-              <strong>3. Vũ Việt Hùng</strong>
-            </div>
-          </div>
-          <div class="cover-meta-divider"></div>
-        </div>
-
-        <div class="cover-footer">
-          <div class="divider-dots">&#9830; &#9830; &#9830;</div>
-          <div class="city-date-vn">THÀNH PHỐ HỒ CHÍ MINH, THÁNG 9/2026</div>
-          <div class="city-date-en">HO CHI MINH CITY, SEPTEMBER 2026</div>
-        </div>
+    <div class="cover-center-box">
+      <div class="cover-coursename">CO5151: Advanced Agentic AI</div>
+      <hr class="cover-box-rule">
+      <div class="cover-reporttype">Project Proposal (D1)</div>
+      <div class="cover-project-title">AGENTIC RAG FOR LEGAL SYSTEM</div>
+      <div class="cover-project-sub">
+        Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance
       </div>
+    </div>
+
+    <table class="cover-advisor-students">
+      <tr>
+        <td class="label-col">Advisor:</td>
+        <td class="val-col"><strong>Dr. Lê Xuân Bách</strong></td>
+      </tr>
+      <tr>
+        <td class="label-col">Students:</td>
+        <td class="val-col">
+          Đặng Lâm Tùng<br>
+          Nguyễn Trung Phong<br>
+          Vũ Việt Hùng
+        </td>
+      </tr>
+    </table>
+
+    <div class="cover-bottom-date">
+      THÀNH PHỐ HỒ CHÍ MINH, THÁNG 9/2026
     </div>
   </div>
 
@@ -427,27 +333,15 @@
   <!-- PAGE 2: PROBLEM, SCENARIOS, WHY AN AGENT -->
   <!-- ============================================================ -->
   <div class="page-sheet">
-    <div class="page-header">
-      <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Agentic RAG for Legal System</span>
-    </div>
+    <div class="page-header"></div>
 
     <div class="page-main">
-      <div class="title-block">
-        <h1>D1 Proposal: Agentic RAG for Legal System</h1>
-        <div class="subtitle">Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance</div>
-        <div class="authors">
-          <strong>Authors:</strong> Dang Lam Tung, Nguyen Trung Phong, Vu Viet Hung<br>
-          <strong>Advisor:</strong> Dr. Le Xuan Bach &nbsp;|&nbsp; <strong>Course:</strong> CO5151 — Advanced Agentic AI (HK261) &nbsp;|&nbsp; <strong>Institution:</strong> HCMUT — VNU-HCM
-        </div>
-      </div>
-
-      <h2 class="section-heading">1. Problem</h2>
+      <h2 class="section-heading">1 Problem</h2>
       <p>
         Vietnamese statutory reasoning is not primarily a document retrieval problem. Legal applicability depends on the interaction between regulatory hierarchy, cross-references, amendments, effective dates, and case-specific facts. A single inquiry may therefore require evidence from multiple Laws, Decrees, Circulars, and their amendment chains.
       </p>
       <p>
-        Existing Vietnamese legal RAG systems demonstrate the value of combining semantic retrieval with legal graphs, but their online execution remains largely predefined. For example, SBV-LawGraph uses top-$k$ retrieval followed by a fixed one-hop graph expansion over amendment, repeal, replacement, and guidance relations. Its results show that graph retrieval improves over Naive RAG, but the traversal policy itself remains fixed [1]. This creates three structural limitations:
+        Existing Vietnamese legal RAG systems demonstrate the value of combining semantic retrieval with legal graphs, but their online execution remains largely predefined. For example, SBV-LawGraph uses top-<i>k</i> retrieval followed by a fixed one-hop graph expansion over amendment, repeal, replacement, and guidance relations. Its results show that graph retrieval improves over Naive RAG, but the traversal policy itself remains fixed [1]. This creates three structural limitations:
       </p>
       <ol>
         <li>
@@ -464,16 +358,16 @@
         The core problem is therefore adaptive evidence acquisition under changing legal state and incomplete case information.
       </p>
 
-      <h2 class="section-heading">2. Users &amp; Scenarios</h2>
-      <p>
+      <h2 class="section-heading">2 Users &amp; Scenarios</h2>
+      <p class="no-indent">
         <strong>Target users:</strong> In-house Legal Counsel, Compliance Officers, and Legal Practitioners working with Vietnamese regulations.
       </p>
       <div class="table-caption">Table 1: Representative scenarios and required agent behavior.</div>
       <table>
         <thead>
           <tr>
-            <th style="width: 22%;">Scenario</th>
-            <th style="width: 44%;">Real-world situation</th>
+            <th style="width: 23%;">Scenario</th>
+            <th style="width: 43%;">Real-world situation</th>
             <th style="width: 34%;">Required agent behavior</th>
           </tr>
         </thead>
@@ -496,11 +390,11 @@
         </tbody>
       </table>
 
-      <h2 class="section-heading">3. Why an agent: Dynamic control rather than fixed workflow</h2>
+      <h2 class="section-heading">3 Why an agent: Dynamic control rather than fixed workflow</h2>
       <p>
         The distinction is not that a workflow cannot contain loops or branches. A workflow can implement predefined retrieval, retry, and approval paths. The limitation arises when the next retrieval action cannot be specified before the current evidence is observed.
       </p>
-      <p>
+      <p class="no-indent">
         Our system treats the agent as a state-dependent controller with three capabilities:
       </p>
       <ol>
@@ -520,8 +414,8 @@
     </div>
 
     <div class="page-footer">
-      <span>HCMUT — VNU-HCM | Application Track</span>
-      <span>Page 1</span>
+      <span>CO5151: Advanced Agentic AI --- HK261</span>
+      <span>1</span>
     </div>
   </div>
 
@@ -529,33 +423,30 @@
   <!-- PAGE 3: TECHNICAL AXES, ARCHITECTURE & WORKFLOW -->
   <!-- ============================================================ -->
   <div class="page-sheet">
-    <div class="page-header">
-      <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Agentic RAG for Legal System</span>
-    </div>
+    <div class="page-header"></div>
 
     <div class="page-main">
-      <h2 class="section-heading">4. Candidate technical axes</h2>
-      <p>
+      <h2 class="section-heading">4 Candidate technical axes</h2>
+      <p class="no-indent">
         <strong>1. Multi-Agent System Coordination.</strong>
         Role-segregated execution with a Legal Search Agent for statutory retrieval, a Legal Law Update Agent for official validity verification, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
       </p>
-      <p>
+      <p class="no-indent">
         <strong>2. Planning &amp; Selective Statutory Traversal.</strong>
         Autonomous query decomposition followed by selective traversal of directional legal relationships such as <code>Amends</code>, <code>Repeals</code>, <code>Replaces</code>, and <code>Guides</code>. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query [1].
       </p>
-      <p>
+      <p class="no-indent">
         <strong>3. Reflection &amp; Statutory Claim Verification.</strong>
         The Reasoning-Verification loop evaluates generated answers against authoritative legal provisions. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR [4, 5, 6].
       </p>
-      <p>
+      <p class="no-indent">
         <strong>4. Security Guardrails &amp; Gated Actions.</strong>
         Tool access is controlled through permission tiers. External-source content is treated as untrusted input, while irreversible actions such as dossier export require explicit human authorization. Indirect prompt injection is evaluated separately from the legal reasoning task [7].
       </p>
 
-      <h2 class="section-heading">5. Proposed Multi-Agent Architecture &amp; Workflow</h2>
+      <h2 class="section-heading">5 Proposed Multi-Agent Architecture &amp; Workflow</h2>
       <h3 class="subsection-heading">5.1 System Architecture Overview</h3>
-      <p>
+      <p class="no-indent">
         The system coordinates five specialized agent roles managed under a supervisor state machine:
       </p>
       <ol>
@@ -567,7 +458,7 @@
       </ol>
 
       <h3 class="subsection-heading">5.2 End-to-End Multi-Agent Workflow Sequence</h3>
-      <p>
+      <p class="no-indent">
         Figure 1 illustrates the end-to-end execution flow of the system. Execution proceeds through six coordinated operational phases:
       </p>
       <ol>
@@ -579,104 +470,104 @@
         <li><strong>Phase 6 (User Review &amp; Report Delivery):</strong> The verified advisory report is generated, with any official actions requiring explicit user confirmation.</li>
       </ol>
 
-      <!-- SVG Multi-Agent Workflow Diagram -->
+      <!-- SVG Multi-Agent Workflow Diagram (matching LaTeX TikZ figure) -->
       <div style="text-align: center; margin: 8px 0 2px 0;">
-        <svg viewBox="0 0 710 215" width="100%" height="auto" style="max-width: 700px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px;">
+        <svg viewBox="0 0 710 215" width="100%" height="auto" style="max-width: 680px; font-family: 'Latin Modern Roman', 'CMU Serif', Times, serif; font-size: 8px;">
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000"/>
             </marker>
             <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a"/>
             </marker>
             <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626"/>
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#b91c1c"/>
             </marker>
             <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#16a34a"/>
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#15803d"/>
             </marker>
           </defs>
 
           <!-- Input Node -->
-          <rect x="235" y="4" width="240" height="26" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="1.1"/>
-          <text x="355" y="15" text-anchor="middle" font-weight="700" fill="#0f172a" font-size="8.2px">User Legal Question &amp; Case Facts</text>
-          <text x="355" y="24" text-anchor="middle" fill="#64748b" font-size="7px">+ Client Profile &amp; Case Parameters</text>
+          <rect x="235" y="4" width="240" height="26" rx="2" fill="#f8fafc" stroke="#000000" stroke-width="0.8"/>
+          <text x="355" y="15" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">User Legal Question &amp; Case Facts</text>
+          <text x="355" y="24" text-anchor="middle" fill="#333333" font-size="7px">+ Client Profile &amp; Case Parameters</text>
 
           <!-- Arrow: Input -> Orch -->
-          <line x1="355" y1="30" x2="355" y2="44" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
+          <line x1="355" y1="30" x2="355" y2="44" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Orchestrator (Supervisor) -->
-          <rect x="226" y="46" width="258" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.3"/>
-          <text x="355" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="9px">Orchestrator Agent (Supervisor)</text>
-          <text x="355" y="68" text-anchor="middle" fill="#3b82f6" font-size="7.2px">Coordinates Research Tasks &amp; User Dialogue</text>
+          <rect x="226" y="46" width="258" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="1.1"/>
+          <text x="355" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.8px">Orchestrator Agent (Supervisor)</text>
+          <text x="355" y="68" text-anchor="middle" fill="#333333" font-size="7.2px">Coordinates Research Tasks &amp; User Dialogue</text>
 
           <!-- Left: Legal Search Agent -->
-          <rect x="8" y="46" width="168" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="92" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">Legal Search Agent</text>
-          <text x="92" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Search Laws &amp; Cross-References</text>
+          <rect x="8" y="46" width="168" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="92" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Search Agent</text>
+          <text x="92" y="68" text-anchor="middle" fill="#333333" font-size="7px">Search Laws &amp; Cross-References</text>
 
           <!-- Arrows: Orch <-> Legal Search Agent -->
-          <line x1="226" y1="56" x2="182" y2="56" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <line x1="182" y1="65" x2="226" y2="65" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <text x="204" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">Search</text>
+          <line x1="226" y1="56" x2="182" y2="56" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <line x1="182" y1="65" x2="226" y2="65" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <text x="204" y="51" text-anchor="middle" font-size="6.5px" fill="#000000">Search</text>
 
           <!-- Right: Legal Law Update Agent -->
-          <rect x="534" y="46" width="168" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="618" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">Legal Law Update Agent</text>
-          <text x="618" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Check Legal Status (vbpl.vn)</text>
+          <rect x="534" y="46" width="168" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="618" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Law Update Agent</text>
+          <text x="618" y="68" text-anchor="middle" fill="#333333" font-size="7px">Check Legal Status (vbpl.vn)</text>
 
           <!-- Arrows: Orch <-> Legal Law Update Agent -->
-          <line x1="484" y1="56" x2="528" y2="56" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <line x1="528" y1="65" x2="484" y2="65" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <text x="506" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">Validity</text>
+          <line x1="484" y1="56" x2="528" y2="56" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <line x1="528" y1="65" x2="484" y2="65" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <text x="506" y="51" text-anchor="middle" font-size="6.5px" fill="#000000">Validity</text>
 
           <!-- Arrow: Orch -> Legal Reasoning Agent -->
-          <line x1="355" y1="75" x2="355" y2="88" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
-          <text x="360" y="83" font-size="6.5px" fill="#475569">Verified sources</text>
+          <line x1="355" y1="75" x2="355" y2="88" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
+          <text x="360" y="83" font-size="6.5px" fill="#444444">Verified sources</text>
 
           <!-- Legal Reasoning Agent -->
-          <rect x="235" y="90" width="240" height="27" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="355" y="101" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.3px">Legal Reasoning Agent</text>
-          <text x="355" y="111" text-anchor="middle" fill="#3b82f6" font-size="7px">Legal Analysis &amp; Advisory Synthesis</text>
+          <rect x="235" y="90" width="240" height="27" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="355" y="101" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.3px">Legal Reasoning Agent</text>
+          <text x="355" y="111" text-anchor="middle" fill="#333333" font-size="7px">Legal Analysis &amp; Advisory Synthesis</text>
 
           <!-- Arrow: Legal Reasoning -> Legal Verification -->
-          <line x1="355" y1="117" x2="355" y2="129" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
+          <line x1="355" y1="117" x2="355" y2="129" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Legal Verification Agent -->
-          <rect x="235" y="131" width="240" height="27" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
-          <text x="355" y="142" text-anchor="middle" font-weight="700" fill="#991b1b" font-size="8.3px">Legal Verification Agent</text>
-          <text x="355" y="152" text-anchor="middle" fill="#dc2626" font-size="7px">Citation &amp; Statutory Accuracy Checking</text>
+          <rect x="235" y="131" width="240" height="27" rx="3" fill="#fff5f5" stroke="#b91c1c" stroke-width="1"/>
+          <text x="355" y="142" text-anchor="middle" font-weight="700" fill="#7f1d1d" font-size="8.3px">Legal Verification Agent</text>
+          <text x="355" y="152" text-anchor="middle" fill="#991b1b" font-size="7px">Citation &amp; Statutory Accuracy Checking</text>
 
           <!-- Arrow: Verification -> Decision -->
-          <line x1="355" y1="158" x2="355" y2="171" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
+          <line x1="355" y1="158" x2="355" y2="171" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Decision Diamond -->
-          <polygon points="355,173 420,188 355,203 290,188" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.2"/>
-          <text x="355" y="187" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">Legally Verified</text>
-          <text x="355" y="195" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">&amp; Accurate?</text>
+          <polygon points="355,173 420,188 355,203 290,188" fill="#fefce8" stroke="#854d0e" stroke-width="1"/>
+          <text x="355" y="187" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.5px">Legally Verified</text>
+          <text x="355" y="195" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.5px">&amp; Accurate?</text>
 
           <!-- Refinement Loop (Left -> Back to Orchestrator) -->
-          <path d="M 290 188 L 30 188 L 30 61 L 220 61" fill="none" stroke="#dc2626" stroke-width="1.1" stroke-dasharray="3.5 2.5" marker-end="url(#arrow-red)"/>
-          <text x="38" y="183" font-weight="600" fill="#dc2626" font-size="7.2px">Needs Revision (max 3 loops)</text>
+          <path d="M 290 188 L 30 188 L 30 61 L 220 61" fill="none" stroke="#b91c1c" stroke-width="0.9" stroke-dasharray="3.5 2.5" marker-end="url(#arrow-red)"/>
+          <text x="38" y="183" font-weight="600" fill="#b91c1c" font-size="7.2px">Needs Revision (max 3 loops)</text>
 
           <!-- Success Branch to User Approval Gate -->
-          <line x1="420" y1="188" x2="528" y2="188" stroke="#16a34a" stroke-width="1.2" marker-end="url(#arrow-green)"/>
-          <text x="474" y="183" text-anchor="middle" font-weight="600" fill="#16a34a" font-size="7.2px">Verified</text>
+          <line x1="420" y1="188" x2="528" y2="188" stroke="#15803d" stroke-width="1" marker-end="url(#arrow-green)"/>
+          <text x="474" y="183" text-anchor="middle" font-weight="600" fill="#15803d" font-size="7.2px">Verified</text>
 
           <!-- User Approval Gate -->
-          <rect x="534" y="174" width="168" height="28" rx="4" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
-          <text x="618" y="186" text-anchor="middle" font-weight="700" fill="#9a3412" font-size="8px">User Approval Gate</text>
-          <text x="618" y="195" text-anchor="middle" fill="#c2410c" font-size="6.8px">Human Confirmation &amp; Report Export</text>
+          <rect x="534" y="174" width="168" height="28" rx="3" fill="#fff7ed" stroke="#c2410c" stroke-width="1"/>
+          <text x="618" y="186" text-anchor="middle" font-weight="700" fill="#7c2d12" font-size="8px">User Approval Gate</text>
+          <text x="618" y="195" text-anchor="middle" fill="#9a3412" font-size="6.8px">Human Confirmation &amp; Report Export</text>
         </svg>
-        <div style="font-size: 7.5pt; font-weight: 600; color: #334155; margin-top: 1px;">
+        <div class="table-caption" style="margin-top: 2px;">
           <em>Figure 1: Multi-Agent Legal Reasoning &amp; Verification Workflow.</em>
         </div>
       </div>
     </div>
 
     <div class="page-footer">
-      <span>HCMUT — VNU-HCM | Application Track</span>
-      <span>Page 2</span>
+      <span>CO5151: Advanced Agentic AI --- HK261</span>
+      <span>2</span>
     </div>
   </div>
 
@@ -684,10 +575,7 @@
   <!-- PAGE 4: TOOLS, MEMORY, EVALUATION PLAN -->
   <!-- ============================================================ -->
   <div class="page-sheet">
-    <div class="page-header">
-      <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Agentic RAG for Legal System</span>
-    </div>
+    <div class="page-header"></div>
 
     <div class="page-main">
       <h3 class="subsection-heading">5.3 Tools &amp; Permission Tiers by Agent (Requirement R2)</h3>
@@ -747,7 +635,7 @@
         <li><strong>Long-Term Memory:</strong> Persistent SQLite database (<code>legal_advisory.db</code>) maintaining: (i) client and case profiles (corporate structure, capital tier, sector, headcount); (ii) audit logs (timestamped verification results, user confirmations); and (iii) validity cache (cached legal status lookups to ensure fast response times).</li>
       </ul>
 
-      <h2 class="section-heading">6. Evaluation Plan &amp; Baselines</h2>
+      <h2 class="section-heading">6 Evaluation Plan &amp; Baselines</h2>
       <h3 class="subsection-heading">6.1 Benchmark Corpora &amp; Task Suite</h3>
       <ul>
         <li><strong>Statutory Corpus:</strong> 1,703 documents (12 Laws, 84 Decrees, 777 Decisions, 763 Circulars) from the SBV Corpus [1], indexed into Neo4j (5,221 nodes, 6,019 edges) and Qdrant dense vector store, augmented by corporate, labor, and tax regulations.</li>
@@ -790,8 +678,8 @@
     </div>
 
     <div class="page-footer">
-      <span>HCMUT — VNU-HCM | Application Track</span>
-      <span>Page 3</span>
+      <span>CO5151: Advanced Agentic AI --- HK261</span>
+      <span>3</span>
     </div>
   </div>
 
@@ -799,14 +687,11 @@
   <!-- PAGE 5: THREAT MODEL, RISKS, BUDGET, REFERENCES -->
   <!-- ============================================================ -->
   <div class="page-sheet">
-    <div class="page-header">
-      <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Agentic RAG for Legal System</span>
-    </div>
+    <div class="page-header"></div>
 
     <div class="page-main">
-      <h2 class="section-heading">7. Threat Model v0 (Requirement R3 / R6)</h2>
-      <p>
+      <h2 class="section-heading">7 Threat Model v0 (Requirement R3 / R6)</h2>
+      <p class="no-indent">
         <strong>Assets:</strong> Audit logs, client consultation database (<code>legal_advisory.db</code>), official request integrity, API credentials.<br>
         <strong>Attacker Profile:</strong> Malicious external parties embedding prompt injections in uploaded legal documents [7] or attempting unauthorized actions.
       </p>
@@ -873,14 +758,14 @@
         </tbody>
       </table>
 
-      <h2 class="section-heading">8. Risks, Budget &amp; Google ADK Resource Estimation</h2>
+      <h2 class="section-heading">8 Risks, Budget &amp; Resource Estimation</h2>
       <h3 class="subsection-heading">8.1 Risks &amp; Mitigation Fallbacks</h3>
       <ul>
         <li><em>External Portal Rate Limits &amp; Latency:</em> Caches frequent statutory status lookups locally in SQLite with a 24-hour TTL; falls back to offline indexed store if portal requests exceed 3 seconds.</li>
         <li><em>Statutory Clause Ambiguity:</em> If a circular omits quantitative operational thresholds, the Legal Verification Agent flags the ambiguity and triggers user interaction rather than extrapolating.</li>
       </ul>
 
-      <h3 class="subsection-heading">8.2 Google ADK Token, Compute &amp; Cloud Cost Estimation</h3>
+      <h3 class="subsection-heading">8.2 Token, Compute &amp; Cloud Cost Estimation</h3>
       <div class="table-caption">Table 4: Comprehensive Google Cloud Vertex AI token and compute cost projection.</div>
       <table>
         <thead>
@@ -944,11 +829,11 @@
           </tr>
         </tbody>
       </table>
-      <p>
+      <p class="no-indent">
         <strong>Budget Compliance:</strong> Total Cloud evaluation on Google Cloud Vertex AI costs <strong>~$2.61</strong>, utilizing &lt;11% of the allocated $25.00 course credit buffer. Local iterative development runs on local Ollama (Qwen 2.5 7B) at <strong>$0.00</strong> cost. Parallel cloud benchmarking executes at 5 concurrent requests in <strong>~22 minutes</strong>.
       </p>
 
-      <h2 class="section-heading">9. References (Strictly 2024–2026)</h2>
+      <h2 class="section-heading">9 References</h2>
       <div class="references-list">
         <div class="ref-item"><span class="ref-key">[1]</span><span>K. N. Phan, X.-B. Le, and T. T. Quan, &ldquo;SBV-LawGraph: A Hybrid RAG Approach Integrating Knowledge Graph for Legal Documents,&rdquo; in <em>Proc. ACIIDS 2026</em>, Springer.</span></div>
         <div class="ref-item"><span class="ref-key">[2]</span><span>W. Fan et al., &ldquo;Can LLMs Time Travel? Enhancing Temporal Consistency in Legal Agentic Search,&rdquo; <em>arXiv:2605.25920</em>, May 2026.</span></div>
@@ -966,8 +851,8 @@
     </div>
 
     <div class="page-footer">
-      <span>HCMUT — VNU-HCM | Application Track</span>
-      <span>Page 4</span>
+      <span>CO5151: Advanced Agentic AI --- HK261</span>
+      <span>4</span>
     </div>
   </div>
 
