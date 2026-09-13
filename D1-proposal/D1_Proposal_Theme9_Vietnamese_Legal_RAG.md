@@ -269,23 +269,13 @@ Following the evaluation formulas from SBV-LawGraph ([1, Section 5.3]) and Ragas
 
 ---
 
-## 8. Work Plan by Member, Risks & Budget
+## 8. Risks, Budget & Google ADK Resource Estimation
 
-### 8.1 Work Plan Breakdown by Member (3 Members)
-
-| Milestone | Member 1 (Lead & Orchestrator) | Member 2 (Graph Retrieval Engineer) | Member 3 (Verification & Security Engineer) |
-| :--- | :--- | :--- | :--- |
-| **W2–3: Setup** | Design Google ADK state machine, agent runner protocols & session service | Deploy Neo4j LKG & Qdrant vector store as ADK tools | Set up scoped Google Search tool (`site:vbpl.vn`), SQLite schema & baseline harness |
-| **W4–6: Build** | Implement autonomous retrieval-decision policy & dynamic sub-goal handoffs | Build `trace_amendment_edge` selective Cypher traversal tool | Build Claim Auditor proposition extractor, verifier & 10 prompt injection test cases |
-| **W7: Checkpoint (D2)** | Deliver working MAS demo on 5 scenario audits via Google ADK | Measure latency and Precision@2 improvement of selective traversal | Connect Claim Auditor to LawGraph & Web outputs; report baseline metrics vs. [1] |
-| **W8–10: Hardening** | Connect guarded filing tool with human confirmation token | Optimize Neo4j graph queries for multi-tier statutory traversal | Refine proposition extractor; execute full 10-test adversarial injection suite |
-| **W11–12: Defense (D3/D4)** | Package reproducible repo (`run.sh`, Docker container) | Finalize ADK tool wrappers, connection pools & caching | Run full 100-QA SBV & ALQAC benchmark across 3 seeds; execute ablations |
-
-### 8.2 Risks & Fallbacks
+### 8.1 Risks & Fallbacks
 - *Google Search API Rate Limits*: Cache frequent statutory status lookups locally in SQLite (`statute_cache`); fall back to static Neo4j metadata if the external portal times out.
 - *Ambiguous Statutory Sub-Clauses*: If a circular does not state an explicit threshold for a sub-clause, the Auditor flags the ambiguity and requests user verification rather than guessing.
 
-### 8.3 Detailed Resource, Token & Cost Estimation for Google ADK Deployment
+### 8.2 Detailed Resource, Token & Cost Estimation for Google ADK Deployment
 
 #### A. Per-Query Token & Turn Breakdown across Agent Roles
 
