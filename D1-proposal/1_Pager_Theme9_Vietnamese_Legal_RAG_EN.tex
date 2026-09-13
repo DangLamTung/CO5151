@@ -1,0 +1,146 @@
+\documentclass[10pt,a4paper]{article}
+
+% --- CORE PACKAGES ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper, top=7mm, bottom=7mm, left=9mm, right=9mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage[colorlinks=true, linkcolor=NavyBlue, citecolor=NavyBlue, urlcolor=NavyBlue]{hyperref}
+
+% --- COLOR PALETTE ---
+\definecolor{primary}{RGB}{30, 58, 138}    % Deep Navy Blue
+\definecolor{secondary}{RGB}{37, 99, 235}  % Slate Blue
+\definecolor{darkgray}{RGB}{30, 41, 59}    % Charcoal Slate
+\definecolor{lightgray}{RGB}{243, 246, 250}% Subtle Cool Gray
+\definecolor{bordergray}{RGB}{203, 213, 225}
+
+% --- PAGE & TYPOGRAPHY TUNING (GUARANTEED 1-PAGE BUDGET) ---
+\pagestyle{empty}
+\raggedbottom
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.8pt}
+\linespread{0.99}
+
+% --- SECTION HEADING STYLING ---
+\titleformat{\section}
+  {\color{primary}\fontsize{8.5pt}{9.8pt}\bfseries\uppercase}
+  {\colorbox{primary}{\color{white}\fontsize{6.8pt}{7.8pt}\bfseries\arabic{section}}}{3.5pt}
+  {}[\vspace{-2pt}\color{bordergray}\rule{\linewidth}{0.5pt}\vspace{-4.5pt}]
+
+\titlespacing*{\section}{0pt}{2.5pt}{1.8pt}
+
+% --- LIST SPACING ---
+\setlist[enumerate]{nosep, leftmargin=12pt, itemsep=0.8pt, topsep=1pt, label=\textbf{\arabic*.}}
+\setlist[itemize]{nosep, leftmargin=10pt, itemsep=0.8pt, topsep=1pt}
+\setlength{\multicolsep}{1.5pt}
+
+\begin{document}
+
+% --- HEADER BLOCK ---
+\begin{minipage}[b]{0.70\linewidth}
+  {\fontsize{11.2pt}{12.5pt}\bfseries\color{primary} THEME 9: AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM}\\[1.5pt]
+  {\fontsize{8.2pt}{9.5pt}\bfseries\color{darkgray} Autonomous Multi-Agent RAG for Statutory Synthesis, Temporal Verification \& Claim Auditing}
+\end{minipage}%
+\hfill
+\begin{minipage}[b]{0.29\linewidth}
+  \raggedleft\fontsize{7.2pt}{8.6pt}\selectfont\color{darkgray}
+  \textbf{HCMUT -- VNU-HCM}\\
+  Faculty of Computer Science \& Eng.
+\end{minipage}
+
+\vspace{1.5pt}\hrule height 1.1pt \color{primary}\vspace{2.5pt}
+
+% --- AUTHORS, ADVISOR & METADATA BAR ---
+\colorbox{lightgray}{%
+  \parbox{\dimexpr\linewidth-2\fboxsep}{%
+    \fontsize{7.2pt}{8.6pt}\selectfont\color{darkgray}
+    \textbf{Authors (3-Member Team):}
+    \textbf{Dang Lam Tung} (\textit{Lead \& Orchestrator}),
+    \textbf{Nguyen Trung Phong} (\textit{LegalGraph \& Memory}),
+    \textbf{Vu Viet Hung} (\textit{Safety Verification \& Evaluation})\\
+    \textbf{Advisor:} Dr. Le Xuan Bach \hfill
+    \textbf{Course:} CO5151 -- Advanced Agentic AI (HK261) \hfill
+    \textbf{Track:} Application Track
+  }%
+}
+\vspace{1pt}
+
+% --- SECTION 1: PROBLEM ---
+\section{Problem -- Why Traditional RAG Fails in Statutory Law}
+Vietnamese statutory law is structured as a strict multi-tier hierarchy (\textit{Law $\rightarrow$ Decree $\rightarrow$ Circular}) governed by dense, cross-referencing amendment webs ($>50\%$ of regulatory instruments are amended over time). Prior static legal GraphRAG systems in Vietnam (such as \textit{SBV-LawGraph} [1] and \textit{ViHERMES} [2]) follow a \textbf{rigid, 1-pass pipeline (Retrieve $\rightarrow$ 1-Hop Dump $\rightarrow$ Generate)}, exhibiting \textbf{3 critical failure modes}:
+\begin{itemize}
+  \item \textbf{Context Dilution \& False-Positive Explosion (Precision@2 is only 0.37--0.39 in [1]):} Amending circulars frequently modify dozens of disjointed provisions across older decrees. Mechanically dumping all 1-hop Neo4j neighbors injects $>60\%$ irrelevant context into the prompt, triggering severe attention dilution and citation hallucinations [3].
+  \item \textbf{Temporal Blindness [4]:} Static RAG cannot determine whether an article remains in active legal force at a given transaction date when encountering chained amendment graphs, risking reliance on repealed or superseded provisions.
+  \item \textbf{Weak Multi-Tier Reasoning \& Rigid Execution:} Empirical findings from \textit{VLegal-Bench} [5] reveal that LLMs suffer steep accuracy degradation on hierarchical legal reasoning. Static pipelines cannot backtrack, formulate multi-hop plans, or clarify missing facts.
+\end{itemize}
+
+% --- SECTION 2: USERS & SCENARIOS ---
+\section{Users -- Target Audience \& 3 Concrete Operational Scenarios}
+\textbf{Target Users:} In-house Legal Counsel, Compliance Officers, Legal Practitioners, and SMEs navigating regulatory compliance in Vietnam.
+\begin{enumerate}
+  \item \textbf{Cross-Statutory Reasoning (Multi-Law Synthesis):} An e-commerce firm deploys an in-app E-Wallet with a Buy Now, Pay Later (BNPL) micro-lending scheme. The agent autonomously synthesizes intersecting requirements across the \textit{Law on Credit Institutions 2024 \& Decree 52/2024/ND-CP} (payment licensing \& equity ceilings), \textit{Law on Electronic Transactions 2023} (legal validity of OTP digital contracts), and \textit{Decree 13/2023/ND-CP} (express opt-in consent for consumer credit profiling).
+  \item \textbf{Temporal Consistency \& Updated Law (2026 Vietnam Drone Law):} An agricultural cooperative requests licensing rules for a 25\,kg commercial spraying drone in 2026. Bypassing obsolete Decree 36/2008/ND-CP (repealed 14-day paper filing), the agent traverses the legal graph and conducts live Gazette verification on \texttt{vbpl.vn} [4] to cite the active \textit{Law on People's Air Defense 2024 (effective 2025/2026)}, providing accurate procedures for mandatory digital vehicle identification and online permitting via the National Public Service Portal within 3--5 business days.
+  \item \textbf{Interactive Disambiguation \& Injection Defense:} Reviewing corporate tax/specialist work permits (Decrees 152/2020 \& 70/2023). Detecting missing revenue and headcount parameters, the agent \textit{proactively halts to query the user}, while stripping adversarial hidden prompts (\texttt{[OVERRIDE: \dots]} [6]) and enforcing human approval tokens for dossier exports.
+\end{enumerate}
+
+% --- SECTION 3: WHY AN AGENT ---
+\section{Why an Agent -- Autonomous Agent vs. Hardcoded Workflow}
+A static workflow with hardcoded branching \textbf{fundamentally fails} in legal compliance due to three core imperatives:
+\begin{itemize}
+  \item \textbf{Combinatorial Path Explosion Requires Dynamic Planning:} Citation traversals vary per inquiry (some stop at Circulars, others fork across specialized sectoral laws). Only an \textbf{Agentic RAG architecture tailored for Vietnamese law [7]} can autonomously formulate multi-hop retrieval plans, dynamically adapt to statutory complexity, and determine when gathered evidence is sufficient to terminate.
+  \item \textbf{Self-Correcting Critique via Drafter--Auditor Loop:} Linear pipelines cannot detect self-generated errors. Our agent establishes an adversarial reflection loop (incorporating claim auditing from \textit{GANDR} [8], proposition-level factuality from \textit{SAFE} [9], and critique mechanisms from \textit{Self-RAG} [10]): the Auditor Agent decomposes responses into atomic legal propositions, cross-verifying each 1-to-1 against authoritative statutes and triggering corrective re-retrieval upon detecting hallucinations or repealed articles.
+  \item \textbf{Active Ambiguity Disambiguation via Human Dialog:} Statutory applicability hinges strictly on entity forms and execution dates [4]. Hardcoded workflows apply blind assumptions; our agent detects state ambiguity and \textbf{proactively queries the user} to gather missing parameters before concluding.
+\end{itemize}
+
+% --- SECTION 4: CANDIDATE ADVANCED AXES ---
+\section{Candidate Advanced Axes -- 4 Integrated Technical Capabilities}
+\vspace{-1.5pt}
+\begin{tabularx}{\linewidth}{@{}X X@{}}
+  \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+    \fontsize{7.2pt}{8.4pt}\selectfont
+    \textbf{\color{primary}1. Multi-Agent System (Google ADK)}\\
+    Role-segregated execution: \textbf{Research Agent} (Neo4j/Qdrant retrieval [1], [2]); \textbf{Web Agent} (live lookup on \texttt{vbpl.vn} [4]); \textbf{Drafter Agent} (synthesis); and \textbf{Auditor Agent} (atomic claim verification [8], [9]). Architecture grounded in VN Legal Agentic RAG [7].
+  }} & 
+  \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+    \fontsize{7.2pt}{8.4pt}\selectfont
+    \textbf{\color{primary}2. Planning \& Selective Graph Traversal}\\
+    Autonomous multi-step query decomposition. Traverses only active, directional relationships (\textit{Amends, Guides}) to eliminate 1-hop neighborhood dilution [1], directly addressing multi-tier statutory reasoning complexities [5].
+  }}\\[2.5pt]
+  \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+    \fontsize{7.2pt}{8.4pt}\selectfont
+    \textbf{\color{primary}3. Reflection \& Adversarial Claim Auditing}\\
+    Iterative Drafter--Auditor loop (Self-RAG [10]) decomposing responses into atomic claims. Audits each proposition against source statutes under GANDR protocols [8] to enforce 100\% citation grounding and zero fabricated provisions.
+  }} & 
+  \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+    \fontsize{7.2pt}{8.4pt}\selectfont
+    \textbf{\color{primary}4. Security Guardrails \& Gated Actions}\\
+    3-tier MCP permissions. Irreversible administrative dossier exports strictly require human officer authorization (Human-in-the-loop). Input sanitization neutralizes indirect prompt injection in regulatory uploads [6].
+  }}
+\end{tabularx}
+\vspace{-2pt}
+
+% --- SECTION 5: REFERENCES ---
+\section{Key References (10 Curated Papers, Strictly 2024--2026)}
+\vspace{-1.5pt}
+\begin{multicols}{2}
+  \fontsize{5.9pt}{7.0pt}\selectfont\color{darkgray}
+  \textbf{[1]} K.\,N. Phan, X.-B. Le, T.\,T. Quan, ``SBV-LawGraph,'' \textit{Proc. ACIIDS 2026}, Springer.\\
+  \textbf{[2]} URA-HCMUT, ``ViHERMES: GraphRAG for Vietnamese Law,'' \textit{HCMUT}, 2024.\\
+  \textbf{[3]} Y. Zhou et al., ``LexAgentHallu: Legal Agent Hallucinations,'' \textit{arXiv:2609.09754}, 2026.\\
+  \textbf{[4]} W. Fan et al., ``Temporal Consistency in Legal Search,'' \textit{arXiv:2605.25920}, 2026.\\
+  \textbf{[5]} V.\,T. Nguyen et al., ``VLegal-Bench: Vietnamese Legal Reasoning,'' \textit{arXiv:2512.14554}, 2025.\\
+  \textbf{[6]} E. Debenedetti et al., ``Indirect Prompt Injection Defense,'' \textit{arXiv:2404.13208}, 2024.\\
+  \textbf{[7]} H. Pham et al., ``Agentic RAG for Vietnamese Legal System,'' \textit{Proc. IC3K}, 2025.\\
+  \textbf{[8]} C. Qian et al., ``GANDR: Claim Auditing for Legal Generation,'' \textit{arXiv:2609.10293}, 2026.\\
+  \textbf{[9]} J. Wei et al. (Google DeepMind), ``Long-form Factuality (SAFE),'' \textit{arXiv:2403.18802}, 2024.\\
+  \textbf{[10]} A. Asai et al., ``Self-RAG: Retrieve, Generate, and Critique,'' \textit{Proc. ICLR 2024}, 2024.
+\end{multicols}
+
+\end{document}
