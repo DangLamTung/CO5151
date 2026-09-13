@@ -1,10 +1,10 @@
 \documentclass[10pt,a4paper]{article}
 
-% --- PACKAGES ---
+% --- CORE PACKAGES ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[a4paper, top=8mm, bottom=8mm, left=10mm, right=10mm]{geometry}
+\usepackage[a4paper, top=7mm, bottom=7mm, left=9mm, right=9mm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{microtype}
 \usepackage[dvipsnames]{xcolor}
@@ -14,58 +14,63 @@
 \usepackage{multicol}
 \usepackage[colorlinks=true, linkcolor=NavyBlue, citecolor=NavyBlue, urlcolor=NavyBlue]{hyperref}
 
-% --- COLOR DEFINITIONS ---
+% --- COLOR PALETTE ---
 \definecolor{primary}{RGB}{30, 58, 138}    % Deep Navy Blue
 \definecolor{secondary}{RGB}{37, 99, 235}  % Slate Blue
-\definecolor{darkgray}{RGB}{30, 41, 59}    % Charcoal Dark
-\definecolor{lightgray}{RGB}{241, 245, 249}% Cool Gray Tint
+\definecolor{darkgray}{RGB}{30, 41, 59}    % Charcoal Slate
+\definecolor{lightgray}{RGB}{243, 246, 250}% Subtle Cool Gray
 \definecolor{bordergray}{RGB}{203, 213, 225}
 
-% --- PAGE & TYPOGRAPHY SETUP ---
+% --- PAGE & TYPOGRAPHY TUNING (GUARANTEED 1-PAGE BUDGET) ---
 \pagestyle{empty}
+\raggedbottom
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{2.2pt}
-\linespread{1.02}
+\setlength{\parskip}{1.8pt}
+\linespread{0.99}
 
-% --- SECTION TITLE FORMATTING ---
+% --- SECTION HEADING STYLING ---
 \titleformat{\section}
-  {\color{primary}\fontsize{8.7pt}{10pt}\bfseries\uppercase}
-  {\colorbox{primary}{\color{white}\fontsize{7pt}{8pt}\bfseries\arabic{section}}}{4pt}
-  {}[\vspace{-2pt}\color{bordergray}\rule{\linewidth}{0.6pt}\vspace{-4pt}]
+  {\color{primary}\fontsize{8.5pt}{9.8pt}\bfseries\uppercase}
+  {\colorbox{primary}{\color{white}\fontsize{6.8pt}{7.8pt}\bfseries\arabic{section}}}{3.5pt}
+  {}[\vspace{-2pt}\color{bordergray}\rule{\linewidth}{0.5pt}\vspace{-4.5pt}]
 
-\titlespacing*{\section}{0pt}{3.5pt}{2.5pt}
+\titlespacing*{\section}{0pt}{2.5pt}{1.8pt}
 
-% --- COMPACT LISTS ---
-\setlist[enumerate]{nosep, leftmargin=13pt, itemsep=1.2pt, label=\textbf{\arabic*.}}
-\setlist[itemize]{nosep, leftmargin=11pt, itemsep=1.2pt}
+% --- LIST SPACING ---
+\setlist[enumerate]{nosep, leftmargin=12pt, itemsep=0.8pt, topsep=1pt, label=\textbf{\arabic*.}}
+\setlist[itemize]{nosep, leftmargin=10pt, itemsep=0.8pt, topsep=1pt}
+\setlength{\multicolsep}{1.5pt}
 
 \begin{document}
 
-% --- HEADER ---
-\begin{minipage}[b]{0.72\linewidth}
-  {\fontsize{11.2pt}{12.5pt}\bfseries\color{primary} THEME 9: AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM}\\[1pt]
+% --- HEADER BLOCK ---
+\begin{minipage}[b]{0.70\linewidth}
+  {\fontsize{11.2pt}{12.5pt}\bfseries\color{primary} THEME 9: AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM}\\[1.5pt]
   {\fontsize{8.2pt}{9.5pt}\bfseries\color{darkgray} Autonomous Multi-Agent RAG for Statutory Synthesis, Temporal Verification \& Claim Auditing}
 \end{minipage}%
 \hfill
-\begin{minipage}[b]{0.27\linewidth}
-  \raggedleft\fontsize{7.3pt}{8.8pt}\selectfont\color{darkgray}
+\begin{minipage}[b]{0.29\linewidth}
+  \raggedleft\fontsize{7.2pt}{8.6pt}\selectfont\color{darkgray}
   \textbf{HCMUT -- VNU-HCM}\\
-  Faculty of Computer Science \& Engineering
+  Faculty of Computer Science \& Eng.
 \end{minipage}
 
-\vspace{2pt}\hrule height 1.2pt \color{primary}\vspace{2.5pt}
+\vspace{1.5pt}\hrule height 1.1pt \color{primary}\vspace{2.5pt}
 
-% --- METADATA BAR ---
+% --- AUTHORS, ADVISOR & METADATA BAR ---
 \colorbox{lightgray}{%
   \parbox{\dimexpr\linewidth-2\fboxsep}{%
-    \fontsize{7.5pt}{8.8pt}\selectfont\color{darkgray}
+    \fontsize{7.2pt}{8.6pt}\selectfont\color{darkgray}
+    \textbf{Authors (3-Member Team):}
+    \textbf{Dang Lam Tung} (\textit{Lead \& Orchestrator}),
+    \textbf{Nguyen Trung Phong} (\textit{LegalGraph \& Memory}),
+    \textbf{Vu Viet Hung} (\textit{Safety Verification \& Evaluation})\\
+    \textbf{Advisor:} Dr. Le Xuan Bach \hfill
     \textbf{Course:} CO5151 -- Advanced Agentic AI (HK261) \hfill
-    \textbf{Instructor:} Dr. Le Xuan Bach \hfill
-    \textbf{Track:} Application Track \hfill
-    \textbf{Team (3 Members):} Dang Lam Tung, Nguyen Trung Phong, Vu Viet Hung
+    \textbf{Track:} Application Track
   }%
 }
-\vspace{1.5pt}
+\vspace{1pt}
 
 % --- SECTION 1: PROBLEM ---
 \section{Problem -- Why Traditional RAG Fails in Statutory Law}
@@ -99,33 +104,33 @@ A static workflow with hardcoded branching \textbf{fundamentally fails} in legal
 \vspace{-1.5pt}
 \begin{tabularx}{\linewidth}{@{}X X@{}}
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
-    \fontsize{7.4pt}{8.7pt}\selectfont
+    \fontsize{7.2pt}{8.4pt}\selectfont
     \textbf{\color{primary}1. Multi-Agent System (Google ADK)}\\
     Role-segregated execution: \textbf{Research Agent} (Neo4j/Qdrant retrieval [1], [2]); \textbf{Web Agent} (live lookup on \texttt{vbpl.vn} [4]); \textbf{Drafter Agent} (synthesis); and \textbf{Auditor Agent} (atomic claim verification [8], [9]). Architecture grounded in VN Legal Agentic RAG [7].
   }} & 
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
-    \fontsize{7.4pt}{8.7pt}\selectfont
+    \fontsize{7.2pt}{8.4pt}\selectfont
     \textbf{\color{primary}2. Planning \& Selective Graph Traversal}\\
     Autonomous multi-step query decomposition. Traverses only active, directional relationships (\textit{Amends, Guides}) to eliminate 1-hop neighborhood dilution [1], directly addressing multi-tier statutory reasoning complexities [5].
-  }}\\[3pt]
+  }}\\[2.5pt]
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
-    \fontsize{7.4pt}{8.7pt}\selectfont
+    \fontsize{7.2pt}{8.4pt}\selectfont
     \textbf{\color{primary}3. Reflection \& Adversarial Claim Auditing}\\
     Iterative Drafter--Auditor loop (Self-RAG [10]) decomposing responses into atomic claims. Audits each proposition against source statutes under GANDR protocols [8] to enforce 100\% citation grounding and zero fabricated provisions.
   }} & 
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
-    \fontsize{7.4pt}{8.7pt}\selectfont
+    \fontsize{7.2pt}{8.4pt}\selectfont
     \textbf{\color{primary}4. Security Guardrails \& Gated Actions}\\
     3-tier MCP permissions. Irreversible administrative dossier exports strictly require human officer authorization (Human-in-the-loop). Input sanitization neutralizes indirect prompt injection in regulatory uploads [6].
   }}
 \end{tabularx}
-\vspace{-2.5pt}
+\vspace{-2pt}
 
 % --- SECTION 5: REFERENCES ---
 \section{Key References (10 Curated Papers, Strictly 2024--2026)}
-\vspace{-2pt}
+\vspace{-1.5pt}
 \begin{multicols}{2}
-  \fontsize{6.1pt}{7.3pt}\selectfont\color{darkgray}
+  \fontsize{5.9pt}{7.0pt}\selectfont\color{darkgray}
   \textbf{[1]} K.\,N. Phan, X.-B. Le, T.\,T. Quan, ``SBV-LawGraph,'' \textit{Proc. ACIIDS 2026}, Springer.\\
   \textbf{[2]} URA-HCMUT, ``ViHERMES: GraphRAG for Vietnamese Law,'' \textit{HCMUT}, 2024.\\
   \textbf{[3]} Y. Zhou et al., ``LexAgentHallu: Legal Agent Hallucinations,'' \textit{arXiv:2609.09754}, 2026.\\
