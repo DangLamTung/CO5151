@@ -3,7 +3,7 @@
 ### Autonomous Multi-Agent RAG for Vietnamese Legal Retrieval, Temporal Verification & Compliance
 
 **Môn học**: CO5151 — Advanced Agentic AI | **Học kỳ**: HK261 | **Giảng viên**: TS. Lê Xuân Bách  
-**Theme**: Theme 9 — Agentic RAG | **Nhóm thực hiện**: 3 thành viên (Lead & Orchestrator, Graph Retrieval Engineer, Verification & Security Engineer)
+**Theme**: Theme 9 — Agentic RAG | **Nhóm thực hiện**: 3 thành viên
 
 ---
 
