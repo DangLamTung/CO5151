@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>D1 Proposal: Theme 9 - Agentic RAG for Vietnamese Legal System</title>
+  <title>D1 Proposal: Agentic RAG for Legal System</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -226,12 +226,13 @@
     /* HCMUT Cover Page Styling */
     .hcmut-cover-page {
       width: 100%;
-      height: 275mm;
+      height: 268mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: center;
       page-break-after: always;
+      margin: 0 auto;
     }
     .cover-border-outer {
       border: 2px solid #1e3a8a;
@@ -243,7 +244,7 @@
       border: 0.8px solid #1e3a8a;
       height: 100%;
       box-sizing: border-box;
-      padding: 8mm 10mm;
+      padding: 7mm 10mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -280,10 +281,10 @@
       letter-spacing: 0.2px;
     }
     .cover-logo {
-      margin: 12px 0;
+      margin: 10px 0;
     }
     .cover-logo img {
-      width: 90px;
+      width: 88px;
       height: auto;
     }
     .cover-title-block .course-title {
@@ -299,17 +300,10 @@
       font-weight: 700;
       color: #2563eb;
       letter-spacing: 0.3px;
-      margin-bottom: 6px;
-    }
-    .cover-title-block .project-theme {
-      font-size: 11pt;
-      font-weight: 700;
-      color: #0f172a;
-      letter-spacing: 0.4px;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
     .cover-title-block .project-main-title {
-      font-size: 14pt;
+      font-size: 15pt;
       font-weight: 700;
       color: #1e3a8a;
       line-height: 1.25;
@@ -394,8 +388,7 @@
         <div class="cover-title-block">
           <div class="course-title">CO5151: Advanced Agentic AI — Semester HK261</div>
           <div class="report-type">PROJECT PROPOSAL (D1)</div>
-          <div class="project-theme">THEME 9</div>
-          <div class="project-main-title">AGENTIC RAG FOR VIETNAMESE LEGAL SYSTEM</div>
+          <div class="project-main-title">AGENTIC RAG FOR LEGAL SYSTEM</div>
           <div class="project-subtitle">
             Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance
           </div>
@@ -413,9 +406,9 @@
           <div class="cover-meta-row">
             <div class="cover-meta-label">Student Team:</div>
             <div class="cover-meta-value">
-              <strong>1. Đặng Lâm Tùng</strong> — <em>Lead &amp; Multi-Agent Orchestrator</em><br>
-              <strong>2. Nguyễn Trung Phong</strong> — <em>LegalGraph &amp; Memory Engineer</em><br>
-              <strong>3. Vũ Việt Hùng</strong> — <em>Safety Verification &amp; Evaluation Engineer</em>
+              <strong>1. Đặng Lâm Tùng</strong><br>
+              <strong>2. Nguyễn Trung Phong</strong><br>
+              <strong>3. Vũ Việt Hùng</strong>
             </div>
           </div>
           <div class="cover-meta-divider"></div>
@@ -436,15 +429,15 @@
   <div class="page-sheet">
     <div class="page-header">
       <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Theme 9: Agentic RAG for Vietnamese Legal System</span>
+      <span>Agentic RAG for Legal System</span>
     </div>
 
     <div class="page-main">
       <div class="title-block">
-        <h1>D1 Proposal: Theme 9 — Agentic RAG for Vietnamese Legal System</h1>
+        <h1>D1 Proposal: Agentic RAG for Legal System</h1>
         <div class="subtitle">Autonomous Multi-Agent RAG for Cross-Statutory Synthesis, Temporal Consistency &amp; Verifiable Compliance</div>
         <div class="authors">
-          <strong>Authors (3-Member Team):</strong> Dang Lam Tung (<em>Lead &amp; Orchestrator</em>), Nguyen Trung Phong (<em>LegalGraph &amp; Memory</em>), Vu Viet Hung (<em>Safety &amp; Evaluation</em>)<br>
+          <strong>Authors:</strong> Dang Lam Tung, Nguyen Trung Phong, Vu Viet Hung<br>
           <strong>Advisor:</strong> Dr. Le Xuan Bach &nbsp;|&nbsp; <strong>Course:</strong> CO5151 — Advanced Agentic AI (HK261) &nbsp;|&nbsp; <strong>Institution:</strong> HCMUT — VNU-HCM
         </div>
       </div>
@@ -533,71 +526,61 @@
   </div>
 
   <!-- ============================================================ -->
-  <!-- PAGE 3: TECHNICAL AXES, TOPIC QUALITY, ARCHITECTURE & WORKFLOW -->
+  <!-- PAGE 3: TECHNICAL AXES, ARCHITECTURE & WORKFLOW -->
   <!-- ============================================================ -->
   <div class="page-sheet">
     <div class="page-header">
       <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Theme 9: Agentic RAG for Vietnamese Legal System</span>
+      <span>Agentic RAG for Legal System</span>
     </div>
 
     <div class="page-main">
       <h2 class="section-heading">4. Candidate technical axes</h2>
       <p>
-        <strong>1. Multi-Agent System, Google ADK.</strong>
-        Role-segregated execution with a Research Agent for Neo4j/Qdrant retrieval, a Web Agent for authoritative-source lookup, a Drafter Agent for statutory synthesis, and an Auditor Agent for claim verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
+        <strong>1. Multi-Agent System Coordination.</strong>
+        Role-segregated execution with a Legal Search Agent for statutory retrieval, a Legal Law Update Agent for official validity verification, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
       </p>
       <p>
-        <strong>2. Planning &amp; Selective Graph Traversal.</strong>
+        <strong>2. Planning &amp; Selective Statutory Traversal.</strong>
         Autonomous query decomposition followed by selective traversal of directional legal relationships such as <code>Amends</code>, <code>Repeals</code>, <code>Replaces</code>, and <code>Guides</code>. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query [1].
       </p>
       <p>
-        <strong>3. Reflection &amp; Adversarial Claim Auditing.</strong>
-        The Drafter-Auditor loop decomposes generated answers into atomic legal claims and checks each claim against authoritative evidence. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR [4, 5, 6].
+        <strong>3. Reflection &amp; Statutory Claim Verification.</strong>
+        The Reasoning-Verification loop evaluates generated answers against authoritative legal provisions. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR [4, 5, 6].
       </p>
       <p>
         <strong>4. Security Guardrails &amp; Gated Actions.</strong>
         Tool access is controlled through permission tiers. External-source content is treated as untrusted input, while irreversible actions such as dossier export require explicit human authorization. Indirect prompt injection is evaluated separately from the legal reasoning task [7].
       </p>
 
-      <h2 class="section-heading">5. Topic-Quality Self-Assessment &amp; Project Scope</h2>
-      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4.5px 7px; margin: 3px 0 5px 0; font-size: 7.9pt; line-height: 1.28;">
-        <strong>Topic-Quality Self-Assessment &amp; Boundaries:</strong>
-        <strong>Novel:</strong> Resolves multi-tier statutory chains (Law &rarr; Decree &rarr; Circular) with real-time Gazette validity vs. static 1-hop dumps [1].
-        <strong>Non-Trivial:</strong> Deeply integrates 4 candidate advanced agentic axes (MCP multi-agent, dynamic planning, Drafter-Auditor reflection, security gate).
-        <strong>Meaningful:</strong> Mitigates enterprise compliance risks and obsolete citations across &gt;50% amended Vietnamese regulations.
-        <strong>Feasible:</strong> Validated on SBV Corpus (1,703 docs, 9,661 articles) [1] and ALQAC 2025 [8] within &sim;$25 Google Cloud Vertex AI budget.
-        <strong>Scope:</strong> In-scope for enterprise statutory compliance; out-of-scope for courtroom litigation defense and unindexed private bylaws.
-      </div>
-
-      <h2 class="section-heading">6. Proposed Multi-Agent Architecture &amp; Workflow</h2>
-      <h3 class="subsection-heading">6.1 System Architecture Overview</h3>
+      <h2 class="section-heading">5. Proposed Multi-Agent Architecture &amp; Workflow</h2>
+      <h3 class="subsection-heading">5.1 System Architecture Overview</h3>
       <p>
-        The system coordinates five specialized agent roles managed under an explicit supervisor state machine:
+        The system coordinates five specialized agent roles managed under a supervisor state machine:
       </p>
       <ol>
-        <li><strong>Orchestrator Agent (Supervisor):</strong> Implemented via Google Agent Development Kit (<code>google-adk</code>). Formulates multi-step retrieval plans, executes dynamic query decomposition, routes tasks, and manages interactive human dialog.</li>
-        <li><strong>LawGraph Research Agent (Structural Retrieval):</strong> Interacts with Qdrant vector store and Neo4j graph via Model Context Protocol (MCP). Executes <strong>selective edge traversal</strong>, following only relevant outgoing relations (<em>Amends, Guides</em>) connected to target clauses, eliminating 1-hop neighborhood noise.</li>
-        <li><strong>Live Gazette Agent (Real-Time Temporal Verification):</strong> Queries the National Database of Legal Documents (<code>vbpl.vn</code>) to verify in-force validity, capturing recent ministerial decrees and amendments post-dating offline indexing [2].</li>
-        <li><strong>Compliance Drafter Agent (Synthesizer):</strong> Formats verified statutory findings into actionable enterprise compliance memos and administrative dossiers.</li>
-        <li><strong>Claim Auditor Agent (Adversarial Critic):</strong> Bounded by zero-hallucination guardrails. Deconstructs candidate drafts into atomic propositions and cross-verifies each 1-to-1 against authoritative source statutes before release [5, 6].</li>
+        <li><strong>Orchestrator Agent (Supervisor):</strong> Formulates step-by-step legal research plans, breaks down complex inquiries, routes tasks between search and update agents, and interacts with the user for clarification.</li>
+        <li><strong>Legal Search Agent:</strong> Retrieves relevant statutory provisions and traverses legal cross-references (amendments, guiding circulars, and replacement decrees) to find applicable rules.</li>
+        <li><strong>Legal Law Update Agent:</strong> Queries official legal databases (such as <code>vbpl.vn</code>) to verify the current validity of each statute as of the transaction date, capturing recent amendments [2].</li>
+        <li><strong>Legal Reasoning Agent:</strong> Synthesizes retrieved evidence, regulatory hierarchies, and case-specific facts into actionable legal advice and advisory memos.</li>
+        <li><strong>Legal Verification Agent:</strong> Independently cross-checks every legal claim and statutory citation against the source texts to ensure complete accuracy and eliminate errors before delivery [5, 6].</li>
       </ol>
 
-      <h3 class="subsection-heading">6.2 End-to-End Multi-Agent Workflow Sequence</h3>
+      <h3 class="subsection-heading">5.2 End-to-End Multi-Agent Workflow Sequence</h3>
       <p>
         Figure 1 illustrates the end-to-end execution flow of the system. Execution proceeds through six coordinated operational phases:
       </p>
       <ol>
-        <li><strong>Phase 1 (Ingestion &amp; Context Hydration):</strong> Parses user query, attachments, and extracts enterprise parameters (capital, corporate form, foreign ownership) from persistent SQLite storage.</li>
-        <li><strong>Phase 2 (Dynamic Planning &amp; Decomposition):</strong> Inquiry is split into targeted statutory sub-queries; Orchestrator determines routing between offline graph and live gazette.</li>
-        <li><strong>Phase 3 (Selective Traversal &amp; Hybrid Retrieval):</strong> LawGraph Agent executes selective Cypher queries on Neo4j along targeted edges (<em>Amends, Guides</em>) and fetches clause embeddings from Qdrant.</li>
-        <li><strong>Phase 4 (Live Gazette Temporal Verification):</strong> Live Gazette Agent validates candidate provisions against <code>vbpl.vn</code> to confirm active in-force legal status on the transaction date.</li>
-        <li><strong>Phase 5 (Synthesis &amp; Adversarial Reflection Loop):</strong> Compliance Drafter synthesizes candidate memos; Claim Auditor breaks output into atomic claims and cross-checks citations (up to 3 refinement loops if grounding &lt; 100%).</li>
-        <li><strong>Phase 6 (Guarded Action Execution):</strong> Cryptographic human approval tokens gate all external dossier exports and portal filings.</li>
+        <li><strong>Phase 1 (Inquiry &amp; Context Ingestion):</strong> Ingests user legal inquiry, case facts, and client profile parameters (corporate structure, capital tier, foreign ownership).</li>
+        <li><strong>Phase 2 (Planning &amp; Query Decomposition):</strong> Decomposes the inquiry into targeted legal questions and coordinates parallel search and update tasks.</li>
+        <li><strong>Phase 3 (Statutory Search &amp; Reference Traversal):</strong> The Legal Search Agent identifies relevant laws, decrees, and circulars, following reference chains across regulatory regimes.</li>
+        <li><strong>Phase 4 (Real-Time Validity Check):</strong> The Legal Law Update Agent confirms whether cited regulations remain in effect or have been modified by newer rules.</li>
+        <li><strong>Phase 5 (Legal Reasoning &amp; Verification Loop):</strong> The Legal Reasoning Agent drafts the legal opinion. The Legal Verification Agent validates all citations; any ungrounded claim triggers a revision loop (up to 3 iterations).</li>
+        <li><strong>Phase 6 (User Review &amp; Report Delivery):</strong> The verified advisory report is generated, with any official actions requiring explicit user confirmation.</li>
       </ol>
 
       <!-- SVG Multi-Agent Workflow Diagram -->
-      <div style="text-align: center; margin: 6px 0 2px 0;">
+      <div style="text-align: center; margin: 8px 0 2px 0;">
         <svg viewBox="0 0 710 215" width="100%" height="auto" style="max-width: 700px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 8px;">
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -616,8 +599,8 @@
 
           <!-- Input Node -->
           <rect x="235" y="4" width="240" height="26" rx="4" fill="#f8fafc" stroke="#475569" stroke-width="1.1"/>
-          <text x="355" y="15" text-anchor="middle" font-weight="700" fill="#0f172a" font-size="8.2px">User Inquiry / Contract Document</text>
-          <text x="355" y="24" text-anchor="middle" fill="#64748b" font-size="7px">+ Enterprise SQLite Profile Parameters</text>
+          <text x="355" y="15" text-anchor="middle" font-weight="700" fill="#0f172a" font-size="8.2px">User Legal Question &amp; Case Facts</text>
+          <text x="355" y="24" text-anchor="middle" fill="#64748b" font-size="7px">+ Client Profile &amp; Case Parameters</text>
 
           <!-- Arrow: Input -> Orch -->
           <line x1="355" y1="30" x2="355" y2="44" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
@@ -625,68 +608,68 @@
           <!-- Orchestrator (Supervisor) -->
           <rect x="226" y="46" width="258" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.3"/>
           <text x="355" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="9px">Orchestrator Agent (Supervisor)</text>
-          <text x="355" y="68" text-anchor="middle" fill="#3b82f6" font-size="7.2px">Google ADK State Machine • Dynamic Decomposition</text>
+          <text x="355" y="68" text-anchor="middle" fill="#3b82f6" font-size="7.2px">Coordinates Research Tasks &amp; User Dialogue</text>
 
-          <!-- Left: LawGraph Agent -->
+          <!-- Left: Legal Search Agent -->
           <rect x="8" y="46" width="168" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="92" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">LawGraph Research Agent</text>
-          <text x="92" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Selective Neo4j / Qdrant Traversal</text>
+          <text x="92" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">Legal Search Agent</text>
+          <text x="92" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Search Laws &amp; Cross-References</text>
 
-          <!-- Arrows: Orch <-> LawGraph -->
+          <!-- Arrows: Orch <-> Legal Search Agent -->
           <line x1="226" y1="56" x2="182" y2="56" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
           <line x1="182" y1="65" x2="226" y2="65" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <text x="204" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">Cypher</text>
+          <text x="204" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">Search</text>
 
-          <!-- Right: Live Gazette Agent -->
+          <!-- Right: Legal Law Update Agent -->
           <rect x="534" y="46" width="168" height="29" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="618" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">Live Gazette Agent</text>
-          <text x="618" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Temporal Validity (vbpl.vn)</text>
+          <text x="618" y="58" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.2px">Legal Law Update Agent</text>
+          <text x="618" y="68" text-anchor="middle" fill="#3b82f6" font-size="7px">Check Legal Status (vbpl.vn)</text>
 
-          <!-- Arrows: Orch <-> Gazette -->
+          <!-- Arrows: Orch <-> Legal Law Update Agent -->
           <line x1="484" y1="56" x2="528" y2="56" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
           <line x1="528" y1="65" x2="484" y2="65" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow-blue)"/>
-          <text x="506" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">In-force</text>
+          <text x="506" y="51" text-anchor="middle" font-size="6.5px" fill="#2563eb" font-weight="600">Validity</text>
 
-          <!-- Arrow: Orch -> Drafter -->
+          <!-- Arrow: Orch -> Legal Reasoning Agent -->
           <line x1="355" y1="75" x2="355" y2="88" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
-          <text x="360" y="83" font-size="6.5px" fill="#475569">Verified evidence</text>
+          <text x="360" y="83" font-size="6.5px" fill="#475569">Verified sources</text>
 
-          <!-- Compliance Drafter -->
+          <!-- Legal Reasoning Agent -->
           <rect x="235" y="90" width="240" height="27" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.1"/>
-          <text x="355" y="101" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.3px">Compliance Drafter Agent</text>
-          <text x="355" y="111" text-anchor="middle" fill="#3b82f6" font-size="7px">Statutory Synthesis &amp; Memo Construction</text>
+          <text x="355" y="101" text-anchor="middle" font-weight="700" fill="#1e3a8a" font-size="8.3px">Legal Reasoning Agent</text>
+          <text x="355" y="111" text-anchor="middle" fill="#3b82f6" font-size="7px">Legal Analysis &amp; Advisory Synthesis</text>
 
-          <!-- Arrow: Drafter -> Auditor -->
+          <!-- Arrow: Legal Reasoning -> Legal Verification -->
           <line x1="355" y1="117" x2="355" y2="129" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
 
-          <!-- Claim Auditor -->
+          <!-- Legal Verification Agent -->
           <rect x="235" y="131" width="240" height="27" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
-          <text x="355" y="142" text-anchor="middle" font-weight="700" fill="#991b1b" font-size="8.3px">Claim Auditor Agent (Adversarial Critic)</text>
-          <text x="355" y="152" text-anchor="middle" fill="#dc2626" font-size="7px">Atomic Proposition Extraction &amp; Citation Check</text>
+          <text x="355" y="142" text-anchor="middle" font-weight="700" fill="#991b1b" font-size="8.3px">Legal Verification Agent</text>
+          <text x="355" y="152" text-anchor="middle" fill="#dc2626" font-size="7px">Citation &amp; Statutory Accuracy Checking</text>
 
-          <!-- Arrow: Auditor -> Decision -->
+          <!-- Arrow: Verification -> Decision -->
           <line x1="355" y1="158" x2="355" y2="171" stroke="#334155" stroke-width="1.1" marker-end="url(#arrow)"/>
 
           <!-- Decision Diamond -->
           <polygon points="355,173 420,188 355,203 290,188" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.2"/>
-          <text x="355" y="187" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">Claims Grounded</text>
-          <text x="355" y="195" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">&ge; 100%?</text>
+          <text x="355" y="187" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">Legally Verified</text>
+          <text x="355" y="195" text-anchor="middle" font-weight="700" fill="#854d0e" font-size="7.5px">&amp; Accurate?</text>
 
           <!-- Refinement Loop (Left -> Back to Orchestrator) -->
           <path d="M 290 188 L 30 188 L 30 61 L 220 61" fill="none" stroke="#dc2626" stroke-width="1.1" stroke-dasharray="3.5 2.5" marker-end="url(#arrow-red)"/>
-          <text x="38" y="183" font-weight="600" fill="#dc2626" font-size="7.2px">No: Refinement Loop (max 3)</text>
+          <text x="38" y="183" font-weight="600" fill="#dc2626" font-size="7.2px">Needs Revision (max 3 loops)</text>
 
-          <!-- Success Branch to Guarded Gate -->
+          <!-- Success Branch to User Approval Gate -->
           <line x1="420" y1="188" x2="528" y2="188" stroke="#16a34a" stroke-width="1.2" marker-end="url(#arrow-green)"/>
-          <text x="474" y="183" text-anchor="middle" font-weight="600" fill="#16a34a" font-size="7.2px">Yes: Verified</text>
+          <text x="474" y="183" text-anchor="middle" font-weight="600" fill="#16a34a" font-size="7.2px">Verified</text>
 
-          <!-- Guarded Action Gate -->
+          <!-- User Approval Gate -->
           <rect x="534" y="174" width="168" height="28" rx="4" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2"/>
-          <text x="618" y="186" text-anchor="middle" font-weight="700" fill="#9a3412" font-size="8px">Guarded Action Gate</text>
-          <text x="618" y="195" text-anchor="middle" fill="#c2410c" font-size="6.8px">Human Approval Token Required</text>
+          <text x="618" y="186" text-anchor="middle" font-weight="700" fill="#9a3412" font-size="8px">User Approval Gate</text>
+          <text x="618" y="195" text-anchor="middle" fill="#c2410c" font-size="6.8px">Human Confirmation &amp; Report Export</text>
         </svg>
         <div style="font-size: 7.5pt; font-weight: 600; color: #334155; margin-top: 1px;">
-          <em>Figure 1: End-to-End Multi-Agent Compliance Workflow: Dynamic Evidence Acquisition, Closed-Loop Claim Auditing, and Human-Gated Actions.</em>
+          <em>Figure 1: Multi-Agent Legal Reasoning &amp; Verification Workflow.</em>
         </div>
       </div>
     </div>
@@ -698,98 +681,80 @@
   </div>
 
   <!-- ============================================================ -->
-  <!-- PAGE 4: TOOLS, MEMORY, ADK BLUEPRINT, EVALUATION PLAN -->
+  <!-- PAGE 4: TOOLS, MEMORY, EVALUATION PLAN -->
   <!-- ============================================================ -->
   <div class="page-sheet">
     <div class="page-header">
       <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Theme 9: Agentic RAG for Vietnamese Legal System</span>
+      <span>Agentic RAG for Legal System</span>
     </div>
 
     <div class="page-main">
-      <h3 class="subsection-heading">6.3 Tools &amp; Permission Tiers by Agent (Requirement R2)</h3>
+      <h3 class="subsection-heading">5.3 Tools &amp; Permission Tiers by Agent (Requirement R2)</h3>
       <div class="table-caption">Table 2: Agent tool ownership, authorization levels, and execution scope.</div>
       <table>
         <thead>
           <tr>
-            <th style="width: 22%;">Agent Owner</th>
+            <th style="width: 24%;">Agent Owner</th>
             <th style="width: 25%;">Tool Name</th>
-            <th style="width: 20%;">Permission Level</th>
+            <th style="width: 18%;">Permission</th>
             <th style="width: 33%;">Scope &amp; Function</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>LawGraph Agent</strong></td>
-            <td><code>query_lawgraph</code></td>
+            <td><strong>Legal Search Agent</strong></td>
+            <td><code>search_legal_corpus</code></td>
             <td>Read-Only</td>
-            <td>Hybrid sparse-dense vector search over parsed statutory chunks.</td>
+            <td>Hybrid semantic search over indexed statutory provisions and articles.</td>
           </tr>
           <tr>
-            <td><strong>LawGraph Agent</strong></td>
-            <td><code>trace_selective_edge</code></td>
+            <td><strong>Legal Search Agent</strong></td>
+            <td><code>trace_law_references</code></td>
             <td>Read-Only</td>
-            <td>Targeted Cypher traversal over specific <em>Amend/Guide</em> relationships.</td>
+            <td>Traverses reference relations (amendments, decrees, and guiding circulars).</td>
           </tr>
           <tr>
-            <td><strong>Gazette Agent</strong></td>
-            <td><code>verify_vbpl_status</code></td>
+            <td><strong>Legal Law Update Agent</strong></td>
+            <td><code>check_law_validity</code></td>
             <td>Read-Only</td>
-            <td>Real-time in-force verification on National Legal Database (<code>vbpl.vn</code>).</td>
+            <td>Verifies active legal status and effective dates on <code>vbpl.vn</code>.</td>
           </tr>
           <tr>
-            <td><strong>Gazette Agent</strong></td>
-            <td><code>search_gazette</code></td>
+            <td><strong>Legal Law Update Agent</strong></td>
+            <td><code>search_recent_updates</code></td>
             <td>Read-Only</td>
-            <td>Targeted portal search for recent ministerial decisions and circulars.</td>
+            <td>Searches official gazettes for recent ministerial circulars and amendments.</td>
           </tr>
           <tr>
-            <td><strong>Drafter Agent</strong></td>
-            <td><code>export_dossier</code></td>
+            <td><strong>Legal Reasoning Agent</strong></td>
+            <td><code>generate_legal_report</code></td>
             <td>Reversible-Write</td>
-            <td>Exports structured compliance matrix (Markdown/DOCX) to local workspace.</td>
+            <td>Exports formatted legal advisory report (Markdown / DOCX) to workspace.</td>
           </tr>
           <tr>
-            <td><strong>Drafter Agent</strong></td>
-            <td><code>submit_portal_filing</code></td>
+            <td><strong>User Approval Gate</strong></td>
+            <td><code>submit_official_filing</code></td>
             <td>Irreversible-Write</td>
-            <td>Dispatches administrative payload. <strong>Guarded by human token gate.</strong></td>
+            <td>Submits official administrative request. <strong>Guarded by user confirmation.</strong></td>
           </tr>
         </tbody>
       </table>
 
-      <h3 class="subsection-heading">6.4 Memory Hierarchy Design</h3>
+      <h3 class="subsection-heading">5.4 Memory Hierarchy Design</h3>
       <ul>
-        <li><strong>Short-Term Working Memory:</strong> In-memory LangGraph/ADK execution state recording multi-turn query history, retrieved statutory passages, claim audit logs, candidate draft states, and retry counters (capped at 3 refinement loops).</li>
-        <li><strong>Long-Term Memory:</strong> Persistent SQLite database (<code>enterprise_compliance.db</code>) maintaining: (i) <code>enterprise_profile</code> (entity form, charter capital, sector classifications, headcount); (ii) <code>audit_history</code> (timestamped audit trails, verification scores, human approval tokens); and (iii) <code>statute_cache</code> (time-to-live cached Gazette validation lookups).</li>
+        <li><strong>Short-Term Working Memory:</strong> In-memory agent state recording multi-turn consultation history, retrieved statutory passages, verification logs, candidate draft states, and retry counters (capped at 3 refinement loops).</li>
+        <li><strong>Long-Term Memory:</strong> Persistent SQLite database (<code>legal_advisory.db</code>) maintaining: (i) client and case profiles (corporate structure, capital tier, sector, headcount); (ii) audit logs (timestamped verification results, user confirmations); and (iii) validity cache (cached legal status lookups to ensure fast response times).</li>
       </ul>
 
-      <h3 class="subsection-heading">6.5 Google Agent Development Kit (ADK) Implementation Blueprint</h3>
-      <div class="code-box">
-<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent
-<span class="code-keyword">from</span> google.adk.runners <span class="code-keyword">import</span> Runner
-<span class="code-keyword">from</span> google.adk.sessions <span class="code-keyword">import</span> InMemorySessionService
-<span class="code-keyword">from</span> google.genai.types <span class="code-keyword">import</span> GenerateContentConfig
-
-orchestrator_agent = Agent(
-    model=<span class="code-string">"gemini-2.5-flash"</span>, <span class="code-comment"># Cloud Vertex AI or local Qwen 2.5 7B via LiteLLM</span>
-    name=<span class="code-string">"legal_orchestrator"</span>,
-    description=<span class="code-string">"Orchestrator for Vietnamese Legal Compliance &amp; Verification"</span>,
-    instruction=<span class="code-string">"Decompose user inquiry. Route to LawGraph &amp; Gazette agents. Enforce Drafter-Auditor critique loop before releasing compliance dossiers."</span>,
-    generate_content_config=GenerateContentConfig(temperature=0.1, max_output_tokens=2048),
-    tools=[query_lawgraph, trace_selective_edge, verify_vbpl_status, export_dossier]
-)
-runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"viet_legal_rag"</span>, session_service=InMemorySessionService())
-      </div>
-
-      <h2 class="section-heading">7. Evaluation Plan &amp; Baselines</h2>
-      <h3 class="subsection-heading">7.1 Benchmark Corpora &amp; Task Suite</h3>
+      <h2 class="section-heading">6. Evaluation Plan &amp; Baselines</h2>
+      <h3 class="subsection-heading">6.1 Benchmark Corpora &amp; Task Suite</h3>
       <ul>
         <li><strong>Statutory Corpus:</strong> 1,703 documents (12 Laws, 84 Decrees, 777 Decisions, 763 Circulars) from the SBV Corpus [1], indexed into Neo4j (5,221 nodes, 6,019 edges) and Qdrant dense vector store, augmented by corporate, labor, and tax regulations.</li>
         <li><strong>Task Set (100 Questions from SBV Legal Dataset [1] + 20 Advanced Tasks):</strong> (1) 89 single-document factual lookups; (2) 11 multi-document chained amendment queries; (3) 10 hierarchical multi-tier compliance scenarios (Law &rarr; Decree &rarr; Circular); (4) 5 contract review and administrative drafting tasks; and (5) 5 adversarial injection and parameter-missing edge cases.</li>
       </ul>
 
-      <h3 class="subsection-heading">7.2 Evaluation Metrics &amp; Formulations</h3>
+      <h3 class="subsection-heading">6.2 Evaluation Metrics &amp; Formulations</h3>
       <ol>
         <li>
           <strong>Retrieval Recall, Precision@2, and F2-Score:</strong>
@@ -805,7 +770,7 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
           <div class="math-formula">
             <em>Correctness</em> = (1 / <em>N</em>) &sum; <em>Correct</em>(<em>a</em><sub><em>i</em></sub>, <em>g</em><sub><em>i</em></sub>)
           </div>
-          requiring semantic equivalence, exact article citation, and verified in-force statutory validity [9].
+          requiring semantic equivalence, exact article citation, and verified official legal validity [9].
         </li>
         <li>
           <strong>Per-Claim Grounding Rate (SAFE [6] / Ragas Faithfulness [10]):</strong>
@@ -816,10 +781,10 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
         <li><strong>Operational Envelope:</strong> End-to-end response latency &le; 12 s and API cost &le; $0.02 per complex query.</li>
       </ol>
 
-      <h3 class="subsection-heading">7.3 Baselines &amp; Ablation Configurations</h3>
+      <h3 class="subsection-heading">6.3 Baselines &amp; Ablation Configurations</h3>
       <ul>
         <li><strong>Baselines:</strong> (1) Naive Chunk RAG; (2) Static Graph-RAG (SBV-LawGraph [1], ViHERMES [11]); (3) Single-Agent ReAct.</li>
-        <li><strong>Ablations:</strong> (1) Full Multi-Agent System; (2) Without Claim Auditor Agent; (3) Without Selective Edge Traversal (mechanical 1-hop dumping); and (4) Without Live Gazette Agent (offline Neo4j only).</li>
+        <li><strong>Ablations:</strong> (1) Full Multi-Agent System; (2) Without Legal Verification Agent; (3) Without Selective Reference Traversal; and (4) Without Legal Law Update Agent (offline store only).</li>
         <li><strong>Protocol:</strong> Evaluated across &ge; 3 random seeds, reporting mean &plusmn; standard deviation.</li>
       </ul>
     </div>
@@ -836,14 +801,14 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
   <div class="page-sheet">
     <div class="page-header">
       <span><strong>CO5151: Advanced Agentic AI</strong> — D1 Project Proposal</span>
-      <span>Theme 9: Agentic RAG for Vietnamese Legal System</span>
+      <span>Agentic RAG for Legal System</span>
     </div>
 
     <div class="page-main">
-      <h2 class="section-heading">8. Threat Model v0 (Requirement R3 / R6)</h2>
+      <h2 class="section-heading">7. Threat Model v0 (Requirement R3 / R6)</h2>
       <p>
-        <strong>Assets:</strong> Enterprise audit trails, corporate database (<code>enterprise_compliance.db</code>), portal filing integrity, API keys.<br>
-        <strong>Attacker Profile:</strong> Malicious external parties embedding prompt injections in uploaded PDFs [7] or attempting unauthorized filings.
+        <strong>Assets:</strong> Audit logs, client consultation database (<code>legal_advisory.db</code>), official request integrity, API credentials.<br>
+        <strong>Attacker Profile:</strong> Malicious external parties embedding prompt injections in uploaded legal documents [7] or attempting unauthorized actions.
       </p>
       <div class="table-caption">Table 3: 10-vector security threat analysis and defensive mitigation mechanisms.</div>
       <table>
@@ -868,7 +833,7 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
           <tr>
             <td>3</td>
             <td>User assertion: <em>"Decree 52 was revoked yesterday"</em></td>
-            <td>Web Agent conducts live Gazette query; confirms active status [2].</td>
+            <td>Legal Law Update Agent conducts live validity check; confirms active status [2].</td>
           </tr>
           <tr>
             <td>4</td>
@@ -883,7 +848,7 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
           <tr>
             <td>6</td>
             <td>Non-existent query: <em>"Article 999 of Law on SBV"</em></td>
-            <td>LawGraph Agent detects absent node; Auditor flags hallucination [9].</td>
+            <td>Legal Search Agent detects absent rule; Verification Agent flags hallucination [9].</td>
           </tr>
           <tr>
             <td>7</td>
@@ -892,8 +857,8 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
           </tr>
           <tr>
             <td>8</td>
-            <td>Command: <em>"Execute submit_portal_filing immediately"</em></td>
-            <td>Guarded gate unconditionally demands physical human confirmation.</td>
+            <td>Command: <em>"Execute submit_official_filing immediately"</em></td>
+            <td>Guarded gate unconditionally demands explicit user confirmation.</td>
           </tr>
           <tr>
             <td>9</td>
@@ -903,19 +868,19 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
           <tr>
             <td>10</td>
             <td>Path Traversal: Export path set to <code>../../etc/shadow</code></td>
-            <td>Strict path sanitization restricts writes strictly to <code>./workspace/dossiers/</code>.</td>
+            <td>Strict path sanitization restricts writes strictly to <code>./workspace/advisory/</code>.</td>
           </tr>
         </tbody>
       </table>
 
-      <h2 class="section-heading">9. Risks, Budget &amp; Google ADK Resource Estimation</h2>
-      <h3 class="subsection-heading">9.1 Risks &amp; Mitigation Fallbacks</h3>
+      <h2 class="section-heading">8. Risks, Budget &amp; Google ADK Resource Estimation</h2>
+      <h3 class="subsection-heading">8.1 Risks &amp; Mitigation Fallbacks</h3>
       <ul>
-        <li><em>External Portal Rate Limits &amp; Latency:</em> Caches frequent statutory status lookups locally in SQLite (<code>statute_cache</code>) with a 24-hour TTL; falls back to offline Neo4j graph metadata if portal requests exceed 3 seconds.</li>
-        <li><em>Statutory Clause Ambiguity:</em> If a circular omits quantitative operational thresholds, the Claim Auditor flags the ambiguity and triggers human interaction rather than extrapolating.</li>
+        <li><em>External Portal Rate Limits &amp; Latency:</em> Caches frequent statutory status lookups locally in SQLite with a 24-hour TTL; falls back to offline indexed store if portal requests exceed 3 seconds.</li>
+        <li><em>Statutory Clause Ambiguity:</em> If a circular omits quantitative operational thresholds, the Legal Verification Agent flags the ambiguity and triggers user interaction rather than extrapolating.</li>
       </ul>
 
-      <h3 class="subsection-heading">9.2 Google ADK Token, Compute &amp; Cloud Cost Estimation</h3>
+      <h3 class="subsection-heading">8.2 Google ADK Token, Compute &amp; Cloud Cost Estimation</h3>
       <div class="table-caption">Table 4: Comprehensive Google Cloud Vertex AI token and compute cost projection.</div>
       <table>
         <thead>
@@ -983,7 +948,7 @@ runner = Runner(agent=orchestrator_agent, app_name=<span class="code-string">"vi
         <strong>Budget Compliance:</strong> Total Cloud evaluation on Google Cloud Vertex AI costs <strong>~$2.61</strong>, utilizing &lt;11% of the allocated $25.00 course credit buffer. Local iterative development runs on local Ollama (Qwen 2.5 7B) at <strong>$0.00</strong> cost. Parallel cloud benchmarking executes at 5 concurrent requests in <strong>~22 minutes</strong>.
       </p>
 
-      <h2 class="section-heading">10. References (Strictly 2024–2026)</h2>
+      <h2 class="section-heading">9. References (Strictly 2024–2026)</h2>
       <div class="references-list">
         <div class="ref-item"><span class="ref-key">[1]</span><span>K. N. Phan, X.-B. Le, and T. T. Quan, &ldquo;SBV-LawGraph: A Hybrid RAG Approach Integrating Knowledge Graph for Legal Documents,&rdquo; in <em>Proc. ACIIDS 2026</em>, Springer.</span></div>
         <div class="ref-item"><span class="ref-key">[2]</span><span>W. Fan et al., &ldquo;Can LLMs Time Travel? Enhancing Temporal Consistency in Legal Agentic Search,&rdquo; <em>arXiv:2605.25920</em>, May 2026.</span></div>
