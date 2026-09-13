@@ -7,35 +7,25 @@
 
 ## 1. Topic-Quality Self-Assessment
 
-- **Novel (Beyond SBV-LawGraph and Static Legal RAG)**: **SBV-LawGraph (Phan, Le & Quan, ACIIDS 2026)** is a static, linear retrieval pipeline: it runs hybrid BM25 + dense search in Qdrant, mechanically dumps all 1-hop Neo4j neighbors into a prompt, and generates an answer in a single pass. While effective for simple statutory lookup, analyzing its published results (Section 5.3) reveals critical operational limitations:
-  1. **Low Precision from Blind 1-Hop Dumping**: In SBV-LawGraph's evaluation (Table 3), its **Precision@2 is only 0.39**—meaning over 60% of the retrieved text dumped into the prompt is irrelevant. Because an amending circular often touches dozens of unrelated articles across multiple decrees, blind 1-hop expansion floods the context window with distracting noise.
-  2. **Rigid Script Without a Retrieval-Decision Policy**: SBV-LawGraph executes the exact same retrieval steps for every query. It cannot evaluate whether initial evidence is sufficient, cannot formulate follow-up queries to drill into specific sub-clauses, and cannot ask the user for clarifying facts.
-  3. **Single-Turn QA vs. Real Compliance Workflows**: SBV-LawGraph is built for isolated question answering (e.g. *"What does Article 5 say?"*). Real enterprise compliance requires auditing complex scenarios (e.g. checking whether a foreign loan agreement complies with borrower eligibility, interest caps, and reporting deadlines across Laws, Decrees, and Circulars simultaneously).
-  4. **Surface-Level Citation Check vs. True Grounding**: SBV-LawGraph only verifies that a citation string is present (`HasCitations`); it does not verify whether the cited clause actually supports the generated claim.
-  We build an **autonomous multi-agent legal compliance system** that replaces the fixed pipeline with an adaptive agentic workflow:
-  - Implements an **autonomous retrieval-decision policy** that dynamically determines *whether* to retrieve, *what* specific legal tier to query, and *when* sufficient evidence has been gathered.
-  - Replaces blind 1-hop dumping with **selective graph traversal**: the agent inspects the specific clause in question and follows only the relevant `Amend` or `Guide` edge.
-  - Features an **adversarial claim auditor** that breaks candidate answers into atomic propositions and audits each claim against authoritative statutory text before release.
-  - Verifies active regulatory status in real time against the **National Legal Database (VBPL)**.
-  - Maintains persistent **enterprise context** (bank license tier, capital thresholds) and generates structured compliance matrices behind human approval gates.
+- **Novel**: Unlike conventional naive RAG chatbots that perform basic lexical or dense retrieval, LegalPilot-VN addresses the multi-tiered, hierarchical nature of Vietnamese statutory law. It features cross-document validity verification (determining whether a clause has been amended, superseded, or annulled) and dynamically synthesizes formal administrative drafts backed by a token-level citation grounding engine. 
 - **Non-trivial**: Integrates three core agentic axes: (1) multi-agent orchestration with role-segregated tools, (2) an autonomous retrieval-decision policy with selective graph traversal, and (3) reflection-based per-claim grounding with human-gated write actions.
-- **Meaningful**: Banking compliance officers spend 15–20 hours weekly auditing transactions across overlapping circulars. Automating scenario checks with verifiable legal grounding directly prevents non-compliance penalties and reduces manual review time by over 70%.
+- **Meaningful**: Small and medium-sized enterprises in Vietnam frequently incur administrative penalties or compliance delays due to unnotified regulatory updates. This system saves dozens of research hours monthly while significantly mitigating the legal risk of relying on superseded statutory provisions.
 - **Feasible**: Uses the published SBV Legal Corpus (1,703 documents, 9,661 articles) and Neo4j graph from Phan et al. (2026). Evaluated on the published 100-QA SBV dataset and ALQAC2025 within a ~$30 API budget.
 
 ---
 
 ## 2. Problem & Critique of Prior Work (SBV-LawGraph)
 
-### What SBV-LawGraph Does Well (The Foundation)
+### The Foundation
 1. **Curated Legal Knowledge Graph (LKG)**: Successfully indexed 1,703 regulatory documents into Neo4j with 5,221 nodes and 6,019 directional relationships (*Amend, Repeal, Replace, Guide*).
 2. **Dual-Retrieval (SBV-LR + SBV-RR)**: Combined sparse BM25 with dense Sentence Transformers in Qdrant and cross-encoder re-ranking (`ViRanker`, `bge-reranker-v2-m3`), improving baseline retrieval recall on Vietnamese legal texts.
 
 ### Critical Gaps in SBV-LawGraph (Why an Agent is Needed)
 1. **No Retrieval-Decision Policy (Fixed Pipeline)**: Runs a hardcoded one-pass script (Retrieve $\rightarrow$ 1-Hop Dump $\rightarrow$ Generate). The model cannot decide to skip retrieval for simple follow-ups, cannot adjust search terms if results are off-target, and cannot iteratively backtrack if a clause references an external decree.
-2. **Context Dilution from Blind 1-Hop Expansion**: As shown in the paper's Table 3, Precision@2 is only 0.37–0.39. In Vietnamese banking law, an amending circular (e.g. Circular 23/2025) amends dozens of unrelated articles across multiple prior circulars. Blindly pulling all 1-hop connected nodes introduces extensive irrelevant text, degrading generation quality.
-3. **Single-Turn QA Only (No Workflow Execution)**: Evaluates only 100 isolated QA pairs. It cannot ingest an enterprise contract or transaction scenario, evaluate multi-condition rules, or output an actionable compliance audit matrix.
+2. **Context Dilution from Blind 1-Hop Expansion:** As documented in retrieval benchmarks, unguided structural expansion causes a sharp drop in Precision@2 due to excessive false positives. In Vietnamese corporate and labor regulations, omnibus instruments (such as Government Decree No. 70/2023/ND-CP) routinely amend dozens of disparate articles across multiple prior decrees at once. Blindly retrieving all 1-hop connected nodes introduces extensive irrelevant regulatory context, overloading the model's context window and severely degrading answer generation quality.
+3. **Single-Turn QA Only**: Evaluates only 100 isolated QA pairs. It cannot ingest an enterprise contract or transaction scenario, evaluate multi-condition rules, or output an actionable compliance audit matrix.
 4. **Surface-Level Citation Check**: The verification step in Algorithm 2 only checks `if ¬HasCitations(aq)`. If the LLM generates an answer with a hallucinated article number or quotes the wrong clause, a regex citation check marks it valid as long as the text resembles a citation.
-5. **Stateless Operation (No Enterprise Memory)**: Treats every query in a vacuum. Banking regulations vary dramatically depending on whether an institution is a state-owned bank, joint-stock bank, or foreign bank branch. Without persistent institutional memory, users must re-specify their institutional constraints in every prompt.
+5. **Stateless Operation**: Treats every query in a vacuum. In Vietnamese administrative, tax, and labor compliance, regulatory obligations vary dramatically depending on an enterprise's organizational form, tax regime, and employee headcount. Without persistent organizational memory, users are forced to repeatedly re-specify their structural constraints and legal profile in every single prompt.
 
 ---
 
@@ -87,7 +77,7 @@ flowchart TD
 4. **Claim Auditor Agent (Grounding Verifier - Critic)**: Decomposes candidate compliance guidance into atomic propositions and audits each claim against the retrieved statutory text. Refuses unverified claims before they reach the user.
 5. **Compliance Dossier Drafter (Synthesizer & Actor)**: Formats verified conclusions into standardized banking compliance matrices (Markdown/DOCX) and drafts administrative filing payloads.
 
-### 3.3 Tools & Permission Tiers by Agent (Requirement R2)
+### 3.3 Tools & Permission Tiers by Agent
 
 | Agent Owner | Tool Name | Permission Level | Function & Scope |
 | :--- | :--- | :--- | :--- |
@@ -98,7 +88,7 @@ flowchart TD
 | **Dossier Drafter** | `export_compliance_matrix`| **Reversible-write** | Saves structured audit matrices (Markdown/DOCX) to `./workspace/dossiers/`. |
 | **Dossier Drafter** | `submit_portal_filing` | **Irreversible-write** | Submits administrative filing payload to mock SBV portal. **Guarded by human confirmation.** |
 
-### 3.4 Memory Design (Requirement R3)
+### 3.4 Memory Design
 - **Short-Term Memory**: Shared LangGraph execution state tracking the user's transaction details, active legal provisions, auditor critique logs, and retry counters (capped at 3 refinement cycles).
 - **Long-Term Memory**: Local SQLite database (`enterprise_compliance.db`):
   - `institution_profile`: Banking license category, charter capital, historical reserve ratios.
@@ -107,7 +97,7 @@ flowchart TD
 
 ---
 
-## 4. Concrete Usage Scenarios (Requirement AT1)
+## 4. Concrete Usage Scenarios
 
 1. **Typical (Chained Amendment Resolution for Foreign Currency Reserves)**:
    - *Scenario*: A commercial bank compliance clerk asks: *"What is our compulsory reserve ratio for foreign currency deposits under 12 months for Q3/2026?"*
@@ -122,7 +112,7 @@ flowchart TD
 
 ---
 
-## 5. Evaluation Plan (R5, AT3)
+## 5. Evaluation Plan
 
 ### Ingested Benchmark Datasets
 - **SBV Legal Corpus (Phan et al., 2026)**: 1,703 documents (12 Laws, 84 Decrees, 777 Decisions, 763 Circulars), with 840 active/partially active documents segmented into 9,661 articles and indexed in Neo4j (5,221 nodes, 6,019 edges).
