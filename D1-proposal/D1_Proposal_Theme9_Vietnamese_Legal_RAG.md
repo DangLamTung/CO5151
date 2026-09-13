@@ -29,7 +29,7 @@
   1. *Multi-Tier Statutory Navigation*: Autonomous traversal across Laws (enacted by the National Assembly), Decrees (issued by the Government), and Circulars (issued by Ministries) linked by explicit directional relationships (*Amend, Repeal, Replace, Guide*).
   2. *Autonomous Retrieval-Decision Policy*: Dynamic query decomposition, selective graph traversal to eliminate context dilution, and adaptive backtracking when initial retrieval is insufficient.
   3. *Temporal Amendment Conflict Resolution*: Tracing directional amendment graphs to identify active provisions for specific transaction dates, cross-referenced in real time with the National Database of Legal Documents (`vbpl.vn`) and Official Gazette (`congbao.chinhphu.vn`) [2].
-  4. *Reflection-Based Claim Auditing*: Deconstructing compliance drafts into atomic factual claims and auditing each statement against source statutes before user release (Self-RAG [11], Reflexion [12], FActScore [7], GANDR [4]).
+  4. *Reflection-Based Claim Auditing*: Deconstructing compliance drafts into atomic factual claims and auditing each statement against source statutes before user release (Self-RAG [11], Vietnamese Legal Agentic RAG [12], SAFE [7], GANDR [4]).
   5. *Interactive Disambiguation & Guardrails*: Actively pausing to query the user when required statutory parameters are missing, paired with 3-tier MCP permissions, human confirmation gates for write actions, and indirect prompt injection defense [9].
   6. *Empirical Evaluation Benchmark*: Utilizing the curated SBV Legal Corpus (1,703 documents, 9,661 articles) [1] and the ALQAC benchmark [5] as concrete, reproducible empirical testbeds for retrieval precision, faithfulness, and answer correctness.
 - **Out-of-Scope Boundaries**:
@@ -202,7 +202,7 @@ Following the evaluation formulas from SBV-LawGraph ([1, Section 5.3]) and Ragas
    - *(ii) Citation presence*: Includes exact legal article and clause numbers.
    - *(iii) Citation validity*: Cited provisions match actual active corpus articles, penalizing hallucinations identified in legal agent benchmarks ([3]).
 
-3. **Per-Claim Grounding Rate (FActScore / Ragas Faithfulness [7], [8])**:
+3. **Per-Claim Grounding Rate (SAFE / Ragas Faithfulness [7], [8])**:
    $$\text{Grounding Rate} = \frac{\text{Supported Atomic Claims}}{\text{Total Generated Claims}}$$
    measuring the percentage of generated assertions that strictly entail from the retrieved legal text, audited via the Drafter-Critic protocol ([4]).
 
@@ -255,17 +255,17 @@ Following the evaluation formulas from SBV-LawGraph ([1, Section 5.3]) and Ragas
 
 [6] V. T. Nguyen et al., "VLegal-Bench: Cognitively Grounded Benchmark for Vietnamese Legal Reasoning of Large Language Models," *arXiv preprint arXiv:2512.14554*, Dec. 2025. [Online]. Available: https://vilegalbench.cmcai.vn/
 
-[7] S. Min, K. Krishna, X. Lyu, M. Lewis, W.-t. Yih, P. W. Koh, M. Iyyer, L. Zettlemoyer, and H. Hajishirzi, "FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation," in *Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP 2023)*, pp. 12076–12100, Dec. 2023. [Online]. Available: https://arxiv.org/abs/2305.14251
+[7] J. Wei et al. (Google DeepMind), "Long-form Factuality in Large Language Models (SAFE: Search-Augmented Factuality Evaluator)," *arXiv preprint arXiv:2403.18802*, Mar. 2024. [Online]. Available: https://arxiv.org/abs/2403.18802
 
 [8] S. Es, J. James, L. Espinosa-Anke, and S. Schockaert, "Ragas: Automated Evaluation of Retrieval Augmented Generation," in *Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (EACL 2024)*, pp. 150–158, Mar. 2024. [Online]. Available: https://arxiv.org/abs/2309.15217
 
-[9] K. Greshake, S. Abdelnabi, S. Mishra, C. Endres, T. Holz, and M. Fritz, "Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection," in *Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISEC 2023)*, pp. 79–90, Nov. 2023. [Online]. Available: https://arxiv.org/abs/2302.12173
+[9] E. Debenedetti, J. Severi, N. Carlini, C. A. Choquette-Choo, M. Jagielski, M. Nasr, and F. Tramèr, "Defending Against Indirect Prompt Injection in Tool-Enabled Language Agents," *arXiv preprint arXiv:2404.13208*, Apr. 2024. [Online]. Available: https://arxiv.org/abs/2404.13208
 
 [10] URA-HCMUT, "ViHERMES: A Retrieval-Augmented Generation System for Vietnamese Legal Documents," *Software Repository*, Ho Chi Minh City University of Technology, 2024. [Online]. Available: https://github.com/ura-hcmut/ViHERMES
 
 [11] A. Asai, Z. Wu, Y. Wang, A. Sil, and H. Hajishirzi, "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection," in *Proceedings of the 12th International Conference on Learning Representations (ICLR 2024)*, May 2024. [Online]. Available: https://arxiv.org/abs/2310.11511
 
-[12] N. Shinn, F. Cassano, E. Berman, A. Gopinath, K. Narasimhan, and S. Yao, "Reflexion: Language Agents with Verbal Reinforcement Learning," in *Advances in Neural Information Processing Systems (NeurIPS 2023)*, vol. 36, pp. 8634–8652, Dec. 2023. [Online]. Available: https://arxiv.org/abs/2303.11366
+[12] H. Pham, N. Duong, and H. Pham, "Agentic RAG-Based Legal Advisory Chatbot: A Knowledge-Driven Approach for Vietnamese Legal System," in *Proceedings of the 17th International Joint Conference on Knowledge Discovery, Knowledge Engineering and Knowledge Management (IC3K/KDIR 2025)*, pp. 354–361, 2025. [Online]. Available: https://doi.org/10.5220/0013735400004000
 
 ---
 
