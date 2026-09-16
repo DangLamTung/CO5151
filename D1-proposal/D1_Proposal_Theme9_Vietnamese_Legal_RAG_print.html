@@ -321,7 +321,7 @@
         <td class="val-col">
           Đặng Lâm Tùng<br>
           Nguyễn Trung Phong<br>
-          Vũ Việt Hùng
+          Vũ Việt Hưng
         </td>
       </tr>
     </table>
@@ -347,7 +347,7 @@
       </p>
       <ol>
         <li>
-          <strong>Context dilution:</strong> Fixed retrieval and unguided graph expansion return related provisions that are not necessary for the current claim, increasing context and citation-selection errors. Indiscriminate retrieval of related articles causes severe attention dilution because an omnibus circular often amends dozens of unrelated provisions across earlier decrees, injecting substantial distracting noise into the prompt [1].
+          <strong>Context dilution:</strong> Fixed retrieval and unguided graph expansion return related provisions that are not necessary for the current claim, increasing context and citation-selection errors. Mechanically expanding 1-hop relations causes severe precision dilution because an omnibus circular often amends dozens of unrelated articles across earlier decrees, injecting substantial distracting noise into the prompt [1].
         </li>
         <li>
           <strong>Using the wrong version of a law:</strong> Finding a relevant legal rule is not enough. At the time of the transaction, the rule may have changed, no longer applied, or not yet come into force. Recent research on legal AI agents highlights the need to check which version of a rule applied on the date in question [2].
@@ -430,10 +430,10 @@
     <div class="page-main">
       <h2 class="section-heading" style="margin-top: 0; margin-bottom: 3px;">4 Candidate technical axes</h2>
       <p class="no-indent" style="margin-bottom: 2.5px;">
-        <strong>1. Multi-Agent System Coordination.</strong> Role-segregated execution with a LawGraph Agent for retrieval, a Legal Update Agent for official validity, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification [4].
+        <strong>1. Multi-Agent System Coordination.</strong> Role-segregated execution with a LawGraph Agent for retrieval, a Legal Law Update Agent for official validity, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification [4].
       </p>
       <p class="no-indent" style="margin-bottom: 2.5px;">
-        <strong>2. Planning &amp; Selective Statutory Traversal.</strong> Autonomous query decomposition followed by selective traversal of directional legal relationships (<code>Amends</code>, <code>Replaces</code>, <code>Guides</code>), avoiding context dilution from unguided graph retrieval [1].
+        <strong>2. Planning &amp; Selective Statutory Traversal.</strong> Autonomous query decomposition followed by selective traversal of directional legal relationships (<code>Amends</code>, <code>Replaces</code>, <code>Guides</code>), avoiding context dilution from fixed 1-hop expansions [1].
       </p>
       <p class="no-indent" style="margin-bottom: 2.5px;">
         <strong>3. Reflection &amp; Statutory Claim Verification.</strong> The Reasoning-Verification loop evaluates generated answers against authoritative provisions; ungrounded claims trigger targeted revision rather than unconditional regeneration [4, 5, 6].
@@ -449,7 +449,7 @@
         (1) <em>Context Ingestion</em> of inquiry and client parameters; 
         (2) <em>Planning &amp; Decomposition</em> into statutory search targets; 
         (3) <em>Statutory Traversal</em> by the <strong>LawGraph Agent</strong>, which queries relationships and writes citation subgraphs to memory; 
-        (4) <em>Real-Time Validity Check</em> by the <strong>Legal Update Agent</strong> via <code>vbpl.vn</code> [2]; 
+        (4) <em>Real-Time Validity Check</em> by the <strong>Legal Law Update Agent</strong> via <code>vbpl.vn</code> [2]; 
         (5) <em>Reasoning-Verification Loop</em> between Drafter and Auditor (max 3 revision iterations) [5]; and 
         (6) <em>Gated Report Export</em> requiring user confirmation.
       </p>
@@ -508,12 +508,12 @@
           <line x1="128" y1="93" x2="128" y2="69" stroke="#475569" stroke-width="0.9" marker-end="url(#arrow)"/>
           <text x="132" y="81" text-anchor="start" font-size="6.3px" fill="#475569">Memory Read</text>
 
-          <!-- Right: Legal Update Agent -->
+          <!-- Right: Legal Law Update Agent -->
           <rect x="534" y="41" width="168" height="26" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
-          <text x="618" y="52" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Update Agent</text>
+          <text x="618" y="52" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Law Update Agent</text>
           <text x="618" y="62" text-anchor="middle" fill="#333333" font-size="6.8px">Check Legal Status (vbpl.vn)</text>
 
-          <!-- Arrows: Orch <-> Legal Update Agent -->
+          <!-- Arrows: Orch <-> Legal Law Update Agent -->
           <line x1="484" y1="50" x2="528" y2="50" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
           <line x1="528" y1="59" x2="484" y2="59" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
           <text x="506" y="46" text-anchor="middle" font-size="6.2px" fill="#000000">Validity</text>
@@ -571,7 +571,7 @@ lawgraph_agent = Agent(
     instruction="Selectively traverse LawGraph edges; write retrieved subgraphs & citations to memory.",
     tools=[search_legal_corpus, trace_law_references, write_case_memory]
 )
-# 2. Legal Update Agent: Queries live official gazette for real-time validity
+# 2. Legal Law Update Agent: Queries live official gazette for real-time validity
 update_agent = Agent(
     name="legal_update_agent", model="gemini-2.5-flash",
     instruction="Query vbpl.vn gazette to verify effective dates and active statutory validity.",
@@ -630,13 +630,13 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
             <td>Writes retrieved subgraphs, case dependencies, and citation cache to memory.</td>
           </tr>
           <tr>
-            <td><strong>Legal Update Agent</strong></td>
+            <td><strong>Legal Law Update Agent</strong></td>
             <td><code>check_law_validity</code></td>
             <td>Read-Only</td>
             <td>Verifies active legal status and effective dates on <code>vbpl.vn</code>.</td>
           </tr>
           <tr>
-            <td><strong>Legal Update Agent</strong></td>
+            <td><strong>Legal Law Update Agent</strong></td>
             <td><code>search_recent_updates</code></td>
             <td>Read-Only</td>
             <td>Searches official gazettes for recent ministerial circulars and amendments.</td>
@@ -674,7 +674,7 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
         <li>
           <strong>Retrieval Recall, Precision@2, and F2-Score:</strong>
           <div class="math-formula"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Precision@</mtext><mi>k</mi><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><msubsup><mover accent="true"><mi>R</mi><mo>^</mo></mover><mi>i</mi><mi>k</mi></msubsup><mo>∩</mo><msub><mi>R</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi></mrow><mi>k</mi></mfrac><mo separator="true">,</mo><mspace width="1em"/><mtext>Recall@</mtext><mi>k</mi><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><msubsup><mover accent="true"><mi>R</mi><mo>^</mo></mover><mi>i</mi><mi>k</mi></msubsup><mo>∩</mo><msub><mi>R</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi></mrow><mrow><mi mathvariant="normal">∣</mi><msub><mi>R</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi></mrow></mfrac><mo separator="true">,</mo><mspace width="1em"/><mtext>F2@</mtext><mi>k</mi><mo>=</mo><mn>5</mn><mo>⋅</mo><mfrac><mrow><mtext>Precision@</mtext><mi>k</mi><mo>⋅</mo><mtext>Recall@</mtext><mi>k</mi></mrow><mrow><mn>4</mn><mo>⋅</mo><mtext>Precision@</mtext><mi>k</mi><mo>+</mo><mtext>Recall@</mtext><mi>k</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{Precision@}k = \frac{|\hat{R}_i^k \cap R_i|}{k}, \quad \text{Recall@}k = \frac{|\hat{R}_i^k \cap R_i|}{|R_i|}, \quad \text{F2@}k = 5 \cdot \frac{\text{Precision@}k \cdot \text{Recall@}k}{4 \cdot \text{Precision@}k + \text{Recall@}k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">Precision@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.3098em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6238em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9468em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">^</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-2.4413em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2587em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">Recall@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.5598em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6238em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∣</span><span class="mord"><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9468em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1667em;"><span class="mord">^</span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-2.4413em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2587em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord">F2@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.1408em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord text"><span class="mord">Precision@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord text"><span class="mord">Recall@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Precision@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord text"><span class="mord">Recall@</span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div>
-          measuring whether selective reference traversal eliminates irrelevant context over unguided graph retrieval [1].
+          measuring whether selective reference traversal eliminates false-positive noise over unguided 1-hop graph expansion [1].
         </li>
         <li>
           <strong>Strict Answer Correctness:</strong>
@@ -691,7 +691,7 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
       <h3 class="subsection-heading">6.3 Baselines &amp; Ablation Configurations</h3>
       <ul>
         <li><strong>Baselines:</strong> (1) Naive Chunk RAG; (2) Static Graph-RAG (SBV-LawGraph [1], ViHERMES [11]); (3) Single-Agent ReAct.</li>
-        <li><strong>Ablations:</strong> (1) Full Multi-Agent System; (2) Without Legal Verification Agent; (3) Without Selective Reference Traversal; and (4) Without Legal Update Agent (offline store only).</li>
+        <li><strong>Ablations:</strong> (1) Full Multi-Agent System; (2) Without Legal Verification Agent; (3) Without Selective Reference Traversal; and (4) Without Legal Law Update Agent (offline store only).</li>
         <li><strong>Protocol:</strong> Evaluated across &ge; 3 random seeds, reporting mean &plusmn; standard deviation.</li>
       </ul>
     </div>
@@ -737,7 +737,7 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
           <tr>
             <td>3</td>
             <td>User assertion: <em>"Decree 52 was revoked yesterday"</em></td>
-            <td>Legal Update Agent conducts live validity check; confirms active status [2].</td>
+            <td>Legal Law Update Agent conducts live validity check; confirms active status [2].</td>
           </tr>
           <tr>
             <td>4</td>

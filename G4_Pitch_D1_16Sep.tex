@@ -48,8 +48,16 @@
   \end{beamercolorbox}%
 }
 
-\newcommand{\hcmutlogo}[1][1.5cm]{%
-  \IfFileExists{hcmut_logo.png}{\includegraphics[height=#1]{hcmut_logo.png}}{\textbf{HCMUT}}%
+\usepackage{graphicx}
+
+\newcommand{\hcmutlogo}[1][1.6cm]{%
+  \IfFileExists{hcmut_logo.png}{\includegraphics[height=#1]{hcmut_logo.png}}{%
+    \IfFileExists{CO5151/hcmut_logo.png}{\includegraphics[height=#1]{CO5151/hcmut_logo.png}}{%
+      \IfFileExists{../hcmut_logo.png}{\includegraphics[height=#1]{../hcmut_logo.png}}{%
+        \IfFileExists{graphics/hcmut.png}{\includegraphics[height=#1]{graphics/hcmut.png}}{\textbf{HCMUT}}%
+      }%
+    }%
+  }%
 }
 
 \begin{document}
@@ -58,7 +66,7 @@
 \begin{frame}[plain]
 \centering
 \vskip0.2cm
-\hcmutlogo[1.5cm]\\[0.35cm]
+\hcmutlogo[1.6cm]\\[0.35cm]
 {\small ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH}\\[0.05cm]
 {\small TRƯỜNG ĐẠI HỌC BÁCH KHOA -- KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH}\\[0.45cm]
 {\large\bfseries CO5151: Advanced Agentic AI}\\[0.1cm]
@@ -66,7 +74,7 @@
 \textcolor{hcmutblue}{\rule{0.82\linewidth}{1pt}}\\[0.3cm]
 {\Large\bfseries Agentic RAG cho Hệ thống Pháp luật Việt Nam}\\[0.1cm]
 {\small Hệ thống đa tác tử có kiểm chứng hiệu lực thời gian thực}\\[0.45cm]
-{\small Nhóm G4: Đặng Lâm Tùng (nhóm trưởng) $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hùng}\\[0.15cm]
+{\small Nhóm G4: Đặng Lâm Tùng (nhóm trưởng) $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hưng}\\[0.15cm]
 {\small Giảng viên: TS. Lê Xuân Bách \hfill 16/9/2026 $\cdot$ HK261}
 \end{frame}
 
@@ -445,11 +453,12 @@ R6 & Security và safety & Threat model; 10 kịch bản kiểm thử injection 
 
 \begin{frame}[plain]
 \centering
-\vskip1.2cm
-{\Large\bfseries Cảm ơn thầy và các bạn}\\[0.6cm]
+\vskip0.6cm
+\hcmutlogo[1.3cm]\\[0.4cm]
+{\Large\bfseries Cảm ơn thầy và các bạn}\\[0.5cm]
 {\large Nhóm G4}\\[0.2cm]
-{\small Đặng Lâm Tùng $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hùng}\\[0.8cm]
-\textcolor{hcmutblue}{\rule{0.5\linewidth}{0.8pt}}\\[0.4cm]
+{\small Đặng Lâm Tùng $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hưng}\\[0.6cm]
+\textcolor{hcmutblue}{\rule{0.5\linewidth}{0.8pt}}\\[0.35cm]
 {\footnotesize CO5151 -- Advanced Agentic AI $\cdot$ 16/9/2026}
 \end{frame}
 
