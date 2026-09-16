@@ -212,7 +212,7 @@ The project therefore evaluates whether state-dependent planning and verificatio
 Role-segregated execution with a Legal Search Agent for statutory retrieval, a Legal Update Agent for official validity verification, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
 
 \textbf{2. Planning \& Selective Statutory Traversal.}
-Autonomous query decomposition followed by selective traversal of directional legal relationships such as \texttt{Amends}, \texttt{Repeals}, \texttt{Replaces}, and \texttt{Guides}. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query~\cite{phan2026sbvlawgraph}.
+Autonomous query decomposition followed by selective traversal of directional legal relationships such as \texttt{Amends}, \texttt{Repeals}, \texttt{Replaces}, and \texttt{Guides}. Traversal depth and relationship paths are dynamically planned based on query requirements rather than static graph expansion~\cite{phan2026sbvlawgraph}.
 
 \textbf{3. Reflection \& Statutory Claim Verification.}
 The Reasoning-Verification loop evaluates generated answers against authoritative legal provisions. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR~\cite{asai2024selfrag,wei2024safe,qian2026gandr}.
@@ -358,7 +358,7 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
 \begin{enumerate}
   \item \textbf{Retrieval Recall, Precision@2, and F2-Score:}
     $$\text{Precision@}k = \frac{|\hat{R}_i^k \cap R_i|}{k}, \quad \text{Recall@}k = \frac{|\hat{R}_i^k \cap R_i|}{|R_i|}, \quad \text{F2@}k = 5 \times \frac{\text{Precision@}k \times \text{Recall@}k}{4 \times \text{Precision@}k + \text{Recall@}k}$$
-    measuring whether selective edge traversal eliminates false-positive noise over unguided 1-hop graph expansion~\cite{phan2026sbvlawgraph}.
+    measuring whether selective edge traversal eliminates irrelevant context over unguided graph retrieval~\cite{phan2026sbvlawgraph}.
   \item \textbf{Strict Answer Correctness:} $\text{Correctness} = \frac{1}{N} \sum_{i=1}^N \text{Correct}(a_i, g_i)$, requiring semantic equivalence, exact article citation, and verified in-force statutory validity~\cite{zhou2026lexagent}.
   \item \textbf{Per-Claim Grounding Rate (SAFE~\cite{wei2024safe} / Ragas Faithfulness~\cite{es2024ragas}):}
     $$\text{Grounding Rate} = \frac{\text{Supported Atomic Propositions}}{\text{Total Generated Legal Claims}}$$
@@ -368,7 +368,7 @@ runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=I
 \subsection{Baselines \& Ablation Configurations}
 \begin{itemize}[leftmargin=11pt]
   \item \textbf{Baselines:} (1) Naive Chunk RAG; (2) Static Graph-RAG (SBV-LawGraph~\cite{phan2026sbvlawgraph}, ViHERMES~\cite{vihermes2024}); (3) Single-Agent ReAct.
-  \item \textbf{Ablations:} (1) Full Multi-Agent System; (2) Without Legal Verification Agent; (3) Without Selective Edge Traversal (fixed 1-hop neighborhood expansion); and (4) Without Legal Update Agent (offline Neo4j only).
+  \item \textbf{Ablations:} (1) Full Multi-Agent System; (2) Without Legal Verification Agent; (3) Without Selective Edge Traversal; and (4) Without Legal Update Agent (offline Neo4j only).
   \item \textbf{Protocol:} Evaluated across $\ge 3$ random seeds, reporting mean $\pm$ standard deviation.
 \end{itemize}
 

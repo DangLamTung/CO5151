@@ -74,9 +74,9 @@
 
 % --- SECTION 1: PROBLEM ---
 \section{Problem -- Why Traditional RAG Fails in Statutory Law}
-Vietnamese statutory law is structured as a strict multi-tier hierarchy (\textit{Law $\rightarrow$ Decree $\rightarrow$ Circular}) governed by dense, cross-referencing amendment webs ($>50\%$ of regulatory instruments are amended over time). Prior static legal GraphRAG research in Vietnam (such as \textit{SBV-LawGraph} [1] and \textit{ViHERMES} [2]) demonstrates the value of legal graphs; however, standard static baseline pipelines (Retrieve $\rightarrow$ Naive 1-Hop Dump $\rightarrow$ Generate) exhibit \textbf{3 critical failure modes}:
+Vietnamese statutory law is structured as a strict multi-tier hierarchy (\textit{Law $\rightarrow$ Decree $\rightarrow$ Circular}) governed by dense, cross-referencing amendment webs ($>50\%$ of regulatory instruments are amended over time). Prior static legal GraphRAG research in Vietnam (such as \textit{SBV-LawGraph} [1] and \textit{ViHERMES} [2]) demonstrates the value of legal graphs; however, standard single-pass retrieval pipelines exhibit \textbf{3 critical failure modes}:
 \begin{itemize}
-  \item \textbf{Context Dilution \& False-Positive Explosion:} Amending circulars frequently modify dozens of disjointed provisions across older decrees. Naive 1-hop neighborhood expansion baselines suffer severe attention dilution and precision drops down to 0.37--0.39, injecting irrelevant context and triggering citation hallucinations [1], [3].
+  \item \textbf{Context Dilution \& Citation Hallucination:} Amending circulars frequently modify dozens of disjointed provisions across older decrees. Indiscriminate retrieval of entire related subgraphs injects substantial irrelevant context into prompts, diluting LLM attention and triggering fabricated citations [3].
   \item \textbf{Temporal Blindness [4]:} Static RAG cannot determine whether an article remains in active legal force at a given transaction date when encountering chained amendment graphs, risking reliance on repealed or superseded provisions.
   \item \textbf{Weak Multi-Tier Reasoning \& Rigid Execution:} Empirical findings from \textit{VLegal-Bench} [5] reveal that LLMs suffer steep accuracy degradation on hierarchical legal reasoning. Static pipelines cannot backtrack, formulate multi-hop plans, or clarify missing facts.
 \end{itemize}
@@ -111,7 +111,7 @@ A static workflow with hardcoded branching \textbf{fundamentally fails} in legal
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
     \fontsize{7.2pt}{8.4pt}\selectfont
     \textbf{\color{primary}2. Planning \& Selective Graph Traversal}\\
-    Autonomous multi-step query decomposition. Traverses only active, directional relationships (\textit{Amends, Guides}) to eliminate 1-hop neighborhood dilution [1], directly addressing multi-tier statutory reasoning complexities [5].
+    Autonomous multi-step query decomposition. Traverses only active, directional relationships (\textit{Amends, Guides}) to eliminate irrelevant statutory noise, directly addressing multi-tier statutory reasoning complexities [5].
   }}\\[2.5pt]
   \colorbox{lightgray}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
     \fontsize{7.2pt}{8.4pt}\selectfont
