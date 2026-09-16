@@ -130,7 +130,7 @@ The project therefore evaluates whether state-dependent planning and verificatio
 
 ## 5. Topic-Quality Self-Assessment & Project Scope
 
-* **Novel (Beyond Naive & Static Graph RAG):** Unlike conventional single-pass RAG chatbots that mechanically dump unpruned text or rigid 1-hop subgraphs into prompts, *LegalPilot-VN* models the hierarchical, multi-tiered structure of Vietnamese statutory law (*Law $\rightarrow$ Decree $\rightarrow$ Circular*). It autonomously resolves cross-instrument amendment chains, verifies temporal validity in real time via official Gazettes, and produces audited compliance matrices.
+* **Novel (Beyond Naive & Static Graph RAG):** Unlike conventional single-pass RAG chatbots that mechanically dump unpruned text or rigid 1-hop subgraphs into prompts, our system models the hierarchical, multi-tiered structure of Vietnamese statutory law (*Law $\rightarrow$ Decree $\rightarrow$ Circular*). It autonomously resolves cross-instrument amendment chains, verifies temporal validity in real time via official Gazettes, and produces audited compliance matrices.
 * **Non-Trivial ($\ge 3$ Advanced Agentic Axes):** Deeply integrates four challenging axes: (1) Multi-Agent System with role-segregated MCP tools; (2) Autonomous Planning & Selective Graph Traversal; (3) Closed-loop Drafter–Auditor reflection; and (4) Security Guardrails with human-in-the-loop gated actions.
 * **Meaningful (High Enterprise Value):** Over 50% of Vietnamese normative instruments undergo chained amendments. The system prevents reliance on obsolete provisions, compressing dozens of manual compliance research hours into seconds.
 * **Feasible:** Leverages the published SBV Legal Corpus (1,703 documents, 9,661 articles) and Neo4j graph from Phan et al. [1], augmented by ALQAC 2025 benchmarks [8], evaluated strictly within a ~$25 Google Cloud Vertex AI budget.
@@ -163,16 +163,17 @@ The project therefore evaluates whether state-dependent planning and verificatio
 
 | Agent Owner | Tool Name | Permission Level | Scope & Function |
 | :--- | :--- | :--- | :--- |
-| **LawGraph Agent** | `query_lawgraph` | Read-Only | Hybrid sparse-dense vector search over statutory chunks. |
-| **LawGraph Agent** | `trace_selective_edge` | Read-Only | Targeted Cypher traversal over specific *Amend/Guide* edges. |
-| **Gazette Agent** | `verify_vbpl_status` | Read-Only | Real-time in-force verification on National Legal Database (`vbpl.vn`). |
-| **Gazette Agent** | `search_gazette` | Read-Only | Targeted portal search for recent ministerial decisions and circulars. |
-| **Drafter Agent** | `export_dossier` | Reversible-Write | Exports compliance matrix (Markdown/DOCX) to local workspace. |
-| **Drafter Agent** | `submit_portal_filing` | Irreversible-Write | Dispatches administrative payload. **Guarded by human token gate.** |
+| **LawGraph Agent** | `search_legal_corpus` | Read-Only | Hybrid semantic search over indexed statutory provisions and articles. |
+| **LawGraph Agent** | `trace_law_references` | Read-Only | Traverses reference relations (amendments, decrees, guiding circulars). |
+| **LawGraph Agent** | `write_case_memory` | Reversible-Write | Writes retrieved subgraphs, case dependencies, and citation cache to memory. |
+| **Legal Law Update Agent** | `check_law_validity` | Read-Only | Verifies active legal status and effective dates on `vbpl.vn`. |
+| **Legal Law Update Agent** | `search_recent_updates`| Read-Only | Searches official gazettes for recent ministerial circulars and amendments. |
+| **Legal Reasoning Agent** | `generate_legal_report` | Reversible-Write | Exports formatted legal advisory report (Markdown / DOCX) to workspace. |
+| **User Approval Gate** | `submit_official_filing` | Irreversible-Write | Submits official administrative request. **Guarded by user confirmation.** |
 
-### 6.3 Memory Hierarchy
-* **Short-Term Working Memory:** In-memory LangGraph/ADK execution state tracking active queries, retrieved passages, audit logs, and retry counters (capped at 3 refinement loops).
-* **Long-Term Memory:** SQLite database (`enterprise_compliance.db`) storing `enterprise_profile`, `audit_history`, and `statute_cache` (TTL 24h).
+### 6.3 Memory Hierarchy & Graph Cache
+* **Short-Term Working Memory:** In-memory execution state tracking active queries, retrieved statutory passages, verification logs, and retry counters (capped at 3 refinement loops).
+* **Long-Term Memory & Graph Cache:** Managed primarily by the **LawGraph Agent** via `write_case_memory` in a persistent SQLite database (`legal_advisory.db`) and local graph index: (i) client and case profiles; (ii) citation subgraph cache (multi-hop dependencies); and (iii) validity cache.
 
 ### 6.4 Google Agent Development Kit (ADK) Implementation Blueprint
 
@@ -182,15 +183,31 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai.types import GenerateContentConfig
 
-orchestrator_agent = Agent(
-    model="gemini-2.5-flash", # Vertex AI Cloud or local Qwen 2.5 7B via LiteLLM
-    name="legal_orchestrator",
-    description="Orchestrator for Vietnamese Legal Compliance & Verification",
-    instruction="Decompose user inquiry. Route to LawGraph & Gazette agents. "
-                "Enforce Drafter-Auditor critique loop before releasing compliance dossiers.",
-    generate_content_config=GenerateContentConfig(temperature=0.1, max_output_tokens=2048),
-    tools=[query_lawgraph, trace_selective_edge, verify_vbpl_status, export_dossier]
+# 1. LawGraph Agent (Traverses Neo4j relationships & writes citation memory)
+lawgraph_agent = Agent(
+    name="lawgraph_agent",
+    model="gemini-2.5-flash",
+    instruction="Selectively traverse LawGraph edges; write retrieved statutory subgraphs & citations to memory.",
+    tools=[search_legal_corpus, trace_law_references, write_case_memory]
 )
+
+# 2. Legal Law Update Agent (Queries live official gazette for active status)
+update_agent = Agent(
+    name="legal_update_agent",
+    model="gemini-2.5-flash",
+    instruction="Query vbpl.vn gazette to verify effective dates and active statutory validity.",
+    tools=[check_law_validity, search_recent_updates]
+)
+
+# 3. Legal Orchestrator (Supervisor coordinating sub-agents and Drafter-Auditor critique loop)
+orchestrator_agent = Agent(
+    name="legal_orchestrator",
+    model="gemini-2.5-flash",
+    instruction="Coordinate LawGraph and Update agents; enforce Drafter-Auditor critique loop before releasing dossiers.",
+    generate_content_config=GenerateContentConfig(temperature=0.1, max_output_tokens=2048),
+    tools=[lawgraph_agent, update_agent, generate_legal_report]
+)
+
 runner = Runner(agent=orchestrator_agent, app_name="viet_legal_rag", session_service=InMemorySessionService())
 ```
 

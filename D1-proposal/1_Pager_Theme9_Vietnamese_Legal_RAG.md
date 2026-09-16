@@ -38,13 +38,13 @@ Một workflow (luồng cố định viết sẵn các nhánh if/else) **không 
 
 ---
 
-### TÀI LIỆU THAM KHẢO CHÍNH (REFERENCES — 10 PAPERS 2024–2026)
+### TÀI LIỆU THAM KHẢO CHÍNH (REFERENCES — 11 PAPERS 2024–2026)
 - **[1]** K. N. Phan, X.-B. Le, T. T. Quan, "SBV-LawGraph: A Hybrid RAG Approach Integrating Knowledge Graph for Legal Documents," *Proc. ACIIDS 2026*, Springer.
 - **[2]** URA-HCMUT, "ViHERMES: A Retrieval-Augmented Generation System for Vietnamese Legal Documents," *Ho Chi Minh City University of Technology*, 2024.
 - **[3]** Y. Zhou et al., "LexAgentHallu: A Hierarchical Benchmark for Profiling Hallucinations in Legal Agents," *arXiv:2609.09754*, 2026.
 - **[4]** W. Fan et al., "Can LLMs Time Travel? Enhancing Temporal Consistency in Legal Agentic Search," *arXiv:2605.25920*, 2026.
 - **[5]** V. T. Nguyen et al., "VLegal-Bench: Cognitively Grounded Benchmark for Vietnamese Legal Reasoning of Large Language Models," *arXiv:2512.14554*, 2025.
-- **[6]** E. Debenedetti et al., "Defending Against Indirect Prompt Injection in Tool-Enabled Language Agents," *arXiv:2404.13208*, 2024.
+- **[6]** E. Debenedetti et al., "AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents," *Proc. NeurIPS 2024 (Datasets & Benchmarks)*, arXiv:2406.13352.
 - **[7]** H. Pham, N. Duong, and H. Pham, "Agentic RAG-Based Legal Advisory Chatbot: A Knowledge-Driven Approach for Vietnamese Legal System," *Proc. 17th Int. Joint Conf. on Knowledge Discovery, Knowledge Engineering and Knowledge Management (IC3K/KDIR)*, pp. 354–361, 2025.
 - **[8]** C. Qian et al., "GANDR: Claim Auditing for Verifiable Legal Answer Generation," *arXiv:2609.10293*, 2026.
 - **[9]** J. Wei et al. (Google DeepMind), "Long-form Factuality in Large Language Models (SAFE: Search-Augmented Factuality Evaluator)," *arXiv:2403.18802*, 2024.

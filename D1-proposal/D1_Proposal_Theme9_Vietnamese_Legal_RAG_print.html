@@ -428,53 +428,35 @@
     <div class="page-header"></div>
 
     <div class="page-main">
-      <h2 class="section-heading">4 Candidate technical axes</h2>
-      <p class="no-indent">
-        <strong>1. Multi-Agent System Coordination.</strong>
-        Role-segregated execution with a Legal Search Agent for statutory retrieval, a Legal Law Update Agent for official validity verification, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification. The orchestration layer maintains shared task state and coordinates agent handoffs.
+      <h2 class="section-heading" style="margin-top: 0; margin-bottom: 3px;">4 Candidate technical axes</h2>
+      <p class="no-indent" style="margin-bottom: 2.5px;">
+        <strong>1. Multi-Agent System Coordination.</strong> Role-segregated execution with a LawGraph Agent for retrieval, a Legal Law Update Agent for official validity, a Legal Reasoning Agent for statutory synthesis, and a Legal Verification Agent for citation verification [4].
       </p>
-      <p class="no-indent">
-        <strong>2. Planning &amp; Selective Statutory Traversal.</strong>
-        Autonomous query decomposition followed by selective traversal of directional legal relationships such as <code>Amends</code>, <code>Repeals</code>, <code>Replaces</code>, and <code>Guides</code>. Unlike fixed one-hop expansion, traversal depth and path selection depend on the evidence required by the current query [1].
+      <p class="no-indent" style="margin-bottom: 2.5px;">
+        <strong>2. Planning &amp; Selective Statutory Traversal.</strong> Autonomous query decomposition followed by selective traversal of directional legal relationships (<code>Amends</code>, <code>Replaces</code>, <code>Guides</code>), avoiding context dilution from fixed 1-hop expansions [1].
       </p>
-      <p class="no-indent">
-        <strong>3. Reflection &amp; Statutory Claim Verification.</strong>
-        The Reasoning-Verification loop evaluates generated answers against authoritative legal provisions. Failed verification triggers targeted retrieval and revision rather than unconditional regeneration. The design is informed by Self-RAG, SAFE, and GANDR [4, 5, 6].
+      <p class="no-indent" style="margin-bottom: 2.5px;">
+        <strong>3. Reflection &amp; Statutory Claim Verification.</strong> The Reasoning-Verification loop evaluates generated answers against authoritative provisions; ungrounded claims trigger targeted revision rather than unconditional regeneration [4, 5, 6].
       </p>
-      <p class="no-indent">
-        <strong>4. Security Guardrails &amp; Gated Actions.</strong>
-        Tool access is controlled through permission tiers. External-source content is treated as untrusted input, while irreversible actions such as dossier export require explicit human authorization. Indirect prompt injection is evaluated separately from the legal reasoning task [7].
+      <p class="no-indent" style="margin-bottom: 3px;">
+        <strong>4. Security Guardrails &amp; Gated Actions.</strong> Tool access is controlled through permission tiers (Read-Only vs. Reversible/Irreversible Writes), with human authorization required for official dossier export [7].
       </p>
 
-      <h2 class="section-heading">5 Proposed Multi-Agent Architecture &amp; Workflow</h2>
-      <h3 class="subsection-heading">5.1 System Architecture Overview</h3>
-      <p class="no-indent">
-        The system coordinates five specialized agent roles managed under a supervisor state machine:
+      <h2 class="section-heading" style="margin-top: 4px; margin-bottom: 3px;">5 Proposed Multi-Agent Architecture &amp; Workflow</h2>
+      <h3 class="subsection-heading" style="margin-top: 2px; margin-bottom: 2px;">5.1 System Architecture &amp; Workflow Sequence</h3>
+      <p class="no-indent" style="margin-bottom: 3px;">
+        The system coordinates five specialized roles under a supervisor state machine across six execution phases: 
+        (1) <em>Context Ingestion</em> of inquiry and client parameters; 
+        (2) <em>Planning &amp; Decomposition</em> into statutory search targets; 
+        (3) <em>Statutory Traversal</em> by the <strong>LawGraph Agent</strong>, which queries relationships and writes citation subgraphs to memory; 
+        (4) <em>Real-Time Validity Check</em> by the <strong>Legal Law Update Agent</strong> via <code>vbpl.vn</code> [2]; 
+        (5) <em>Reasoning-Verification Loop</em> between Drafter and Auditor (max 3 revision iterations) [5]; and 
+        (6) <em>Gated Report Export</em> requiring user confirmation.
       </p>
-      <ol>
-        <li><strong>Orchestrator Agent (Supervisor):</strong> Formulates step-by-step legal research plans, breaks down complex inquiries, routes tasks between search and update agents, and interacts with the user for clarification.</li>
-        <li><strong>Legal Search Agent:</strong> Retrieves relevant statutory provisions and traverses legal cross-references (amendments, guiding circulars, and replacement decrees) to find applicable rules.</li>
-        <li><strong>Legal Law Update Agent:</strong> Queries official legal databases (such as <code>vbpl.vn</code>) to verify the current validity of each statute as of the transaction date, capturing recent amendments [2].</li>
-        <li><strong>Legal Reasoning Agent:</strong> Synthesizes retrieved evidence, regulatory hierarchies, and case-specific facts into actionable legal advice and advisory memos.</li>
-        <li><strong>Legal Verification Agent:</strong> Independently cross-checks every legal claim and statutory citation against the source texts to ensure complete accuracy and eliminate errors before delivery [5, 6].</li>
-      </ol>
 
-      <h3 class="subsection-heading">5.2 End-to-End Multi-Agent Workflow Sequence</h3>
-      <p class="no-indent">
-        Figure 1 illustrates the end-to-end execution flow of the system. Execution proceeds through six coordinated operational phases:
-      </p>
-      <ol>
-        <li><strong>Phase 1 (Inquiry &amp; Context Ingestion):</strong> Ingests user legal inquiry, case facts, and client profile parameters (corporate structure, capital tier, foreign ownership).</li>
-        <li><strong>Phase 2 (Planning &amp; Query Decomposition):</strong> Decomposes the inquiry into targeted legal questions and coordinates parallel search and update tasks.</li>
-        <li><strong>Phase 3 (Statutory Search &amp; Reference Traversal):</strong> The Legal Search Agent identifies relevant laws, decrees, and circulars, following reference chains across regulatory regimes.</li>
-        <li><strong>Phase 4 (Real-Time Validity Check):</strong> The Legal Law Update Agent confirms whether cited regulations remain in effect or have been modified by newer rules.</li>
-        <li><strong>Phase 5 (Legal Reasoning &amp; Verification Loop):</strong> The Legal Reasoning Agent drafts the legal opinion. The Legal Verification Agent validates all citations; any ungrounded claim triggers a revision loop (up to 3 iterations).</li>
-        <li><strong>Phase 6 (User Review &amp; Report Delivery):</strong> The verified advisory report is generated, with any official actions requiring explicit user confirmation.</li>
-      </ol>
-
-      <!-- SVG Multi-Agent Workflow Diagram (matching LaTeX TikZ figure) -->
-      <div style="text-align: center; margin: 8px 0 2px 0;">
-        <svg viewBox="0 0 710 215" width="100%" height="auto" style="max-width: 680px; font-family: 'Latin Modern Roman', 'CMU Serif', Times, serif; font-size: 8px;">
+      <!-- SVG Multi-Agent Workflow Diagram -->
+      <div style="text-align: center; margin: 3px 0 1px 0;">
+        <svg viewBox="0 0 710 182" width="100%" height="auto" style="max-width: 680px; font-family: 'Latin Modern Roman', 'CMU Serif', Times, serif; font-size: 8px;">
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000"/>
@@ -491,80 +473,117 @@
           </defs>
 
           <!-- Input Node -->
-          <rect x="235" y="4" width="240" height="26" rx="2" fill="#f8fafc" stroke="#000000" stroke-width="0.8"/>
-          <text x="355" y="15" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">User Legal Question &amp; Case Facts</text>
-          <text x="355" y="24" text-anchor="middle" fill="#333333" font-size="7px">+ Client Profile &amp; Case Parameters</text>
+          <rect x="235" y="3" width="240" height="23" rx="2" fill="#f8fafc" stroke="#000000" stroke-width="0.8"/>
+          <text x="355" y="13" text-anchor="middle" font-weight="700" fill="#000000" font-size="8px">User Legal Question &amp; Case Facts</text>
+          <text x="355" y="21" text-anchor="middle" fill="#333333" font-size="6.8px">+ Client Profile &amp; Case Parameters</text>
 
           <!-- Arrow: Input -> Orch -->
-          <line x1="355" y1="30" x2="355" y2="44" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
+          <line x1="355" y1="26" x2="355" y2="39" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Orchestrator (Supervisor) -->
-          <rect x="226" y="46" width="258" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="1.1"/>
-          <text x="355" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.8px">Orchestrator Agent (Supervisor)</text>
-          <text x="355" y="68" text-anchor="middle" fill="#333333" font-size="7.2px">Coordinates Research Tasks &amp; User Dialogue</text>
+          <rect x="226" y="41" width="258" height="26" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="1.1"/>
+          <text x="355" y="52" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.6px">Orchestrator Agent (Supervisor)</text>
+          <text x="355" y="62" text-anchor="middle" fill="#333333" font-size="7px">Coordinates Research Tasks &amp; User Dialogue</text>
 
-          <!-- Left: Legal Search Agent -->
-          <rect x="8" y="46" width="168" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
-          <text x="92" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Search Agent</text>
-          <text x="92" y="68" text-anchor="middle" fill="#333333" font-size="7px">Search Laws &amp; Cross-References</text>
+          <!-- Left: LawGraph Agent -->
+          <rect x="8" y="41" width="168" height="26" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="92" y="52" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">LawGraph Agent</text>
+          <text x="92" y="62" text-anchor="middle" fill="#333333" font-size="6.8px">Traverse Relations &amp; Cache Citations</text>
 
-          <!-- Arrows: Orch <-> Legal Search Agent -->
-          <line x1="226" y1="56" x2="182" y2="56" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
-          <line x1="182" y1="65" x2="226" y2="65" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
-          <text x="204" y="51" text-anchor="middle" font-size="6.5px" fill="#000000">Search</text>
+          <!-- Arrows: Orch <-> LawGraph Agent -->
+          <line x1="226" y1="50" x2="182" y2="50" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <line x1="182" y1="59" x2="226" y2="59" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <text x="204" y="46" text-anchor="middle" font-size="6.2px" fill="#000000">Search</text>
+
+          <!-- Left: Memory Store (Short-Term State & Long-Term DB) -->
+          <rect x="8" y="93" width="168" height="34" rx="3" fill="#f8fafc" stroke="#475569" stroke-width="0.9" stroke-dasharray="2.5 1.5"/>
+          <text x="92" y="104" text-anchor="middle" font-weight="700" fill="#1e293b" font-size="7.6px">Memory Store (Graph &amp; SQLite)</text>
+          <text x="92" y="113" text-anchor="middle" fill="#475569" font-size="6.5px">Working State &bull; Profile &bull; Cache</text>
+          <text x="92" y="122" text-anchor="middle" fill="#64748b" font-size="6.2px">Neo4j LawGraph + legal_advisory.db</text>
+
+          <!-- Memory Arrows between LawGraph Agent and Memory Store -->
+          <line x1="56" y1="67" x2="56" y2="91" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <text x="52" y="81" text-anchor="end" font-size="6.3px" font-weight="700" fill="#1e3a8a">Memory Write</text>
+
+          <line x1="128" y1="93" x2="128" y2="69" stroke="#475569" stroke-width="0.9" marker-end="url(#arrow)"/>
+          <text x="132" y="81" text-anchor="start" font-size="6.3px" fill="#475569">Memory Read</text>
 
           <!-- Right: Legal Law Update Agent -->
-          <rect x="534" y="46" width="168" height="29" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
-          <text x="618" y="58" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Law Update Agent</text>
-          <text x="618" y="68" text-anchor="middle" fill="#333333" font-size="7px">Check Legal Status (vbpl.vn)</text>
+          <rect x="534" y="41" width="168" height="26" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="618" y="52" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Law Update Agent</text>
+          <text x="618" y="62" text-anchor="middle" fill="#333333" font-size="6.8px">Check Legal Status (vbpl.vn)</text>
 
           <!-- Arrows: Orch <-> Legal Law Update Agent -->
-          <line x1="484" y1="56" x2="528" y2="56" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
-          <line x1="528" y1="65" x2="484" y2="65" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
-          <text x="506" y="51" text-anchor="middle" font-size="6.5px" fill="#000000">Validity</text>
+          <line x1="484" y1="50" x2="528" y2="50" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <line x1="528" y1="59" x2="484" y2="59" stroke="#1e3a8a" stroke-width="0.9" marker-end="url(#arrow-blue)"/>
+          <text x="506" y="46" text-anchor="middle" font-size="6.2px" fill="#000000">Validity</text>
 
           <!-- Arrow: Orch -> Legal Reasoning Agent -->
-          <line x1="355" y1="75" x2="355" y2="88" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
-          <text x="360" y="83" font-size="6.5px" fill="#444444">Verified sources</text>
+          <line x1="355" y1="67" x2="355" y2="78" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Legal Reasoning Agent -->
-          <rect x="235" y="90" width="240" height="27" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
-          <text x="355" y="101" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.3px">Legal Reasoning Agent</text>
-          <text x="355" y="111" text-anchor="middle" fill="#333333" font-size="7px">Legal Analysis &amp; Advisory Synthesis</text>
+          <rect x="235" y="80" width="240" height="24" rx="3" fill="#f1f5f9" stroke="#1e3a8a" stroke-width="0.9"/>
+          <text x="355" y="90" text-anchor="middle" font-weight="700" fill="#000000" font-size="8.2px">Legal Reasoning Agent</text>
+          <text x="355" y="99" text-anchor="middle" fill="#333333" font-size="6.8px">Legal Analysis &amp; Advisory Synthesis</text>
 
           <!-- Arrow: Legal Reasoning -> Legal Verification -->
-          <line x1="355" y1="117" x2="355" y2="129" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
+          <line x1="355" y1="104" x2="355" y2="114" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Legal Verification Agent -->
-          <rect x="235" y="131" width="240" height="27" rx="3" fill="#fff5f5" stroke="#b91c1c" stroke-width="1"/>
-          <text x="355" y="142" text-anchor="middle" font-weight="700" fill="#7f1d1d" font-size="8.3px">Legal Verification Agent</text>
-          <text x="355" y="152" text-anchor="middle" fill="#991b1b" font-size="7px">Citation &amp; Statutory Accuracy Checking</text>
+          <rect x="235" y="116" width="240" height="24" rx="3" fill="#fff5f5" stroke="#b91c1c" stroke-width="1"/>
+          <text x="355" y="126" text-anchor="middle" font-weight="700" fill="#7f1d1d" font-size="8.2px">Legal Verification Agent</text>
+          <text x="355" y="135" text-anchor="middle" fill="#991b1b" font-size="6.8px">Citation &amp; Statutory Accuracy Checking</text>
 
           <!-- Arrow: Verification -> Decision -->
-          <line x1="355" y1="158" x2="355" y2="171" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
+          <line x1="355" y1="140" x2="355" y2="149" stroke="#000000" stroke-width="0.9" marker-end="url(#arrow)"/>
 
           <!-- Decision Diamond -->
-          <polygon points="355,173 420,188 355,203 290,188" fill="#fefce8" stroke="#854d0e" stroke-width="1"/>
-          <text x="355" y="187" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.5px">Legally Verified</text>
-          <text x="355" y="195" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.5px">&amp; Accurate?</text>
+          <polygon points="355,150 415,163 355,176 295,163" fill="#fefce8" stroke="#854d0e" stroke-width="1"/>
+          <text x="355" y="161" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.2px">Legally Verified</text>
+          <text x="355" y="169" text-anchor="middle" font-weight="700" fill="#000000" font-size="7.2px">&amp; Accurate?</text>
 
-          <!-- Refinement Loop (Left -> Back to Orchestrator) -->
-          <path d="M 290 188 L 30 188 L 30 61 L 220 61" fill="none" stroke="#b91c1c" stroke-width="0.9" stroke-dasharray="3.5 2.5" marker-end="url(#arrow-red)"/>
-          <text x="38" y="183" font-weight="600" fill="#b91c1c" font-size="7.2px">Needs Revision (max 3 loops)</text>
+          <!-- Refinement Loop (Corridor x=198 -> Back to Orchestrator) -->
+          <path d="M 295 163 L 198 163 L 198 55 L 224 55" fill="none" stroke="#b91c1c" stroke-width="0.9" stroke-dasharray="3.5 2.5" marker-end="url(#arrow-red)"/>
+          <text x="193" y="153" text-anchor="end" font-weight="600" fill="#b91c1c" font-size="6.8px">Needs Revision (max 3 loops)</text>
 
           <!-- Success Branch to User Approval Gate -->
-          <line x1="420" y1="188" x2="528" y2="188" stroke="#15803d" stroke-width="1" marker-end="url(#arrow-green)"/>
-          <text x="474" y="183" text-anchor="middle" font-weight="600" fill="#15803d" font-size="7.2px">Verified</text>
+          <line x1="415" y1="163" x2="528" y2="163" stroke="#15803d" stroke-width="1" marker-end="url(#arrow-green)"/>
+          <text x="471" y="158" text-anchor="middle" font-weight="600" fill="#15803d" font-size="7px">Verified</text>
 
           <!-- User Approval Gate -->
-          <rect x="534" y="174" width="168" height="28" rx="3" fill="#fff7ed" stroke="#c2410c" stroke-width="1"/>
-          <text x="618" y="186" text-anchor="middle" font-weight="700" fill="#7c2d12" font-size="8px">User Approval Gate</text>
-          <text x="618" y="195" text-anchor="middle" fill="#9a3412" font-size="6.8px">Human Confirmation &amp; Report Export</text>
+          <rect x="534" y="150" width="168" height="26" rx="3" fill="#fff7ed" stroke="#c2410c" stroke-width="1"/>
+          <text x="618" y="161" text-anchor="middle" font-weight="700" fill="#7c2d12" font-size="7.8px">User Approval Gate</text>
+          <text x="618" y="170" text-anchor="middle" fill="#9a3412" font-size="6.5px">Human Confirmation &amp; Report Export</text>
         </svg>
-        <div class="table-caption" style="margin-top: 2px;">
-          <em>Figure 1: Multi-Agent Legal Reasoning &amp; Verification Workflow.</em>
+        <div class="table-caption" style="margin-top: 1px; margin-bottom: 2px;">
+          <em>Figure 1: Multi-Agent Legal Reasoning &amp; Verification Workflow (Memory Read/Write managed by LawGraph Agent).</em>
         </div>
       </div>
+
+      <h3 class="subsection-heading" style="margin-top: 4px; margin-bottom: 2px;">5.2 Google ADK Multi-Agent Implementation Blueprint</h3>
+      <pre class="code-block" style="font-size: 6.5pt; line-height: 1.22; margin: 2px 0 0 0; padding: 4px 6px; background: #f8fafc; border: 0.6pt solid #cbd5e1; border-radius: 3px; font-family: 'Courier New', Courier, monospace; color: #0f172a;"><code>from google.adk.agents import Agent
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+
+# 1. LawGraph Agent: Traverses statutory edges and writes retrieved subgraphs to memory
+lawgraph_agent = Agent(
+    name="lawgraph_agent", model="gemini-2.5-flash",
+    instruction="Selectively traverse LawGraph edges; write retrieved subgraphs & citations to memory.",
+    tools=[search_legal_corpus, trace_law_references, write_case_memory]
+)
+# 2. Legal Law Update Agent: Queries live official gazette for real-time validity
+update_agent = Agent(
+    name="legal_update_agent", model="gemini-2.5-flash",
+    instruction="Query vbpl.vn gazette to verify effective dates and active statutory validity.",
+    tools=[check_law_validity, search_recent_updates]
+)
+# 3. Legal Orchestrator: Supervisor managing plan, sub-agents, and Drafter-Auditor critique loop
+orchestrator = Agent(
+    name="legal_orchestrator", model="gemini-2.5-flash",
+    instruction="Coordinate LawGraph and Update agents; enforce Drafter-Auditor verification before export.",
+    tools=[lawgraph_agent, update_agent, generate_legal_report]
+)
+runner = Runner(agent=orchestrator, app_name="viet_legal_rag", session_service=InMemorySessionService())</code></pre>
     </div>
 
     <div class="page-footer">
@@ -580,7 +599,7 @@
     <div class="page-header"></div>
 
     <div class="page-main">
-      <h3 class="subsection-heading">5.3 Tools &amp; Permission Tiers by Agent (Requirement R2)</h3>
+      <h3 class="subsection-heading">5.4 Tools &amp; Permission Tiers by Agent (Requirement R2)</h3>
       <div class="table-caption">Table 2: Agent tool ownership, authorization levels, and execution scope.</div>
       <table>
         <thead>
@@ -593,16 +612,22 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Legal Search Agent</strong></td>
+            <td><strong>LawGraph Agent</strong></td>
             <td><code>search_legal_corpus</code></td>
             <td>Read-Only</td>
             <td>Hybrid semantic search over indexed statutory provisions and articles.</td>
           </tr>
           <tr>
-            <td><strong>Legal Search Agent</strong></td>
+            <td><strong>LawGraph Agent</strong></td>
             <td><code>trace_law_references</code></td>
             <td>Read-Only</td>
             <td>Traverses reference relations (amendments, decrees, and guiding circulars).</td>
+          </tr>
+          <tr>
+            <td><strong>LawGraph Agent</strong></td>
+            <td><code>write_case_memory</code></td>
+            <td>Reversible-Write</td>
+            <td>Writes retrieved subgraphs, case dependencies, and citation cache to memory.</td>
           </tr>
           <tr>
             <td><strong>Legal Law Update Agent</strong></td>
@@ -631,10 +656,10 @@
         </tbody>
       </table>
 
-      <h3 class="subsection-heading">5.4 Memory Hierarchy Design</h3>
+      <h3 class="subsection-heading">5.5 Memory Hierarchy Design</h3>
       <ul>
         <li><strong>Short-Term Working Memory:</strong> In-memory agent state recording multi-turn consultation history, retrieved statutory passages, verification logs, candidate draft states, and retry counters (capped at 3 refinement loops).</li>
-        <li><strong>Long-Term Memory:</strong> Persistent SQLite database (<code>legal_advisory.db</code>) maintaining: (i) client and case profiles (corporate structure, capital tier, sector, headcount); (ii) audit logs (timestamped verification results, user confirmations); and (iii) validity cache (cached legal status lookups to ensure fast response times).</li>
+        <li><strong>Long-Term Memory &amp; Graph Cache:</strong> Managed primarily by the <strong>LawGraph Agent</strong> via <code>write_case_memory</code> in a persistent SQLite database (<code>legal_advisory.db</code>) and local graph index: (i) client and case profiles (corporate structure, capital tier, sector); (ii) citation subgraph cache (cached multi-hop dependencies to avoid redundant traversals); and (iii) validity cache (cached legal status lookups to ensure fast response times).</li>
       </ul>
 
       <h2 class="section-heading">6 Evaluation Plan &amp; Baselines</h2>
@@ -835,7 +860,7 @@
         <div class="ref-item"><span class="ref-key">[4]</span><span>A. Asai et al., &ldquo;Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection,&rdquo; in <em>Proc. ICLR 2024</em>.</span></div>
         <div class="ref-item"><span class="ref-key">[5]</span><span>C. Qian et al., &ldquo;GANDR: Claim Auditing for Verifiable Legal Answer Generation,&rdquo; <em>arXiv:2609.10293</em>, Sep. 2026.</span></div>
         <div class="ref-item"><span class="ref-key">[6]</span><span>J. Wei et al. (Google DeepMind), &ldquo;Long-form Factuality in Large Language Models (SAFE),&rdquo; <em>arXiv:2403.18802</em>, Mar. 2024.</span></div>
-        <div class="ref-item"><span class="ref-key">[7]</span><span>E. Debenedetti et al., &ldquo;Defending Against Indirect Prompt Injection in Tool-Enabled Language Agents,&rdquo; <em>arXiv:2404.13208</em>, Apr. 2024.</span></div>
+        <div class="ref-item"><span class="ref-key">[7]</span><span>E. Debenedetti et al., &ldquo;AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,&rdquo; <em>Proc. NeurIPS 2024</em>, arXiv:2406.13352.</span></div>
         <div class="ref-item"><span class="ref-key">[8]</span><span>ALQAC 2025, &ldquo;Benchmark Dataset for Vietnamese Legal Information Retrieval and Question Answering,&rdquo; in <em>IEEE KSE 2025</em>.</span></div>
         <div class="ref-item"><span class="ref-key">[9]</span><span>Y. Zhou et al., &ldquo;LexAgentHallu: A Hierarchical Benchmark for Profiling Hallucinations in Legal Agents,&rdquo; <em>arXiv:2609.09754</em>, Sep. 2026.</span></div>
         <div class="ref-item"><span class="ref-key">[10]</span><span>S. Es et al., &ldquo;Ragas: Automated Evaluation of Retrieval Augmented Generation,&rdquo; in <em>Proc. EACL 2024</em>.</span></div>
