@@ -356,9 +356,13 @@ Giả định rủi ro: Cổng tra cứu VBPL có thể bị gián đoạn hoặ
   \item Bảo đảm giữ nguyên vẹn 4 trục kiến trúc cốt lõi.
 \end{itemize}
 \end{block}
-\begin{block}{\small Quản trị rủi ro nguồn ngữ liệu}
+\begin{block}{\small Quản trị rủi ro nguồn ngữ liệu \& Dataset dự phòng}
 \footnotesize
-Tập ngữ liệu SBV từ nghiên cứu [1] chưa công khai rộng rãi: Nhóm đã gửi yêu cầu cấp quyền tiếp cận phục vụ môn học, đồng thời chuẩn bị sẵn pipeline thu thập và chuẩn hóa dữ liệu từ cổng VBPL theo đúng phương pháp luận chuẩn.
+Trường hợp chưa tiếp cận được tập QA của SBV: Nhóm kích hoạt ngay 2 nguồn dự phòng chuẩn hóa:
+\begin{itemize}
+  \item \textbf{Dự phòng 1}: 150 câu hỏi từ benchmark công khai ALQAC 2025 (có ground truth điều khoản đối soát).
+  \item \textbf{Dự phòng 2}: Pipeline tự động trích xuất từ 1.703 văn bản VBPL + chuyên viên thẩm định để sinh 100 câu hỏi tuân thủ chuẩn format.
+\end{itemize}
 \end{block}
 \end{column}
 \begin{column}{0.5\textwidth}
@@ -449,6 +453,51 @@ R5 & Đánh giá định lượng & 120 task, 3 baseline, 4 ablation, 3 seeds, e
 R6 & Security và safety & Threat model; 10 kịch bản kiểm thử injection (4 gián tiếp); least-privilege; audit log --- slide 7, proposal mục 8\\
 \bottomrule
 \end{tabular}
+\end{frame}
+
+% ===================== BACKUP: KIEN TRUC RAG NEN TANG =====================
+\begin{frame}{Backup --- Thiết kế RAG: Embedding, Hybrid Search \& Reranking [chi tiết]}
+\footnotesize
+\textbf{Kế thừa \& Phát triển từ nghiên cứu SBV-LawGraph (TS. Lê Xuân Bách, ACIIDS 2026):}
+\vskip0.15cm
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{\small Quy trình RAG 4 tầng kỹ thuật}
+\scriptsize
+\begin{enumerate}
+  \item \textbf{Phân rã cấu trúc (Hierarchical Parsing)}:
+    Bóc tách phân cấp: Văn bản $\rightarrow$ Chương $\rightarrow$ Điều $\rightarrow$ Khoản/Điểm. Trích xuất 4 cạnh quan hệ chính vào Neo4j (\texttt{SỬA\_ĐỔI}, \texttt{BÃI\_BỎ}, \texttt{THAY\_THẾ}, \texttt{HƯỚNG\_DẪN}).
+  \item \textbf{Chỉ mục lai (Hybrid Indexing)}:
+    \begin{itemize}\tiny
+      \item \textit{Dense}: Mô hình \texttt{bge-m3} (1024 dims) nhúng ngữ nghĩa điều khoản $\rightarrow$ lưu trữ trong \textbf{Qdrant}.
+      \item \textit{Sparse}: BM25 đối soát chính xác số hiệu văn bản (e.g., ``52/2024/NĐ-CP'') và thuật ngữ pháp lý.
+    \end{itemize}
+  \item \textbf{Truy xuất 2 chặng \& Tác tử duyệt chọn lọc}:
+    Lấy Top-$k$ nút hạt nhân qua RRF (Reciprocal Rank Fusion). Thay vì mở rộng 1-hop cố định, LawGraph Agent lập kế hoạch duyệt cạnh chọn lọc theo câu hỏi và kiểm tra hiệu lực qua VBPL.
+  \item \textbf{Tái xếp hạng (Cross-Encoder Reranking)}:
+    Sử dụng \texttt{bge-reranker-v2-m3} chấm điểm tương quan sâu giữa truy vấn và các điều khoản ứng viên trước khi nạp vào context của Drafter.
+\end{enumerate}
+\end{block}
+\end{column}
+
+\begin{column}{0.52\textwidth}
+\begin{block}{\small So sánh kiến trúc: SBV-LawGraph vs G4 Agentic RAG}
+\scriptsize
+\begin{tabular}{@{}p{1.9cm}p{2.3cm}p{2.6cm}@{}}
+\toprule
+\textbf{Thành phần} & \textbf{SBV-LawGraph [1]} & \textbf{G4 Agentic RAG (Đề tài)} \\ \midrule
+\textit{Chỉ mục} & Dense vector phân cấp & Hybrid (Dense \texttt{bge-m3} + Sparse BM25) \\
+\textit{Đồ thị} & Neo4j 5.221 nút, 6.019 cạnh & Kế thừa Neo4j + Graph Cache cục bộ \\
+\textit{Duyệt đồ thị} & Mở rộng 1-hop cố định (dễ loãng context) & \textbf{Tác tử duyệt chọn lọc} theo suy luận câu hỏi \\
+\textit{Hiệu lực luật} & Tĩnh tại thời điểm cào & \textbf{Xác minh live} qua cổng VBPL \\
+\textit{Tái xếp hạng} & MonoT5 / Cross-Encoder & \texttt{bge-reranker-v2-m3} \\
+\textit{Hậu xử lý} & 1 LLM sinh câu trả lời & \textbf{Đa tác tử}: Soạn thảo $\leftrightarrow$ Claim Auditor phản biện chéo \\
+\bottomrule
+\end{tabular}
+\end{block}
+{\tiny $\Rightarrow$ G4 kế thừa tầng biểu diễn đồ thị và phân cấp của SBV-LawGraph, nhưng thay thế cơ chế duyệt cố định bằng tác tử suy luận và bổ sung chốt chặn kiểm định chéo.}
+\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}[plain]
