@@ -81,21 +81,21 @@
 % ====================== 2. VAN DE & NGUOI DUNG ======================
 \begin{frame}{Vấn đề \& Người dùng [30 giây]}
 \begin{columns}[T]
-\begin{column}{0.56\textwidth}
-\begin{block}{Vấn đề bài toán}
-\begin{itemize}\small
-  \item Tra cứu pháp luật đòi hỏi suy luận liên văn bản qua chuỗi sửa đổi/bổ sung và xác định tính hiệu lực theo dòng thời gian.
-  \item \textbf{Đặc thù ngữ liệu}: Ngữ liệu pháp lý Việt Nam có tỷ lệ sửa đổi dày đặc (ngữ liệu ngân hàng SBV có \textbf{1.703} văn bản với $>50\%$ hết hiệu lực; bộ dữ liệu cuộc thi pháp lý quốc gia \textbf{ALQAC} có hàng trăm tình huống liên kết đa văn bản).
-  \item Các phương pháp RAG thông thường dễ gây loãng ngữ cảnh khi văn bản sửa đổi trải rộng trên nhiều nghị định; đồng thời chưa có cơ chế kiểm tra hiệu lực văn bản theo thời gian thực.
+\begin{column}{0.58\textwidth}
+\begin{block}{\small Vấn đề: Vì sao RAG cơ bản thất bại trong Pháp lý?}
+\begin{itemize}\footnotesize
+  \item \textbf{Chồng chéo đa tầng \& liên luật}: Thực tế đòi hỏi kết hợp đồng thời \textit{Luật $\rightarrow$ Nghị định $\rightarrow$ Thông tư} và liên ngành (\textit{Chuyên ngành + Đầu tư + Doanh nghiệp}). RAG cơ bản chỉ tìm đoạn lẻ tẻ, dễ bỏ sót điều kiện tiên quyết và biểu mẫu bắt buộc.
+  \item \textbf{Luật thay đổi liên tục \& hết hiệu lực một phần}: $>50\%$ văn bản bị sửa đổi; ví dụ \textbf{Nghị định 52/2024/NĐ-CP} vừa có hiệu lực (01/7/2024) khai tử hoàn toàn \textbf{NĐ 101/2012}. RAG cơ bản không có ý thức thời gian, dễ trích dẫn điều luật đã hết hiệu lực.
+  \item \textbf{Ví dụ thực tế}: Xin cấp phép Ví điện tử phải đối soát đồng thời NĐ 52/2024 (điều kiện vốn 50 tỷ), TT 40/2024 (biểu mẫu) và Luật Đầu tư (tỷ lệ sở hữu ngoại).
 \end{itemize}
 \end{block}
 \end{column}
-\begin{column}{0.42\textwidth}
-\begin{block}{Người dùng \& Sự cần thiết của Agent}
-\begin{itemize}\small
+\begin{column}{0.40\textwidth}
+\begin{block}{\small Người dùng \& Sự cần thiết của Agent}
+\begin{itemize}\footnotesize
   \item \textbf{Đối tượng}: Chuyên viên pháp chế, cán bộ tuân thủ tại các doanh nghiệp vừa và nhỏ (SME).
-  \item \textbf{Tính phức tạp}: Không gian tra cứu phân nhánh động theo từng tình huống thực tế, vượt ngoài khả năng bao quát của các luồng xử lý cố định (hard-coded rules).
-  \item \textbf{Giải pháp}: Cần hệ thống đa tác tử tự lập kế hoạch truy xuất, phản biện đối soát chéo và chủ động tương tác làm rõ khi thiếu dữ kiện.
+  \item \textbf{Thách thức rẽ nhánh}: Tình huống thực tế rẽ nhánh rất đa dạng theo hồ sơ từng doanh nghiệp (ngành nghề, vốn, tỷ lệ vốn ngoại), không thể bao quát bằng kịch bản cố định (if-else).
+  \item \textbf{Giải pháp Agentic}: Đa tác tử tự lập kế hoạch duyệt đồ thị chọn lọc, xác minh hiệu lực live và phản biện đối soát chéo (Claim Auditor).
 \end{itemize}
 \end{block}
 \end{column}
