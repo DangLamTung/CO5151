@@ -500,6 +500,44 @@ R6 & Security và safety & Threat model; 10 kịch bản kiểm thử injection 
 \end{columns}
 \end{frame}
 
+% ===================== BACKUP: CASE STUDY THUC TE =====================
+\begin{frame}{Backup --- Nghiên cứu tình huống: Vì sao Naive RAG thất bại? [chi tiết]}
+\footnotesize
+\textbf{Tình huống nghiệp vụ}: Doanh nghiệp Fintech (có cổ đông ngoại) xin cấp phép hoạt động Ví điện tử.
+\vskip0.15cm
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{\small Mạng lưới 4 văn bản liên quan (Thư Viện Pháp Luật)}
+\scriptsize
+\begin{itemize}
+  \item \textbf{Nghị định 52/2024/NĐ-CP (Hiệu lực 01/7/2024)}:
+    Điều 22 quy định vốn tối thiểu 50 tỷ VNĐ; Điều 36 \textit{thay thế hoàn toàn NĐ 101/2012 và NĐ 80/2016}.
+  \item \textbf{Thông tư 40/2024/TT-NHNN (Hiệu lực 01/7/2024)}:
+    Hướng dẫn chi tiết NĐ 52, quy định \textit{biểu mẫu đơn từ và quy trình nộp} tại NHNN (thay thế TT 39/2014).
+  \item \textbf{Luật Các tổ chức tín dụng 2024}:
+    Khung thẩm quyền cấp phép dịch vụ trung gian thanh toán.
+  \item \textbf{Luật Đầu tư 2020 \& NĐ 31/2021/NĐ-CP}:
+    Điều 9 quy định ngành nghề tiếp cận thị trường có điều kiện đối với nhà đầu tư nước ngoài (room ngoại).
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{0.52\textwidth}
+\begin{block}{\small Đối sánh: Naive RAG vs G4 Agentic RAG}
+\scriptsize
+\begin{tabular}{@{}p{1.7cm}p{2.3cm}p{2.7cm}@{}}
+\toprule
+\textbf{Khía cạnh} & \textbf{Naive RAG (RAG thông thường)} & \textbf{G4 Agentic RAG (Đề tài)} \\ \midrule
+\textit{Thời gian \& Hiệu lực} & \textcolor{red!75!black}{\textbf{Thất bại}}: Trích dẫn NĐ 101/2012 và TT 39/2014 vì text cũ có similarity cao $\rightarrow$ \textbf{Tư vấn luật hết hạn} & \textcolor{green!55!black}{\textbf{Chính xác}}: Legal Update Agent kiểm tra live VBPL, phát hiện NĐ 101 hết hạn $\rightarrow$ chỉ lấy NĐ 52/2024 \\ \addlinespace
+\textit{Bao phủ liên luật} & \textcolor{red!75!black}{\textbf{Thất bại}}: Chỉ lấy được NĐ 52; bỏ sót TT 40 (thiếu biểu mẫu) và Luật Đầu tư (bỏ qua vốn ngoại) & \textcolor{green!55!black}{\textbf{Đầy đủ}}: LawGraph Agent duyệt đồ thị liên văn bản: NĐ 52 $\rightarrow$ TT 40 và Luật TCTD $\rightarrow$ Luật Đầu tư \\ \addlinespace
+\textit{Độ tin cậy} & Sinh văn bản một lượt, không đối soát căn cứ & Claim Auditor phản biện từng điều kiện trước khi xuất hồ sơ \\
+\bottomrule
+\end{tabular}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
 \begin{frame}[plain]
 \centering
 \vskip0.6cm
