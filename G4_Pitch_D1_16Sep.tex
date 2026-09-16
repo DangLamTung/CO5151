@@ -265,14 +265,16 @@
 \end{frame}
 
 % ==================== 6b. HE CHI SO DO LUONG (METRICS) ====================
-\begin{frame}{Hệ chỉ số đo lường thực nghiệm (Evaluation Metrics) [chi tiết]}
+\begin{frame}{Hệ chỉ số đo lường theo chuẩn RAG Evaluation Triad [chi tiết]}
+{\footnotesize Hệ thống chỉ số được cấu trúc chặt chẽ theo 3 đỉnh của \textbf{RAG Triad} (\textit{Query $\leftrightarrow$ Context $\leftrightarrow$ Answer}) nhằm triệt tiêu hoàn toàn góc chết đánh giá:}
+\vskip0.15cm
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
-\begin{block}{\small 1. Năng lực truy xuất căn cứ (Retrieval)}
+\begin{block}{\small Cạnh 1: Khâu Truy xuất (Query $\leftrightarrow$ Context)}
 \footnotesize
 \begin{itemize}
-  \item \textbf{Precision@2}: Đo lường độ tinh lọc, loại bỏ nhiễu ngữ cảnh (không nhồi điều khoản rác vào prompt). Khắc phục điểm yếu tụt Precision@2 (0.37--0.39) của baseline 1-hop tĩnh.
-  \item \textbf{Recall}: Đo lường mức độ bao phủ, không bỏ sót các điều khoản bắt buộc và thông tư hướng dẫn kèm theo.
+  \item \textbf{Context Precision@2}: Đo lường độ tinh lọc, loại bỏ nhiễu ngữ cảnh (không nhồi điều khoản rác vào prompt). Khắc phục điểm yếu tụt Precision@2 (0.37--0.39) của baseline 1-hop tĩnh.
+  \item \textbf{Context Recall}: Đo lường mức độ bao phủ, không bỏ sót các điều khoản bắt buộc và thông tư hướng dẫn kèm theo.
   \item \textbf{F2-Score}:
     $$F_2 = 5 \times \frac{\text{Precision} \times \text{Recall}}{4\,\text{Precision} + \text{Recall}}$$
     Ưu tiên Recall vì trong tư vấn pháp lý, \textit{bỏ sót căn cứ luật nguy hiểm hơn thừa thông tin}.
@@ -281,19 +283,21 @@
 \end{column}
 
 \begin{column}{0.48\textwidth}
-\begin{block}{\small 2. Độ tin cậy câu trả lời \& Chống ảo giác}
+\begin{block}{\small Cạnh 2 \& 3: Tính Trung thực \& Độ Chính xác}
 \footnotesize
 \begin{itemize}
-  \item \textbf{Độ chính xác nghiêm ngặt (Strict Correctness)}:
-    Yêu cầu đồng thời đúng mã hiệu điều khoản trích dẫn, chuẩn xác ngữ nghĩa và văn bản còn hiệu lực thi hành.
-  \item \textbf{Tỷ lệ mệnh đề có căn cứ (Grounding Rate)}:
-    Đo lường theo chuẩn SAFE (Google Research) / Ragas:
+  \item \textbf{Faithfulness (Context $\leftrightarrow$ Answer)}:
+    Đo lường tỷ lệ có căn cứ (Grounding Rate) theo chuẩn SAFE (Google Research) / Ragas:
     $$\text{Grounding Rate} = \frac{\text{Số mệnh đề nguyên tử được chứng minh}}{\text{Tổng số mệnh đề pháp lý sinh ra}}$$
-    Vòng lặp Claim Auditor đối soát nhằm bảo đảm \textbf{100\%} mệnh đề kết luận đều có căn cứ vững chắc.
+    Vòng lặp Claim Auditor rà soát nhằm đạt mục tiêu \textbf{100\%} mệnh đề kết luận đều có căn cứ.
+  \item \textbf{Strict Correctness (Query $\leftrightarrow$ Answer)}:
+    Yêu cầu đồng thời đúng mã điều khoản trích dẫn, chuẩn xác ngữ nghĩa và văn bản còn hiệu lực thi hành.
 \end{itemize}
 \end{block}
 \end{column}
 \end{columns}
+\vskip0.12cm
+{\tiny $\Rightarrow$ \textbf{Sự phân công theo RAG Triad}: LawGraph Agent tối ưu \textit{Context Relevance}, Claim Auditor tối ưu \textit{Faithfulness}, và Orchestrator bảo đảm \textit{Strict Correctness}.}
 \end{frame}
 
 % ===================== 7. THREAT MODEL v0 =====================
