@@ -313,18 +313,18 @@
 \end{column}
 \begin{column}{0.64\textwidth}
 \footnotesize
-\textbf{Mô hình đối thủ (Threat Actor)}: Kẻ tấn công có thể chèn prompt độc hại vào tài liệu tải lên hoặc cố tình thao túng kết quả tra cứu ngoài; không có quyền truy cập CSDL nội bộ và không thể vượt qua phê duyệt con người.\\[0.15cm]
-\begin{tabular}{@{}p{1.15cm}p{3.8cm}p{2.6cm}@{}}
+\textbf{Mô hình đối thủ (Threat Actor)}: Kẻ tấn công có thể chèn prompt độc hại vào tài liệu tải lên hoặc cố tình thao túng kết quả tra cứu ngoài; không có quyền truy cập CSDL nội bộ và không thể vượt qua phê duyệt con người.\\[0.12cm]
+\begin{tabular}{@{}p{2.2cm}p{3.3cm}p{3.0cm}@{}}
 \toprule
-Loại & Kịch bản đe dọa & Biện pháp ngăn chặn\\ \midrule
-Trực tiếp & Trích xuất system prompt / API key & Meta-prompt bảo vệ \& phân tách ngữ cảnh\\
-Gián tiếp & Ký tự ẩn trong PDF: [OVERRIDE \dots] & Tiền xử lý văn bản, bóc tách chỉ thị độc hại\\
-Gián tiếp & Thao túng kết quả trang tra cứu ngoài & Coi output là dữ liệu thô, Auditor thẩm định\\
-Gián tiếp & Đầu độc bộ nhớ làm sai lệch tư vấn & Bộ nhớ append-only, phân lập multi-tenant\\
-Gián tiếp & Đầu độc output nộp dịch vụ công & Bắt buộc phê duyệt qua Human Gate\\ \bottomrule
+\textbf{Loại (OWASP Top 10)} & \textbf{Kịch bản đe dọa} & \textbf{Biện pháp ngăn chặn}\\ \midrule
+\textbf{Direct Injection} \newline {\tiny (LLM01 / LLM06 Leakage)} & \textit{Prompt Leaking}: Ép trích xuất system prompt, API keys & Meta-prompt phân tách ngữ cảnh; bộ lọc chặn tiết lộ credential\\
+\textbf{Indirect Injection} \newline {\tiny (LLM01 Injection)} & Ký tự ẩn trong file PDF: \texttt{[OVERRIDE \dots]} & Bóc tách text, strip layer ẩn; input sanitizer loại bỏ chỉ thị độc\\
+\textbf{Tool Injection} \newline {\tiny (LLM01 Indirect Attack)} & Thao túng kết quả trang tra cứu ngoài (VBPL/web) & Coi tool output là dữ liệu thô (untrusted), Claim Auditor thẩm định\\
+\textbf{Stored Injection} \newline {\tiny (LLM01/03 Poisoning)} & Đầu độc bộ nhớ làm sai lệch các lượt tư vấn sau & Bộ nhớ SQLite append-only, cô lập multi-tenant theo doanh nghiệp\\
+\textbf{Excessive Agency} \newline {\tiny (LLM08 Insecure Action)} & Lừa tác tử tự động nộp hồ sơ dịch vụ công sai lệch & Phân quyền least-privilege, chốt chặn bắt buộc qua \textbf{Human Gate}\\ \bottomrule
 \end{tabular}
-\vskip0.15cm
-{\scriptsize Bộ kiểm thử an toàn gồm 10 kịch bản (4 kịch bản tấn công gián tiếp). Giải pháp phòng thủ: Phân quyền tối thiểu ở MCP, Human-in-the-loop và ghi log audit toàn diện.}
+\vskip0.12cm
+{\scriptsize Chuẩn hóa theo \textbf{OWASP Top 10 for LLM} (LLM01, LLM06, LLM08). Bộ kiểm thử an toàn gồm 10 kịch bản (4 ca indirect injection). Phòng thủ đa tầng: Input sanitizer, Model Armor guardrails, Human-in-the-loop và Audit log toàn diện.}
 \end{column}
 \end{columns}
 \end{frame}
