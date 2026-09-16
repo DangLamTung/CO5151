@@ -267,43 +267,29 @@
 % ==================== 6b. HE CHI SO DO LUONG (METRICS) ====================
 \begin{frame}{Hệ chỉ số đo lường thực nghiệm (Evaluation Metrics) [chi tiết]}
 \begin{columns}[T]
-\begin{column}{0.33\textwidth}
-\begin{block}{\small 1. Năng lực truy xuất căn cứ}
+\begin{column}{0.48\textwidth}
+\begin{block}{\small 1. Năng lực truy xuất căn cứ (Retrieval)}
 \footnotesize
 \begin{itemize}
-  \item \textbf{Precision@2}: Đo lường độ tinh lọc, loại bỏ nhiễu ngữ cảnh (không nhồi văn bản rác vào prompt).
-  \item \textbf{Recall}: Đo lường mức độ bao phủ, không bỏ sót điều khoản và thông tư kèm theo.
+  \item \textbf{Precision@2}: Đo lường độ tinh lọc, loại bỏ nhiễu ngữ cảnh (không nhồi điều khoản rác vào prompt). Khắc phục điểm yếu tụt Precision@2 (0.37--0.39) của baseline 1-hop tĩnh.
+  \item \textbf{Recall}: Đo lường mức độ bao phủ, không bỏ sót các điều khoản bắt buộc và thông tư hướng dẫn kèm theo.
   \item \textbf{F2-Score}:
-    $$5 \times \frac{\text{Precision} \times \text{Recall}}{4\,\text{Precision} + \text{Recall}}$$
-    Ưu tiên Recall vì trong tư vấn pháp chế, \textit{bỏ sót luật nguy hiểm hơn thừa thông tin}.
+    $$F_2 = 5 \times \frac{\text{Precision} \times \text{Recall}}{4\,\text{Precision} + \text{Recall}}$$
+    Ưu tiên Recall vì trong tư vấn pháp lý, \textit{bỏ sót căn cứ luật nguy hiểm hơn thừa thông tin}.
 \end{itemize}
 \end{block}
 \end{column}
 
-\begin{column}{0.35\textwidth}
-\begin{block}{\small 2. Độ tin cậy câu trả lời}
+\begin{column}{0.48\textwidth}
+\begin{block}{\small 2. Độ tin cậy câu trả lời \& Chống ảo giác}
 \footnotesize
 \begin{itemize}
   \item \textbf{Độ chính xác nghiêm ngặt (Strict Correctness)}:
-    Yêu cầu đồng thời đúng điều khoản trích dẫn, chuẩn ngữ nghĩa và văn bản còn hiệu lực.
-  \item \textbf{Tỷ lệ có căn cứ (Grounding Rate)}:
-    Dựa trên chuẩn SAFE / Ragas:
-    $$\frac{\text{Số mệnh đề được chứng minh}}{\text{Tổng số mệnh đề pháp lý}}$$
-    Claim Auditor rà soát nhằm đạt mục tiêu \textbf{100\%} mệnh đề có căn cứ trước khi xuất hồ sơ.
-\end{itemize}
-\end{block}
-\end{column}
-
-\begin{column}{0.32\textwidth}
-\begin{block}{\small 3. Hiệu năng \& Chi phí}
-\footnotesize
-\begin{itemize}
-  \item \textbf{Thời gian phản hồi (Latency)}:
-    $$\text{Latency} \le 12\text{ giây}$$
-    đáp ứng thời gian thực cho phiên tư vấn tuân thủ phức tạp.
-  \item \textbf{Chi phí vận hành}:
-    $$\text{Chi phí} \le \$0.02 / \text{truy vấn}$$
-    nhờ Graph Cache và chỉ truyền tóm tắt nhận định giữa các tác tử thay vì gửi toàn bộ văn bản thô.
+    Yêu cầu đồng thời đúng mã hiệu điều khoản trích dẫn, chuẩn xác ngữ nghĩa và văn bản còn hiệu lực thi hành.
+  \item \textbf{Tỷ lệ mệnh đề có căn cứ (Grounding Rate)}:
+    Đo lường theo chuẩn SAFE (Google Research) / Ragas:
+    $$\text{Grounding Rate} = \frac{\text{Số mệnh đề nguyên tử được chứng minh}}{\text{Tổng số mệnh đề pháp lý sinh ra}}$$
+    Vòng lặp Claim Auditor đối soát nhằm bảo đảm \textbf{100\%} mệnh đề kết luận đều có căn cứ vững chắc.
 \end{itemize}
 \end{block}
 \end{column}
