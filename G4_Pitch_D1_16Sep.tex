@@ -84,8 +84,8 @@
 \begin{column}{0.56\textwidth}
 \begin{block}{Vấn đề bài toán}
 \begin{itemize}\small
-  \item Tra cứu pháp luật không dừng ở tìm kiếm văn bản đơn lẻ, mà thách thức cốt lõi là suy luận liên văn bản qua chuỗi sửa đổi/bổ sung và xác định tính hiệu lực theo dòng thời gian.
-  \item Tập dữ liệu SBV gồm \textbf{1.703} văn bản, trong đó \textbf{863} văn bản đã hết hiệu lực và \textbf{191} văn bản hết hiệu lực một phần.
+  \item Tra cứu pháp luật đòi hỏi suy luận liên văn bản qua chuỗi sửa đổi/bổ sung và xác định tính hiệu lực theo dòng thời gian.
+  \item \textbf{Đặc thù ngữ liệu}: Ngữ liệu pháp lý Việt Nam có tỷ lệ sửa đổi dày đặc (ngữ liệu ngân hàng SBV có \textbf{1.703} văn bản với $>50\%$ hết hiệu lực; bộ dữ liệu cuộc thi pháp lý quốc gia \textbf{ALQAC} có hàng trăm tình huống liên kết đa văn bản).
   \item Các phương pháp RAG thông thường dễ gây loãng ngữ cảnh khi văn bản sửa đổi trải rộng trên nhiều nghị định; đồng thời chưa có cơ chế kiểm tra hiệu lực văn bản theo thời gian thực.
 \end{itemize}
 \end{block}
@@ -238,10 +238,10 @@
 \begin{block}{\small Bộ kiểm thử chuẩn hóa (120 tasks)}
 \footnotesize
 \begin{itemize}
-  \item \textbf{100 câu SBV benchmark}: 89 câu tra cứu đơn văn bản, 11 câu suy luận đa tầng qua chuỗi văn bản sửa đổi.
+  \item \textbf{100 câu benchmark}: 89 câu tra cứu đơn văn bản, 11 câu chuỗi sửa đổi (từ tập SBV hoặc cuộc thi \textbf{ALQAC 2025}).
   \item \textbf{10 kịch bản tuân thủ thực tế}: Đa tầng Luật -- Nghị định -- Thông tư (thủ tục cấp phép, tỷ lệ sở hữu nước ngoài).
   \item \textbf{10 kịch bản an toàn}: 5 ca soạn hồ sơ doanh nghiệp, 5 ca tấn công prompt injection / vượt quyền.
-  \item {\scriptsize (Mở rộng đối chiếu với 150 câu hỏi từ ALQAC 2025)}
+  \item {\scriptsize (Khai thác song song 150 câu hỏi truy xuất chuẩn hóa từ ALQAC 2025)}
 \end{itemize}
 \end{block}
 {\footnotesize \textbf{Ngân sách}: $\sim$\$3.2 / \$25 hạn mức tín dụng Vertex AI; thử nghiệm phát triển cục bộ qua Ollama.}
