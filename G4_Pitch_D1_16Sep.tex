@@ -78,7 +78,7 @@
 \begin{itemize}\small
   \item Tra cứu pháp luật không dừng ở tìm kiếm văn bản đơn lẻ, mà thách thức cốt lõi là suy luận liên văn bản qua chuỗi sửa đổi/bổ sung và xác định tính hiệu lực theo dòng thời gian.
   \item Tập dữ liệu SBV gồm \textbf{1.703} văn bản, trong đó \textbf{863} văn bản đã hết hiệu lực và \textbf{191} văn bản hết hiệu lực một phần.
-  \item Các phương pháp mở rộng đồ thị 1-hop cố định (baseline) dễ gây loãng ngữ cảnh và giảm độ chính xác; đồng thời các hệ thống Graph-RAG hiện thời chưa có cơ chế kiểm tra hiệu lực văn bản theo thời gian thực.
+  \item Các phương pháp RAG thông thường dễ gây loãng ngữ cảnh khi văn bản sửa đổi trải rộng trên nhiều nghị định; đồng thời chưa có cơ chế kiểm tra hiệu lực văn bản theo thời gian thực.
 \end{itemize}
 \end{block}
 \end{column}
@@ -119,32 +119,32 @@
   {Người dùng\\ {\tiny Chuyên viên pháp chế SME}};
 \node[box, fill=hcmutblue!20, draw=hcmutblue, very thick, minimum width=4.6cm, minimum height=0.9cm] (O) at (4.1,6.65)
   {ORCHESTRATOR (Supervisor)\\ {\tiny Quản lý state $\cdot$ Điều phối tác vụ}};
-\node[box, fill=orange!12, draw=orange!80!black, text width=4.2cm, minimum height=1.7cm] (M) at (12.6,6.65)
-  {\textbf{MEMORY HIERARCHY}\\ {\tiny $\bullet$ Ngắn hạn: Session state, bộ đếm loop $\le$ 3}\\ {\tiny $\bullet$ Dài hạn (SQLite): Hồ sơ DN, nhật ký audit}\\ {\tiny $\bullet$ Tri thức (Neo4j + Qdrant): Đồ thị \& vector luật}};
+\node[box, fill=orange!12, draw=orange!80!black, text width=4.3cm, minimum height=1.6cm] (M) at (12.2,6.65)
+  {\textbf{BỘ NHỚ HỆ THỐNG}\\ {\tiny $\bullet$ Phiên (Session): Trạng thái, loop counter $\le$ 3}\\ {\tiny $\bullet$ Dài hạn (SQLite): Hồ sơ DN, nhật ký audit}};
 \node[sub] (LG) at (2.0,5.2) {LawGraph Agent};
 \node[sub] (LU) at (6.2,5.2) {Legal Update\\ Agent};
 \node[sub] (D)  at (2.0,4.0) {Compliance Drafter};
 \node[sub] (A)  at (6.2,4.0) {Claim Auditor};
-\node[box, fill=green!8, draw=green!55!black, text width=4.2cm, minimum height=2.2cm, align=left] (MP) at (12.0,4.4)
-  {\textbf{MCP layer}\\ {\tiny $\bullet$ chỉ đọc --- Neo4j + Qdrant (LawGraph)}\\ {\tiny $\bullet$ chỉ đọc --- VBPL (Legal Update)}\\ {\tiny $\bullet$ ghi --- export\_dossier (Drafter)}\\ {\tiny $\bullet$ ghi --- submit\_portal\_filing (Human Gate)}};
+\node[box, fill=green!8, draw=green!55!black, text width=4.3cm, minimum height=2.2cm, align=left] (MP) at (12.2,4.3)
+  {\textbf{TẦNG CÔNG CỤ (TOOLS)}\\ {\tiny $\bullet$ Tri thức (Neo4j, Qdrant): Đồ thị \& cache}\\ {\tiny $\bullet$ Chỉ đọc: Tra cứu hiệu lực VBPL}\\ {\tiny $\bullet$ Ghi an toàn: export\_dossier (Drafter)}\\ {\tiny $\bullet$ Ghi rủi ro: submit\_filing (Human Gate)}};
 \node[box, fill=red!8, draw=red!65!black, very thick, minimum width=3.6cm] (H) at (4.1,2.5)
   {HUMAN GATE\\ {\tiny Chuyên viên phê duyệt}};
 \node[box, fill=hcmutblue!18, draw=hcmutblue, very thick, minimum width=3.6cm] (OUT) at (4.1,1.4)
   {Hồ sơ tuân thủ + Audit Log};
-\node[box, draw=black!30, fill=black!3, text width=5.0cm, align=left, font=\tiny] (L) at (10.9,1.8)
+\node[box, draw=black!30, fill=black!3, text width=5.2cm, align=left, font=\tiny] (L) at (10.8,1.8)
   {\textbf{Trục:} \textcolor{hcmutblue}{A1} đa tác tử $\cdot$ \textcolor{hcmutblue}{A2} chọn nhánh $\cdot$ \textcolor{hcmutblue}{A3} phản biện $\cdot$ \textcolor{hcmutblue}{A4} guardrails\\[0.1cm]
-   \textcolor{green!55!black}{$\blacksquare$} MCP chỉ đọc \quad \textcolor{red!65!black}{$\blacksquare$} MCP ghi (qua cổng người) \quad \textcolor{orange!80!black}{$\blacksquare$} memory};
+   \textcolor{green!55!black}{$\blacksquare$} Tool chỉ đọc \quad \textcolor{red!65!black}{$\blacksquare$} Tool ghi (qua cổng người) \quad \textcolor{orange!80!black}{$\blacksquare$} Bộ nhớ};
 % --- edges ---
 \draw[ar] (U) -- (O);
 \draw[ar] (O.south) -- (SUB.north) node[midway, right, font=\tiny] {điều phối tác vụ};
 \draw[fb] (SUB.north west) -- (O.south west) node[midway, above, font=\tiny\itshape, text=red!75!black, align=left] {yêu cầu truy xuất lại};
-\draw[db] (O) -- (M) node[midway, above, font=\tiny] {truy xuất / ghi nhận memory};
+\draw[db] (O) -- (M) node[midway, above, font=\tiny] {quản lý bộ nhớ};
 \draw[ar] (LG) -- (D);
 \draw[ar] (LU) -- (D);
 \draw[fbx] (D) -- (A) node[midway, above, font=\tiny, text=red!75!black] {đối soát / phản biện};
 \draw[ar] (A) -- (H);
 \draw[ar] (H) -- (OUT);
-\draw[db] (SUB.east) -- (MP.west) node[midway, above, font=\tiny] {gọi MCP tools};
+\draw[db] (SUB.east) -- (MP.west) node[midway, above, font=\tiny] {gọi tool};
 % --- axis tags ---
 \node[ax] at (8.6,5.8) {A1};
 \node[ax] at (8.6,3.4) {A2};
@@ -169,7 +169,7 @@
 
 % ================== 4. CO CHE LOI: RETRIEVAL DECISION ==================
 \begin{frame}{Cơ chế lõi: Quyết định duyệt đồ thị chọn lọc [chi tiết]}
-{\small Cơ chế duyệt đồ thị chọn lọc (Selective Traversal) do tác tử tự quyết định, tránh nạp 1-hop ồ ạt gây tràn ngữ cảnh:}
+{\small Cơ chế duyệt đồ thị chọn lọc (Selective Traversal) giúp tác tử tập trung vào các điều khoản liên quan trực tiếp, tránh nạp dư thừa làm tràn ngữ cảnh:}
 \vskip0.2cm
 \begin{columns}[T]
 \begin{column}{0.32\textwidth}
@@ -224,37 +224,80 @@
 \end{frame}
 
 % ========================= 6. DANH GIA =========================
-\begin{frame}{Kế hoạch đánh giá thực nghiệm [45 giây]}
+\begin{frame}{Kế hoạch đánh giá thực nghiệm [30 giây]}
 \begin{columns}[T]
-\begin{column}{0.5\textwidth}
-\begin{block}{\small Bộ kiểm thử (120 tasks)}
+\begin{column}{0.48\textwidth}
+\begin{block}{\small Bộ kiểm thử chuẩn hóa (120 tasks)}
 \footnotesize
 \begin{itemize}
-  \item 100 câu hỏi từ tập dữ liệu SBV: 89 câu tra cứu đơn văn bản, 11 câu suy luận đa tầng qua chuỗi sửa đổi
-  \item 10 kịch bản tuân thủ đa tầng (Luật -- Nghị định -- Thông tư)
-  \item 5 kịch bản soạn thảo hồ sơ tuân thủ pháp lý
-  \item 5 kịch bản kiểm thử tấn công prompt injection
-  \item {\scriptsize (Mở rộng kiểm thử năng lực truy xuất với 150 câu hỏi từ ALQAC 2025)}
+  \item \textbf{100 câu SBV benchmark}: 89 câu tra cứu đơn văn bản, 11 câu suy luận đa tầng qua chuỗi văn bản sửa đổi.
+  \item \textbf{10 kịch bản tuân thủ thực tế}: Đa tầng Luật -- Nghị định -- Thông tư (thủ tục cấp phép, tỷ lệ sở hữu nước ngoài).
+  \item \textbf{10 kịch bản an toàn}: 5 ca soạn hồ sơ doanh nghiệp, 5 ca tấn công prompt injection / vượt quyền.
+  \item {\scriptsize (Mở rộng đối chiếu với 150 câu hỏi từ ALQAC 2025)}
 \end{itemize}
 \end{block}
-\begin{block}{\small Chỉ số đo lường (Metrics)}
+{\footnotesize \textbf{Ngân sách}: $\sim$\$3.2 / \$25 hạn mức tín dụng Vertex AI; thử nghiệm phát triển cục bộ qua Ollama.}
+\end{column}
+\begin{column}{0.52\textwidth}
+\begin{block}{\small Đối sánh (Baselines) \& Thử nghiệm tháo rời (Ablations)}
 \footnotesize
-Truy xuất: Precision@2, Recall, F2\\
-Câu trả lời: Tính chính xác điều khoản, Grounding rate (SAFE/Ragas)\\
-Hiệu năng: Latency $\le 12$s, Chi phí $\le$ \$0.02/truy vấn
+\begin{itemize}
+  \item \textbf{3 Baseline đối sánh}:
+    \begin{enumerate}
+      \item Naive RAG (cắt đoạn chunk + tìm kiếm vector)
+      \item Graph-RAG tĩnh (duyệt lân cận cố định)
+      \item ReAct đơn tác tử (1 LLM tự suy nghĩ \& gọi tool)
+    \end{enumerate}
+  \item \textbf{4 Cấu hình tháo rời (Ablations)}: Hệ đầy đủ $\cdot$ Bỏ Auditor $\cdot$ Bỏ duyệt chọn lọc $\cdot$ Bỏ Legal Update Agent.
+  \item \textbf{Độ tin cậy}: Chạy 3 seeds độc lập (báo cáo mean $\pm$ std). Phân tích 4 nhóm lỗi và đối soát thủ công 30 mẫu để đo lường độ tương đồng (Human Agreement).
+\end{itemize}
 \end{block}
 \end{column}
-\begin{column}{0.5\textwidth}
-\begin{block}{\small Mô hình đối sánh \& Độ tin cậy}
+\end{columns}
+\end{frame}
+
+% ==================== 6b. HE CHI SO DO LUONG (METRICS) ====================
+\begin{frame}{Hệ chỉ số đo lường thực nghiệm (Evaluation Metrics) [chi tiết]}
+\begin{columns}[T]
+\begin{column}{0.33\textwidth}
+\begin{block}{\small 1. Năng lực truy xuất căn cứ}
 \footnotesize
 \begin{itemize}
-  \item 3 baseline: Naive RAG $\cdot$ Graph-RAG tĩnh (SBV-LawGraph, ViHERMES) $\cdot$ ReAct đơn tác tử
-  \item 4 ablation: Hệ đầy đủ $\cdot$ Bỏ Auditor $\cdot$ Bỏ duyệt chọn lọc $\cdot$ Bỏ Legal Update Agent
-  \item 3 seeds thử nghiệm, báo cáo kết quả dạng mean $\pm$ std
-  \item Phân tích lỗi theo 4 khía cạnh: sai lệch truy xuất $\cdot$ sai hiệu lực thời gian $\cdot$ mệnh đề thiếu căn cứ $\cdot$ từ chối sai (false refusal). Đánh giá thủ công 30 mẫu để đo lường độ tương đồng (Human Agreement)
+  \item \textbf{Precision@2}: Đo lường độ tinh lọc, loại bỏ nhiễu ngữ cảnh (không nhồi văn bản rác vào prompt).
+  \item \textbf{Recall}: Đo lường mức độ bao phủ, không bỏ sót điều khoản và thông tư kèm theo.
+  \item \textbf{F2-Score}:
+    $$5 \times \frac{\text{Precision} \times \text{Recall}}{4\,\text{Precision} + \text{Recall}}$$
+    Ưu tiên Recall vì trong tư vấn pháp chế, \textit{bỏ sót luật nguy hiểm hơn thừa thông tin}.
 \end{itemize}
 \end{block}
-{\footnotesize Ước tính chi phí đánh giá benchmark khoảng \$3.2 / \$25 (giai đoạn phát triển thử nghiệm trên mô hình mã nguồn mở cục bộ qua Ollama).}
+\end{column}
+
+\begin{column}{0.35\textwidth}
+\begin{block}{\small 2. Độ tin cậy câu trả lời}
+\footnotesize
+\begin{itemize}
+  \item \textbf{Độ chính xác nghiêm ngặt (Strict Correctness)}:
+    Yêu cầu đồng thời đúng điều khoản trích dẫn, chuẩn ngữ nghĩa và văn bản còn hiệu lực.
+  \item \textbf{Tỷ lệ có căn cứ (Grounding Rate)}:
+    Dựa trên chuẩn SAFE / Ragas:
+    $$\frac{\text{Số mệnh đề được chứng minh}}{\text{Tổng số mệnh đề pháp lý}}$$
+    Claim Auditor rà soát nhằm đạt mục tiêu \textbf{100\%} mệnh đề có căn cứ trước khi xuất hồ sơ.
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{0.32\textwidth}
+\begin{block}{\small 3. Hiệu năng \& Chi phí}
+\footnotesize
+\begin{itemize}
+  \item \textbf{Thời gian phản hồi (Latency)}:
+    $$\text{Latency} \le 12\text{ giây}$$
+    đáp ứng thời gian thực cho phiên tư vấn tuân thủ phức tạp.
+  \item \textbf{Chi phí vận hành}:
+    $$\text{Chi phí} \le \$0.02 / \text{truy vấn}$$
+    nhờ Graph Cache và chỉ truyền tóm tắt nhận định giữa các tác tử thay vì gửi toàn bộ văn bản thô.
+\end{itemize}
+\end{block}
 \end{column}
 \end{columns}
 \end{frame}
@@ -350,7 +393,7 @@ W11--12 & Đóng gói giải pháp (Docker/run.sh) và bảo vệ đồ án\\
 \begin{frame}{Backup --- 4 câu hỏi chất lượng đề tài}
 \footnotesize
 \begin{description}
-  \item[TÍNH MỚI] Khác biệt với các hệ thống Graph-RAG tĩnh (SBV-LawGraph, ViHERMES) ở 3 điểm: (1) Chính sách duyệt đồ thị chọn lọc linh hoạt theo ngữ cảnh do tác tử quyết định thay vì mở rộng 1-hop cố định; (2) Cơ chế xác minh hiệu lực văn bản thời gian thực; (3) Vòng lặp phản biện chéo (Claim Auditor) bảo đảm 100\% mệnh đề kết luận đều có căn cứ pháp lý.
+  \item[TÍNH MỚI] Khác biệt với các hệ thống RAG đồ thị thông thường ở 3 điểm: (1) Chính sách duyệt đồ thị chọn lọc thích ứng theo ngữ cảnh do tác tử quyết định; (2) Cơ chế xác minh hiệu lực văn bản thời gian thực; (3) Vòng lặp phản biện chéo (Claim Auditor) bảo đảm 100\% mệnh đề kết luận đều có căn cứ pháp lý.
   \item[TÍNH PHI TẦM THƯỜNG] Thách thức cốt lõi nằm ở \textbf{chính sách duyệt đồ thị thích ứng} (lựa chọn cạnh, xác định điểm dừng tối ưu tránh bùng nổ ngữ cảnh). Đòi hỏi tích hợp đồ thị 5.221 nút, kết nối cổng xác thực VBPL và thực nghiệm nghiêm ngặt trên 120 tác vụ $\times$ 3 seeds.
   \item[Ý NGHĨA KHOA HỌC \& THỰC TIỄN] Giải quyết trực tiếp bài toán tuân thủ pháp lý cho doanh nghiệp SME; trả lời câu hỏi nghiên cứu: \emph{Việc lập kế hoạch duyệt có trạng thái kết hợp phản biện chéo có giải quyết triệt để hiện tượng ảo giác (hallucination) so với Graph-RAG truyền thống hay không?}
   \item[TÍNH KHẢ THI] Lộ trình 10 tuần phân bổ chặt chẽ với các mốc kiểm soát chất lượng cụ thể; chi phí đánh giá tối ưu ($\approx$ \$3.2 / \$25) nhờ tận dụng mô hình nguồn mở khi phát triển.
