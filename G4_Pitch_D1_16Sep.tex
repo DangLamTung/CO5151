@@ -1,0 +1,413 @@
+% =====================================================================
+%  CO5151 -- Advanced Agentic AI  |  Nhom G4  |  Pitch Proposal D1
+%  Slide beamer, dung mau/logo theo mau HCMUT (hcmut-report.cls)
+%  BIEN DICH:  pdflatex G4_Pitch_D1_16Sep.tex   (chay 2 lan de co so trang)
+%  Yeu cau: beamer, tikz, vntex (giong template bao cao cua mon)
+% =====================================================================
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% ---- Tieng Viet (giong hcmut-report.cls) ----
+\usepackage[utf8]{vntex,inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese,english]{babel}
+\usefonttheme{serif}
+\usefonttheme{professionalfonts}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+\usepackage{booktabs}
+\usepackage{array}
+
+% ---- Mau nhan dien HCMUT ----
+\definecolor{hcmutblue}{RGB}{0,62,126}
+\definecolor{hcmutlight}{RGB}{0,120,190}
+\definecolor{hcmutgray}{RGB}{238,241,245}
+
+% ---- Trinh bay chung ----
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{frametitle}{bg=hcmutblue, fg=white}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamercolor{footline}{bg=hcmutblue!80!black, fg=white}
+\setbeamerfont{footline}{size=\tiny}
+\setbeamercolor{itemize item}{fg=hcmutblue}
+\setbeamercolor{block title}{bg=hcmutblue!12, fg=hcmutblue}
+\setbeamercolor{block body}{bg=hcmutgray}
+\setbeamercolor{structure}{fg=hcmutblue}
+\setbeamersize{text margin left=0.6cm, text margin right=0.6cm}
+
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.7ex,dp=1.4ex,leftskip=0.4cm,rightskip=0.4cm]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle%
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.1ex,leftskip=0.4cm,rightskip=0.4cm]{footline}%
+    \usebeamerfont{footline}CO5151 -- Advanced Agentic AI \hfill Nhom G4 $\cdot$ Pitch D1 -- 16/9/2026 \hfill \insertframenumber/\inserttotalframenumber%
+  \end{beamercolorbox}%
+}
+
+\newcommand{\hcmutlogo}[1][1.5cm]{%
+  \IfFileExists{hcmut_logo.png}{\includegraphics[height=#1]{hcmut_logo.png}}{\textbf{HCMUT}}%
+}
+
+\begin{document}
+
+% ============================ 1. TITLE ============================
+\begin{frame}[plain]
+\centering
+\vskip0.2cm
+\hcmutlogo[1.5cm]\\[0.35cm]
+{\small ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH}\\[0.05cm]
+{\small TRƯỜNG ĐẠI HỌC BÁCH KHOA -- KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH}\\[0.45cm]
+{\large\bfseries CO5151: Advanced Agentic AI}\\[0.1cm]
+{\footnotesize Project Proposal (D1) -- Pitch 5 phút}\\[0.35cm]
+\textcolor{hcmutblue}{\rule{0.82\linewidth}{1pt}}\\[0.3cm]
+{\Large\bfseries Agentic RAG cho Hệ thống Pháp luật Việt Nam}\\[0.1cm]
+{\small Hệ thống đa tác tử có kiểm chứng hiệu lực thời gian thực}\\[0.45cm]
+{\small Nhóm G4: Đặng Lâm Tùng (nhóm trưởng) $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hùng}\\[0.15cm]
+{\small Giảng viên: TS. Lê Xuân Bách \hfill 16/9/2026 $\cdot$ HK261}
+\end{frame}
+
+% ====================== 2. VAN DE & NGUOI DUNG ======================
+\begin{frame}{Vấn đề \& Người dùng [30 giây]}
+\begin{columns}[T]
+\begin{column}{0.56\textwidth}
+\begin{block}{Vấn đề bài toán}
+\begin{itemize}\small
+  \item Tra cứu pháp luật không dừng ở tìm kiếm văn bản đơn lẻ, mà thách thức cốt lõi là suy luận liên văn bản qua chuỗi sửa đổi/bổ sung và xác định tính hiệu lực theo dòng thời gian.
+  \item Tập dữ liệu SBV gồm \textbf{1.703} văn bản, trong đó \textbf{863} văn bản đã hết hiệu lực và \textbf{191} văn bản hết hiệu lực một phần.
+  \item Các phương pháp mở rộng đồ thị 1-hop cố định (baseline) dễ gây loãng ngữ cảnh và giảm độ chính xác; đồng thời các hệ thống Graph-RAG hiện thời chưa có cơ chế kiểm tra hiệu lực văn bản theo thời gian thực.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.42\textwidth}
+\begin{block}{Người dùng \& Sự cần thiết của Agent}
+\begin{itemize}\small
+  \item \textbf{Đối tượng}: Chuyên viên pháp chế, cán bộ tuân thủ tại các doanh nghiệp vừa và nhỏ (SME).
+  \item \textbf{Tính phức tạp}: Không gian tra cứu phân nhánh động theo từng tình huống thực tế, vượt ngoài khả năng bao quát của các luồng xử lý cố định (hard-coded rules).
+  \item \textbf{Giải pháp}: Cần hệ thống đa tác tử tự lập kế hoạch truy xuất, phản biện đối soát chéo và chủ động tương tác làm rõ khi thiếu dữ kiện.
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ========================= 3. KIEN TRUC (KEY) =========================
+\begin{frame}[shrink=4]{Kiến trúc: Orchestrator điều phối các sub-agent [60 giây]}
+\centering
+\begin{tikzpicture}[
+  scale=0.88, transform shape,
+  font=\scriptsize,
+  box/.style={draw, rounded corners=2pt, inner sep=3pt, align=center,
+              minimum height=0.75cm, fill=white},
+  sub/.style={box, fill=hcmutblue!8, draw=hcmutblue!80, minimum width=3.0cm},
+  ar/.style={-{Stealth[length=2mm]}, thick, draw=hcmutblue!85!black},
+  fb/.style={-{Stealth[length=2.4mm]}, very thick, dashed, draw=red!75!black},
+  fbx/.style={{Stealth[length=2.2mm]}-{Stealth[length=2.2mm]}, very thick, dashed, draw=red!75!black},
+  db/.style={{Stealth[length=1.8mm]}-{Stealth[length=1.8mm]}, thick, dotted, draw=orange!80!black},
+  ax/.style={font=\tiny\bfseries, text=hcmutblue, fill=hcmutblue!12,
+             rounded corners=1pt, inner sep=1.5pt}
+]
+% --- khung sub-agent (ve truoc, nam duoi) ---
+\node[draw, dashed, rounded corners=4pt, draw=hcmutblue!60, inner sep=0pt,
+      minimum width=8.0cm, minimum height=2.7cm] (SUB) at (4.1,4.6) {};
+\node[font=\tiny\bfseries, text=hcmutblue, anchor=south west] at (0.25,5.62) {SUB-AGENTS};
+% --- nodes ---
+\node[box, fill=black!6, minimum width=3.2cm] (U) at (4.1,7.7)
+  {Người dùng\\ {\tiny Chuyên viên pháp chế SME}};
+\node[box, fill=hcmutblue!20, draw=hcmutblue, very thick, minimum width=4.6cm, minimum height=0.9cm] (O) at (4.1,6.65)
+  {ORCHESTRATOR (Supervisor)\\ {\tiny Quản lý state $\cdot$ Điều phối tác vụ}};
+\node[box, fill=orange!12, draw=orange!80!black, text width=4.2cm, minimum height=1.7cm] (M) at (12.6,6.65)
+  {\textbf{MEMORY HIERARCHY}\\ {\tiny $\bullet$ Ngắn hạn: Session state, bộ đếm loop $\le$ 3}\\ {\tiny $\bullet$ Dài hạn (SQLite): Hồ sơ DN, nhật ký audit}\\ {\tiny $\bullet$ Tri thức (Neo4j + Qdrant): Đồ thị \& vector luật}};
+\node[sub] (LG) at (2.0,5.2) {LawGraph Agent};
+\node[sub] (LU) at (6.2,5.2) {Legal Update\\ Agent};
+\node[sub] (D)  at (2.0,4.0) {Compliance Drafter};
+\node[sub] (A)  at (6.2,4.0) {Claim Auditor};
+\node[box, fill=green!8, draw=green!55!black, text width=4.2cm, minimum height=2.2cm, align=left] (MP) at (12.0,4.4)
+  {\textbf{MCP layer}\\ {\tiny $\bullet$ chỉ đọc --- Neo4j + Qdrant (LawGraph)}\\ {\tiny $\bullet$ chỉ đọc --- VBPL (Legal Update)}\\ {\tiny $\bullet$ ghi --- export\_dossier (Drafter)}\\ {\tiny $\bullet$ ghi --- submit\_portal\_filing (Human Gate)}};
+\node[box, fill=red!8, draw=red!65!black, very thick, minimum width=3.6cm] (H) at (4.1,2.5)
+  {HUMAN GATE\\ {\tiny Chuyên viên phê duyệt}};
+\node[box, fill=hcmutblue!18, draw=hcmutblue, very thick, minimum width=3.6cm] (OUT) at (4.1,1.4)
+  {Hồ sơ tuân thủ + Audit Log};
+\node[box, draw=black!30, fill=black!3, text width=5.0cm, align=left, font=\tiny] (L) at (10.9,1.8)
+  {\textbf{Trục:} \textcolor{hcmutblue}{A1} đa tác tử $\cdot$ \textcolor{hcmutblue}{A2} chọn nhánh $\cdot$ \textcolor{hcmutblue}{A3} phản biện $\cdot$ \textcolor{hcmutblue}{A4} guardrails\\[0.1cm]
+   \textcolor{green!55!black}{$\blacksquare$} MCP chỉ đọc \quad \textcolor{red!65!black}{$\blacksquare$} MCP ghi (qua cổng người) \quad \textcolor{orange!80!black}{$\blacksquare$} memory};
+% --- edges ---
+\draw[ar] (U) -- (O);
+\draw[ar] (O.south) -- (SUB.north) node[midway, right, font=\tiny] {điều phối tác vụ};
+\draw[fb] (SUB.north west) -- (O.south west) node[midway, above, font=\tiny\itshape, text=red!75!black, align=left] {yêu cầu truy xuất lại};
+\draw[db] (O) -- (M) node[midway, above, font=\tiny] {truy xuất / ghi nhận memory};
+\draw[ar] (LG) -- (D);
+\draw[ar] (LU) -- (D);
+\draw[fbx] (D) -- (A) node[midway, above, font=\tiny, text=red!75!black] {đối soát / phản biện};
+\draw[ar] (A) -- (H);
+\draw[ar] (H) -- (OUT);
+\draw[db] (SUB.east) -- (MP.west) node[midway, above, font=\tiny] {gọi MCP tools};
+% --- axis tags ---
+\node[ax] at (8.6,5.8) {A1};
+\node[ax] at (8.6,3.4) {A2};
+\node[ax] at (6.8,3.05) {A3};
+\node[ax] at (6.8,2.0) {A4};
+\end{tikzpicture}
+\end{frame}
+
+% ================== 3b. LUONG DIEU KHIEN ==================
+\begin{frame}{Luồng điều khiển (Control Flow) [chi tiết]}
+\footnotesize
+\begin{enumerate}
+  \item \textbf{Tiếp nhận \& Phân rã mục tiêu}: Orchestrator tra cứu ngữ cảnh phiên làm việc và phân rã yêu cầu tuân thủ phức tạp thành các câu hỏi con.
+  \item \textbf{Điều phối tác tử chuyên trách}: Giao việc cho sub-agent phù hợp --- LawGraph Agent (duyệt chọn lọc đồ thị quan hệ) hoặc Legal Update Agent (xác minh hiệu lực thời gian thực).
+  \item \textbf{Dự thảo \& Thẩm định chéo}: Compliance Drafter soạn thảo hồ sơ; Claim Auditor phân rã từng tuyên bố (claim decomposition) để đối soát nghiêm ngặt với điều khoản nguồn.
+  \item \textbf{Vòng lặp tinh chỉnh (Refinement Loop)}: Nếu phát hiện mệnh đề thiếu căn cứ, Orchestrator kích hoạt truy xuất bổ sung (giới hạn tối đa 3 chu kỳ).
+  \item \textbf{Phê duyệt \& Kết xuất}: Khi 100\% mệnh đề có căn cứ $\rightarrow$ qua HUMAN GATE (kiểm soát các tác vụ ghi không thể đảo nghịch) $\rightarrow$ kết xuất hồ sơ tuân thủ, lưu audit log và cập nhật memory dài hạn.
+\end{enumerate}
+\vskip0.15cm
+{\scriptsize Orchestrator đóng vai trò \textbf{Supervisor}: duy trì trạng thái chung, điều phối các sub-agent độc lập và quản lý điều kiện dừng. Các sub-agent \textbf{không} gọi chéo trực tiếp mà thông qua bus điều phối của Orchestrator.}
+\end{frame}
+
+% ================== 4. CO CHE LOI: RETRIEVAL DECISION ==================
+\begin{frame}{Cơ chế lõi: Quyết định duyệt đồ thị chọn lọc [chi tiết]}
+{\small Cơ chế duyệt đồ thị chọn lọc (Selective Traversal) do tác tử tự quyết định, tránh nạp 1-hop ồ ạt gây tràn ngữ cảnh:}
+\vskip0.2cm
+\begin{columns}[T]
+\begin{column}{0.32\textwidth}
+\begin{block}{\small 1. Khám phá metadata quan hệ}
+\footnotesize Với mỗi điều luật khởi tạo, tác tử chỉ trích xuất metadata của các cạnh liên kết: loại quan hệ, số hiệu văn bản đích, trích yếu tiêu đề; chưa nạp toàn văn để tiết kiệm context.
+\end{block}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{block}{\small 2. Đánh giá \& Xếp hạng cạnh}
+\footnotesize Xếp hạng mức độ ưu tiên theo hai tiêu chí: trọng số loại quan hệ (\textbf{Sửa đổi} $>$ \textbf{Bãi bỏ} $>$ \textbf{Thay thế} $>$ \textbf{Hướng dẫn}) và độ tương đồng ngữ nghĩa với truy vấn con.
+\end{block}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{block}{\small 3. Duyệt chọn lọc có điểm dừng}
+\footnotesize Chỉ duyệt theo 1--2 cạnh có điểm cao nhất và nạp toàn văn điều luật đích. Dừng khi Auditor xác nhận đủ căn cứ pháp lý, hoặc đạt độ sâu tối đa (2 hops). Chủ động hỏi người dùng khi thiếu dữ kiện.
+\end{block}
+\end{column}
+\end{columns}
+\vskip0.15cm
+{\footnotesize \textcolor{hcmutblue}{\textbf{Thách thức kỹ thuật cốt lõi:}} Cân bằng tối ưu giữa việc bảo đảm đầy đủ căn cứ pháp lý và kiểm soát nghiêm ngặt độ dài ngữ cảnh (context bloat).}
+\end{frame}
+
+% ============ 5. THANH PHAN + PHAN QUYEN (R2) + MEMORY ============
+\begin{frame}{Thành phần \& Phân quyền MCP (R2) + Thiết kế Memory [chi tiết]}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{block}{\small Tools \& Phân quyền MCP (R2)}
+\scriptsize
+\begin{itemize}
+  \item \texttt{query\_lawgraph}, \texttt{trace\_selective\_edge} --- \textcolor{green!55!black}{\textbf{Chỉ đọc (Read-only)}}
+  \item \texttt{verify\_vbpl\_status}, \texttt{search\_legal\_update} --- \textcolor{green!55!black}{\textbf{Chỉ đọc (Read-only)}}
+  \item \texttt{export\_dossier} --- \textcolor{orange!80!black}{\textbf{Ghi cục bộ / Reversible}} (xuất tệp hồ sơ, có thể ghi đè/xóa)
+  \item \texttt{submit\_portal\_filing} --- \textcolor{red!70!black}{\textbf{Tác động ngoại vi / Irreversible}} (nộp dịch vụ công, bắt buộc qua phê duyệt con người)
+\end{itemize}
+\end{block}
+{\scriptsize Hệ thống phân tách thành 2 MCP Server: Knowledge MCP Server (Neo4j + Qdrant) và Legal Status MCP Server (VBPL). Quyền ghi được kiểm soát chặt chẽ theo nguyên tắc least-privilege.}
+\end{column}
+\begin{column}{0.43\textwidth}
+\begin{block}{\small Kiến trúc Memory \& Ngữ cảnh tác tử}
+\scriptsize
+\textbf{Working Memory (Ngắn hạn)}: Duy trì trong phiên làm việc: câu hỏi, trích đoạn căn cứ, bản thảo hồ sơ, nhật ký phản biện (giới hạn loop $\le 3$).\\[0.1cm]
+\textbf{Long-term Memory (Dài hạn)}: Lưu trữ trên \texttt{SQLite} (\texttt{legal\_advisory.db}):
+\begin{itemize}\scriptsize
+  \item Hồ sơ doanh nghiệp + nhật ký audit tư vấn (lưu Điều/Khoản đã dẫn chiếu).
+  \item Bộ đệm trạng thái hiệu lực văn bản (TTL 24h) giảm tải truy vấn trực tiếp cổng \texttt{vbpl.vn}.
+\end{itemize}
+\textbf{Kho tri thức}: \texttt{Neo4j} (đồ thị quan hệ) + \texttt{Qdrant} (vector Điều/Khoản).\\[0.05cm]
+\textbf{Phân lập ngữ cảnh tác tử}: Mỗi sub-agent vận hành trong context riêng biệt; chỉ trao đổi kết quả cô đọng (Mã điều khoản, nhận định 1--3 dòng), không truyền tải toàn văn bản thô. Dữ liệu dài hạn chỉ ghi nhận sau khi có sự phê duyệt của con người.
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ========================= 6. DANH GIA =========================
+\begin{frame}{Kế hoạch đánh giá thực nghiệm [45 giây]}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{block}{\small Bộ kiểm thử (120 tasks)}
+\footnotesize
+\begin{itemize}
+  \item 100 câu hỏi từ tập dữ liệu SBV: 89 câu tra cứu đơn văn bản, 11 câu suy luận đa tầng qua chuỗi sửa đổi
+  \item 10 kịch bản tuân thủ đa tầng (Luật -- Nghị định -- Thông tư)
+  \item 5 kịch bản soạn thảo hồ sơ tuân thủ pháp lý
+  \item 5 kịch bản kiểm thử tấn công prompt injection
+  \item {\scriptsize (Mở rộng kiểm thử năng lực truy xuất với 150 câu hỏi từ ALQAC 2025)}
+\end{itemize}
+\end{block}
+\begin{block}{\small Chỉ số đo lường (Metrics)}
+\footnotesize
+Truy xuất: Precision@2, Recall, F2\\
+Câu trả lời: Tính chính xác điều khoản, Grounding rate (SAFE/Ragas)\\
+Hiệu năng: Latency $\le 12$s, Chi phí $\le$ \$0.02/truy vấn
+\end{block}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{block}{\small Mô hình đối sánh \& Độ tin cậy}
+\footnotesize
+\begin{itemize}
+  \item 3 baseline: Naive RAG $\cdot$ Graph-RAG tĩnh (SBV-LawGraph, ViHERMES) $\cdot$ ReAct đơn tác tử
+  \item 4 ablation: Hệ đầy đủ $\cdot$ Bỏ Auditor $\cdot$ Bỏ duyệt chọn lọc $\cdot$ Bỏ Legal Update Agent
+  \item 3 seeds thử nghiệm, báo cáo kết quả dạng mean $\pm$ std
+  \item Phân tích lỗi theo 4 khía cạnh: sai lệch truy xuất $\cdot$ sai hiệu lực thời gian $\cdot$ mệnh đề thiếu căn cứ $\cdot$ từ chối sai (false refusal). Đánh giá thủ công 30 mẫu để đo lường độ tương đồng (Human Agreement)
+\end{itemize}
+\end{block}
+{\footnotesize Ước tính chi phí đánh giá benchmark khoảng \$3.2 / \$25 (giai đoạn phát triển thử nghiệm trên mô hình mã nguồn mở cục bộ qua Ollama).}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ===================== 7. THREAT MODEL v0 =====================
+\begin{frame}{Mô hình đe dọa an toàn (Threat Model v0) [30 giây]}
+\begin{columns}[T]
+\begin{column}{0.34\textwidth}
+\begin{block}{\small Tài sản bảo vệ \& Vector tấn công}
+\footnotesize
+\textbf{Tài sản cốt lõi}: Nhật ký audit, CSDL hồ sơ doanh nghiệp, tính toàn vẹn hồ sơ, API keys.\\[0.1cm]
+\textbf{3 bề mặt tiếp nhận dữ liệu không tin cậy}:
+\begin{enumerate}
+  \item Tài liệu hồ sơ người dùng tải lên,
+  \item Nội dung câu hỏi của người dùng,
+  \item Dữ liệu phản hồi từ công cụ ngoài (VBPL, web).
+\end{enumerate}
+\end{block}
+\end{column}
+\begin{column}{0.64\textwidth}
+\footnotesize
+\textbf{Mô hình đối thủ (Threat Actor)}: Kẻ tấn công có thể chèn prompt độc hại vào tài liệu tải lên hoặc cố tình thao túng kết quả tra cứu ngoài; không có quyền truy cập CSDL nội bộ và không thể vượt qua phê duyệt con người.\\[0.15cm]
+\begin{tabular}{@{}p{1.15cm}p{3.8cm}p{2.6cm}@{}}
+\toprule
+Loại & Kịch bản đe dọa & Biện pháp ngăn chặn\\ \midrule
+Trực tiếp & Trích xuất system prompt / API key & Meta-prompt bảo vệ \& phân tách ngữ cảnh\\
+Gián tiếp & Ký tự ẩn trong PDF: [OVERRIDE \dots] & Tiền xử lý văn bản, bóc tách chỉ thị độc hại\\
+Gián tiếp & Thao túng kết quả trang tra cứu ngoài & Coi output là dữ liệu thô, Auditor thẩm định\\
+Gián tiếp & Đầu độc bộ nhớ làm sai lệch tư vấn & Bộ nhớ append-only, phân lập multi-tenant\\
+Gián tiếp & Đầu độc output nộp dịch vụ công & Bắt buộc phê duyệt qua Human Gate\\ \bottomrule
+\end{tabular}
+\vskip0.15cm
+{\scriptsize Bộ kiểm thử an toàn gồm 10 kịch bản (4 kịch bản tấn công gián tiếp). Giải pháp phòng thủ: Phân quyền tối thiểu ở MCP, Human-in-the-loop và ghi log audit toàn diện.}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ================= 8. RUI RO & LO TRINH =================
+\begin{frame}{Rủi ro, Phương án dự phòng \& Lộ trình 10 tuần [15 giây]}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{block}{\small Giả định rủi ro kỹ thuật}
+\footnotesize
+Giả định rủi ro: Cổng tra cứu VBPL có thể bị gián đoạn hoặc nghẽn mạng. Phương án dự phòng:
+\begin{itemize}
+  \item Khai thác thuộc tính hiệu lực offline đồng bộ trong Neo4j kết hợp cache SQLite 24h;
+  \item Đánh giá thực nghiệm trên snapshot dữ liệu có nhãn mốc thời gian chuẩn;
+  \item Bảo đảm giữ nguyên vẹn 4 trục kiến trúc cốt lõi.
+\end{itemize}
+\end{block}
+\begin{block}{\small Quản trị rủi ro nguồn ngữ liệu}
+\footnotesize
+Tập ngữ liệu SBV từ nghiên cứu [1] chưa công khai rộng rãi: Nhóm đã gửi yêu cầu cấp quyền tiếp cận phục vụ môn học, đồng thời chuẩn bị sẵn pipeline thu thập và chuẩn hóa dữ liệu từ cổng VBPL theo đúng phương pháp luận chuẩn.
+\end{block}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{block}{\small Lộ trình triển khai}
+\footnotesize
+\begin{tabular}{@{}p{1.3cm}p{5.4cm}@{}}
+W2--3 & Dựng đồ thị Neo4j/Qdrant và khung đánh giá harness\\
+W4--6 & Hiện thực hóa 5 tác tử, MCP tools và Claim Auditor\\
+W7 & Cột mốc D2: demo 5 kịch bản, số liệu đo lường đầu tiên\\
+W8--10 & Hoàn thiện, chạy full 120 task $\times$ 3 seeds và 10 ca injection\\
+W11--12 & Đóng gói giải pháp (Docker/run.sh) và bảo vệ đồ án\\
+\end{tabular}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ===================== BACKUP: Q&A =====================
+\begin{frame}{Backup --- Lộ trình 10 tuần (Gantt) [chi tiết]}
+\centering
+\begin{tikzpicture}[x=1.05cm,y=0.72cm,font=\tiny,scale=0.9,transform shape]
+  \foreach \i in {0,...,11}{\draw[black!12] (\i,-0.1) -- (\i,4.7);}
+  \foreach \i/\w in {0/W2,1/W3,2/W4,3/W5,4/W6,5/W7,6/W8,7/W9,8/W10,9/W11,10/W12}{\node[text=black!55] at (\i+0.5,4.95) {\w};}
+  \draw[black!35] (0,-0.1) rectangle (11,4.7);
+  \fill[hcmutblue!65] (0,3.725) rectangle (2,4.275);
+  \node[anchor=east] at (-0.15,4.0) {Nền tảng: dựng đồ thị + harness};
+  \fill[hcmutblue!65] (2,2.825) rectangle (5,3.375);
+  \node[anchor=east] at (-0.15,3.1) {Xây dựng: 5 tác tử, MCP tools, Auditor};
+  \fill[red!45] (5,1.925) rectangle (6,2.475);
+  \node[anchor=east] at (-0.15,2.2) {Checkpoint D2 (demo 5 kịch bản)};
+  \fill[hcmutblue!65] (6,1.025) rectangle (9,1.575);
+  \node[anchor=east] at (-0.15,1.3) {Đánh giá: 120 task, 3 seeds, 10 ca injection};
+  \fill[hcmutblue!30] (9,0.125) rectangle (11,0.675);
+  \node[anchor=east] at (-0.15,0.4) {Đóng gói (Docker/run.sh) + bảo vệ};
+\end{tikzpicture}
+\vskip0.2cm
+{\scriptsize Mốc theo đề cương: D1 (W2) đã nộp $\cdot$ D2 checkpoint 25/10 (W7) $\cdot$ D3/D4 nộp 29/11, bảo vệ 2/12 (W12).}
+\end{frame}
+
+\begin{frame}{Backup --- 4 câu hỏi chất lượng đề tài}
+\footnotesize
+\begin{description}
+  \item[TÍNH MỚI] Khác biệt với các hệ thống Graph-RAG tĩnh (SBV-LawGraph, ViHERMES) ở 3 điểm: (1) Chính sách duyệt đồ thị chọn lọc linh hoạt theo ngữ cảnh do tác tử quyết định thay vì mở rộng 1-hop cố định; (2) Cơ chế xác minh hiệu lực văn bản thời gian thực; (3) Vòng lặp phản biện chéo (Claim Auditor) bảo đảm 100\% mệnh đề kết luận đều có căn cứ pháp lý.
+  \item[TÍNH PHI TẦM THƯỜNG] Thách thức cốt lõi nằm ở \textbf{chính sách duyệt đồ thị thích ứng} (lựa chọn cạnh, xác định điểm dừng tối ưu tránh bùng nổ ngữ cảnh). Đòi hỏi tích hợp đồ thị 5.221 nút, kết nối cổng xác thực VBPL và thực nghiệm nghiêm ngặt trên 120 tác vụ $\times$ 3 seeds.
+  \item[Ý NGHĨA KHOA HỌC \& THỰC TIỄN] Giải quyết trực tiếp bài toán tuân thủ pháp lý cho doanh nghiệp SME; trả lời câu hỏi nghiên cứu: \emph{Việc lập kế hoạch duyệt có trạng thái kết hợp phản biện chéo có giải quyết triệt để hiện tượng ảo giác (hallucination) so với Graph-RAG truyền thống hay không?}
+  \item[TÍNH KHẢ THI] Lộ trình 10 tuần phân bổ chặt chẽ với các mốc kiểm soát chất lượng cụ thể; chi phí đánh giá tối ưu ($\approx$ \$3.2 / \$25) nhờ tận dụng mô hình nguồn mở khi phát triển.
+\end{description}
+\end{frame}
+
+\begin{frame}{Backup --- Điểm khác biệt định vị với G3 \& G8}
+\footnotesize
+Cả ba nhóm cùng nghiên cứu mảng pháp luật, tuy nhiên G4 định vị khác biệt rõ rệt về \textbf{bài toán mục tiêu} và \textbf{4 cơ chế kiến trúc}:
+\vskip0.2cm
+\begin{enumerate}
+  \item \textbf{Định vị bài toán}: Không định hướng làm chatbot hỏi đáp tổng quát, mà tập trung vào \textbf{hệ thống cố vấn tuân thủ doanh nghiệp} (đầu ra là hồ sơ thẩm định/ma trận tuân thủ có đối soát dẫn chứng pháp lý).
+  \item \textbf{Xác minh hiệu lực thời gian thực (Temporal Verification)}: Tác tử chuyên trách tra cứu cổng \texttt{vbpl.vn} theo thời gian thực nhằm triệt tiêu hoàn toàn rủi ro viện dẫn luật đã hết hiệu lực.
+  \item \textbf{Vòng lặp đối soát căn cứ (Drafter--Auditor Loop)}: Phân định rạch ròi giữa tác tử soạn thảo và tác tử kiểm toán, cam đoan tính trung thực của từng tuyên bố (claim-level grounding).
+  \item \textbf{Cơ chế kiểm soát hành vi không thể đảo nghịch (Human Gate)}: Tác vụ nộp hồ sơ dịch vụ công bắt buộc có sự phê duyệt của chuyên viên, phòng ngừa rủi ro sai sót tự động.
+\end{enumerate}
+\vskip0.25cm
+{\scriptsize Nguyên tắc định vị: Tập trung vào giải pháp kiến trúc của nhóm, đối chiếu rõ ràng theo 3 trục \emph{Nhiệm vụ nghiệp vụ $\rightarrow$ Cơ chế cốt lõi $\rightarrow$ Phương pháp đánh giá thực nghiệm}.}
+\end{frame}
+
+\begin{frame}{Backup --- Thiết kế Memory \& Ngữ cảnh của từng tác tử [chi tiết]}
+\scriptsize
+\begin{tabular}{@{}p{2.5cm}p{4.6cm}p{4.4cm}@{}}
+\toprule
+Tác tử & Dữ liệu nhận vào & Kết quả trả về Shared State\\ \midrule
+Orchestrator & Yêu cầu tư vấn, hồ sơ doanh nghiệp (từ memory) \& tóm tắt từ các tác tử & Kế hoạch phân rã, điều phối tác vụ, điều kiện lặp, quyết định kết luận\\
+LawGraph Agent & Câu hỏi con phân rã & Mã điều/khoản, lộ trình đồ thị đã duyệt, tóm tắt bằng chứng 2--3 dòng\\
+Legal Update Agent & Danh sách số hiệu văn bản cần thẩm định & Trạng thái hiệu lực, ngày áp dụng / văn bản thay thế\\
+Compliance Drafter & Tóm tắt căn cứ hợp lệ, toàn văn điều luật đối soát, hồ sơ tham chiếu tương tự & Bản thảo hồ sơ tư vấn / ma trận tuân thủ\\
+Claim Auditor & Bản thảo hồ sơ \& các điều khoản pháp luật đối chứng & Kết luận kiểm định từng mệnh đề, danh sách điểm chưa đạt\\
+\bottomrule
+\end{tabular}
+\vskip0.15cm
+{\tiny \textbf{3 nguyên tắc kiểm soát cửa sổ ngữ cảnh:} (1) Các tác tử chỉ trao đổi \emph{kết quả cô đọng} (Mã điều khoản, kết luận 1--3 dòng), toàn văn văn bản được lưu giữ cục bộ tại tác tử truy xuất; (2) Mỗi tác vụ con khởi tạo một ngữ cảnh độc lập từ mô tả nhiệm vụ; (3) Thiết lập ngưỡng chặn trần cho không gian bằng chứng (top-$k=5$, độ sâu tối đa 2 hops, $\le 5$ văn bản) giúp chặn đứng nguy cơ bùng nổ ngữ cảnh. Claim Auditor vận hành ở chế độ không công cụ (toolless) để tập trung thuần túy vào đối soát văn bản.}
+\end{frame}
+
+\begin{frame}{Backup --- Đối chiếu yêu cầu R2--R6}
+\footnotesize
+\begin{tabular}{@{}p{1.0cm}p{4.4cm}p{7.2cm}@{}}
+\toprule
+Yêu cầu & Nội dung & Được đáp ứng ở đâu\\ \midrule
+R2 & Tools/MCP + phân quyền & 2 MCP server (Neo4j+Qdrant, VBPL); 6 tools, 3 mức quyền --- slide 5, proposal mục 3.2 và 6.2\\
+R4 & $\ge 3$ trục kỹ thuật & 4 trục: Multi-agent, Planning và selective traversal, Reflection, Guardrails --- slide 3, proposal mục 4\\
+R5 & Đánh giá định lượng & 120 task, 3 baseline, 4 ablation, 3 seeds, error analysis --- slide 6, proposal mục 7\\
+R6 & Security và safety & Threat model; 10 kịch bản kiểm thử injection (4 gián tiếp); least-privilege; audit log --- slide 7, proposal mục 8\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}[plain]
+\centering
+\vskip1.2cm
+{\Large\bfseries Cảm ơn thầy và các bạn}\\[0.6cm]
+{\large Nhóm G4}\\[0.2cm]
+{\small Đặng Lâm Tùng $\cdot$ Nguyễn Trung Phong $\cdot$ Vũ Việt Hùng}\\[0.8cm]
+\textcolor{hcmutblue}{\rule{0.5\linewidth}{0.8pt}}\\[0.4cm]
+{\footnotesize CO5151 -- Advanced Agentic AI $\cdot$ 16/9/2026}
+\end{frame}
+
+\end{document}

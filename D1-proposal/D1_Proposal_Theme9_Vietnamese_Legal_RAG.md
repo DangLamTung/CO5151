@@ -63,7 +63,7 @@ flowchart TD
 ### 3.2 Role-Segregated Agent Specialization
 1. **Orchestrator Agent (Supervisor)**: Evaluates user compliance inquiries against enterprise memory, executes the **retrieval-decision policy**, coordinates specialist agents via a shared LangGraph state, and controls iterative backtracking.
 2. **LawGraph Research Agent (Structural Retrieval Specialist)**: Executes targeted queries on Qdrant and Neo4j. Instead of mechanical 1-hop dumping, it performs **selective edge traversal**: following only the specific *Amend* or *Guide* relationship connected to the queried sub-clause, dramatically reducing context noise.
-3. **Live Legal Law Update Agent (Real-Time Status Specialist)**: Queries the National Database of Legal Documents (VBPL) to confirm current legal effectiveness, catching newly issued circulars or suspensions issued after the offline graph was indexed.
+3. **Legal Update Agent (Real-Time Status Specialist)**: Queries the National Database of Legal Documents (VBPL) to confirm current legal effectiveness, catching newly issued circulars or suspensions issued after the offline graph was indexed.
 4. **Claim Auditor Agent (Grounding Verifier - Critic)**: Decomposes candidate compliance guidance into atomic propositions and audits each claim against the retrieved statutory text. Refuses unverified claims before they reach the user.
 5. **Compliance Dossier Drafter (Synthesizer & Actor)**: Formats verified conclusions into standardized SME administrative and legal compliance matrices (Markdown/DOCX) and drafts administrative filing payloads.
 
@@ -73,8 +73,8 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | **LawGraph Agent** | `query_lawgraph` | **Read-only** | Executes targeted hybrid search over Qdrant vectors and filtered Neo4j subgraphs. |
 | **LawGraph Agent** | `trace_selective_edge` | **Read-only** | Follows specific *Amend* or *Guide* relationships for a designated legal clause. |
-| **Legal Law Update Agent** | `verify_vbpl_status` | **Read-only** | Queries the National Database of Legal Documents (VBPL) for official in-force status. |
-| **Legal Law Update Agent** | `search_Legal Law Update_portal`| **Read-only** | Searches ministerial portals for recent decrees and official guidance circulars. |
+| **Legal Update Agent** | `verify_vbpl_status` | **Read-only** | Queries the National Database of Legal Documents (VBPL) for official in-force status. |
+| **Legal Update Agent** | `search_Legal Law Update_portal`| **Read-only** | Searches ministerial portals for recent decrees and official guidance circulars. |
 | **Dossier Drafter** | `export_compliance_matrix`| **Reversible-write** | Saves structured audit matrices (Markdown/DOCX) to `./workspace/dossiers/`. |
 | **Dossier Drafter** | `submit_portal_filing` | **Irreversible-write** | Submits administrative filing payload to mock SBV portal. **Guarded by human confirmation.** |
 
@@ -91,7 +91,7 @@ flowchart TD
 
 1. **Typical (Chained Amendment Resolution for Foreign Currency Reserves)**:
    - *Scenario*: An HR manager at an SME asks: *"What are the qualification and document requirements to sponsor an internal transfer work permit for a foreign technical specialist in 2026?"*
-   - *Agent Execution*: The Orchestrator checks enterprise memory (confirming the firm's corporate structure and operational lines), directs the LegalGraph Agent to query Decree No. 152/2020/ND-CP, selectively follows the outgoing Amends edge to Decree No. 70/2023/ND-CP, and isolates the revised specialist criteria. The Legal Law Update Agent verifies via the VBPL portal that Decree 70 remains in active legal force. The Claim Auditor cross-checks the required years of verified experience against the statutory text. Finally, the Dossier Drafter synthesizes the procedural compliance checklist and document templates.
+   - *Agent Execution*: The Orchestrator checks enterprise memory (confirming the firm's corporate structure and operational lines), directs the LegalGraph Agent to query Decree No. 152/2020/ND-CP, selectively follows the outgoing Amends edge to Decree No. 70/2023/ND-CP, and isolates the revised specialist criteria. The Legal Update Agent verifies via the VBPL portal that Decree 70 remains in active legal force. The Claim Auditor cross-checks the required years of verified experience against the statutory text. Finally, the Dossier Drafter synthesizes the procedural compliance checklist and document templates.
 2. **Edge Case (Multi-Condition Scenario Audit with Missing Information)**:
    - *Scenario*: An SME business owner asks whether their company qualifies for statutory corporate income tax (CIT) reductions and tax deferrals under current SME support decrees.
    - *Agent Execution*: The Orchestrator retrieves the governing Decree and identifies three cumulative statutory requirements: (a) annual gross revenue below 200 billion VND, (b) average annual headcount participating in compulsory social insurance, and (c) not operating in excluded real estate or financial service sectors. The agent queries enterprise memory, confirms the revenue ceiling is satisfied, but identifies that headcount and business sector classification are unrecorded. Rather than fabricating assumptions, the agent halts the pipeline, prompts the user for the missing organizational data, and resumes the compliance assessment once verified.
@@ -166,8 +166,8 @@ The project therefore evaluates whether state-dependent planning and verificatio
 | **LawGraph Agent** | `search_legal_corpus` | Read-Only | Hybrid semantic search over indexed statutory provisions and articles. |
 | **LawGraph Agent** | `trace_law_references` | Read-Only | Traverses reference relations (amendments, decrees, guiding circulars). |
 | **LawGraph Agent** | `write_case_memory` | Reversible-Write | Writes retrieved subgraphs, case dependencies, and citation cache to memory. |
-| **Legal Law Update Agent** | `check_law_validity` | Read-Only | Verifies active legal status and effective dates on `vbpl.vn`. |
-| **Legal Law Update Agent** | `search_recent_updates`| Read-Only | Searches official gazettes for recent ministerial circulars and amendments. |
+| **Legal Update Agent** | `check_law_validity` | Read-Only | Verifies active legal status and effective dates on `vbpl.vn`. |
+| **Legal Update Agent** | `search_recent_updates`| Read-Only | Searches official gazettes for recent ministerial circulars and amendments. |
 | **Legal Reasoning Agent** | `generate_legal_report` | Reversible-Write | Exports formatted legal advisory report (Markdown / DOCX) to workspace. |
 | **User Approval Gate** | `submit_official_filing` | Irreversible-Write | Submits official administrative request. **Guarded by user confirmation.** |
 
@@ -191,7 +191,7 @@ lawgraph_agent = Agent(
     tools=[search_legal_corpus, trace_law_references, write_case_memory]
 )
 
-# 2. Legal Law Update Agent (Queries live official gazette for active status)
+# 2. Legal Update Agent (Queries live official gazette for active status)
 update_agent = Agent(
     name="legal_update_agent",
     model="gemini-2.5-flash",
