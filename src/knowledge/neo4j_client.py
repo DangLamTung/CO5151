@@ -189,7 +189,7 @@ class Neo4jClient:
             "source_url": source_url,
         }
         res = self.execute_query(query, params)
-        return res[0]["d"] if res else {}
+        return dict(res[0]["d"]) if res else {}
 
     def upsert_article(
         self,
@@ -219,7 +219,7 @@ class Neo4jClient:
             "content": content,
         }
         res = self.execute_query(query, params)
-        return res[0]["a"] if res else {}
+        return dict(res[0]["a"]) if res else {}
 
     def upsert_clause(
         self,
@@ -246,7 +246,7 @@ class Neo4jClient:
             "content": content,
         }
         res = self.execute_query(query, params)
-        return res[0]["c"] if res else {}
+        return dict(res[0]["c"]) if res else {}
 
     def create_relationship(
         self,
@@ -296,7 +296,7 @@ class Neo4jClient:
         res = self.execute_query(query, {"doc_id": doc_id})
         if not res:
             return None
-        doc_data = res[0]["d"]
+        doc_data: dict[str, Any] = dict(res[0]["d"])
         doc_data["articles"] = res[0]["articles"]
         return doc_data
 
@@ -326,8 +326,8 @@ class Neo4jClient:
         if not res:
             return []
         record = res[0]
-        amenders = [a for a in record.get("amenders", []) if a.get("doc_id")]
-        amended = [a for a in record.get("amended_docs", []) if a.get("doc_id")]
+        amenders = [dict(a) for a in record.get("amenders", []) if a.get("doc_id")]
+        amended = [dict(a) for a in record.get("amended_docs", []) if a.get("doc_id")]
         return amenders + amended
 
     def clear_database(self, confirm: bool = False) -> None:
