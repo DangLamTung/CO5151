@@ -51,7 +51,9 @@ class QdrantClientManager:
                 logger.info("Connected to Qdrant at %s:%s", self.host, self.port)
             except Exception as e:
                 logger.error("Failed to connect to Qdrant: %s", e)
-                raise KnowledgeBaseError(f"Failed to connect to Qdrant at {self.host}:{self.port}: {e}") from e
+                raise KnowledgeBaseError(
+                    f"Failed to connect to Qdrant at {self.host}:{self.port}: {e}"
+                ) from e
         return self._client
 
     def health_check(self) -> bool:
