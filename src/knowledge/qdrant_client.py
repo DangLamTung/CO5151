@@ -45,7 +45,7 @@ class QdrantClientManager:
                     host=self.host,
                     port=self.port,
                     api_key=self.api_key,
-                    timeout=10.0,
+                    timeout=10,
                     check_compatibility=False,
                 )
                 logger.info("Connected to Qdrant at %s:%s", self.host, self.port)
