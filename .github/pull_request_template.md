@@ -1,19 +1,18 @@
 ## Description
-<!-- Provide a brief explanation of the changes introduced in this PR. -->
+Provide a concise summary of the changes introduced in this pull request and the rationale behind them.
 
 ## Related Milestone / Issue
-<!-- Link related issue or milestone, e.g., Resolves #12, Milestone: W4-6 Core Build -->
 - Milestone: 
 - Issue: 
 
 ## Type of Change
-- [ ] 🚀 New feature (non-breaking change adding functionality)
-- [ ] 🐛 Bug fix (non-breaking change fixing an issue)
-- [ ] 🔒 Security / Threat Model enhancement
-- [ ] ⚡ Performance optimization
-- [ ] 🧪 Testing / Benchmarks (unit tests, ablation studies, evaluation runs)
-- [ ] 📝 Documentation update
-- [ ] 🛠️ DevOps / CI/CD / Infrastructure change
+- [ ] New feature (non-breaking change adding functionality)
+- [ ] Bug fix (non-breaking change resolving an issue)
+- [ ] Security / threat model improvement
+- [ ] Performance optimization
+- [ ] Testing / benchmark addition
+- [ ] Documentation update
+- [ ] Infrastructure / CI/CD change
 
 ## Architectural Component Affected
 - [ ] `src/core/` (Config, logging, exceptions)
@@ -22,20 +21,21 @@
 - [ ] `src/tools/` (MCP permission-tiered tools)
 - [ ] `src/agents/` (Orchestrator, LawGraph, Web Update, Drafter, Claim Auditor)
 - [ ] `src/security/` (Sanitizer, Guardrails, Human Token Gate)
-- [ ] `src/evaluation/` (Metrics, Ragas, Benchmark runners)
-- [ ] `src/ui/` (Streamlit Web dashboard, FastAPI endpoints)
+- [ ] `src/evaluation/` (Metrics, Ragas, benchmark runners)
+- [ ] `src/ui/` (Streamlit dashboard, FastAPI endpoints)
 
-## Verification & Testing
-<!-- Describe how you verified these changes. Include command outputs or test results. -->
-- [ ] Unit tests pass locally: `pytest tests/ -v`
-- [ ] Linter & formatter check pass: `ruff check src tests && ruff format --check src tests`
-- [ ] Type check passes: `mypy src tests`
+## Verification
+Describe how these changes were tested and verified.
+
+- [ ] Unit tests pass: `pytest tests/ -v`
+- [ ] Code formatting and linting pass: `ruff check src tests && ruff format --check src tests`
+- [ ] Type checks pass: `mypy src tests`
 - [ ] Threat Model v0 tests pass (if modifying input handling, DB, or tool execution)
-- [ ] Manual verification in Streamlit UI (if UI or agent flow changed)
+- [ ] Manual verification completed (if UI or agent workflow changed)
 
 ## Checklist
-- [ ] My code follows the project's codebase standards and PEP 8 guidelines.
-- [ ] I have commented my code, particularly in complex algorithmic sections (e.g. Cypher traversal, reflection loops).
-- [ ] I have added unit tests that prove my fix is effective or that my feature works.
-- [ ] New and existing unit tests pass locally with my changes.
-- [ ] Any dependent changes have been merged and published in downstream modules.
+- [ ] Code adheres to project coding standards and PEP 8 guidelines.
+- [ ] Complex logic (e.g. Cypher traversals, reflection loops) includes clear comments.
+- [ ] Tests covering new functionality or bug fixes have been added.
+- [ ] All tests pass locally.
+- [ ] Documentation has been updated accordingly.

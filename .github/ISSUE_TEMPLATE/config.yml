@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "CO5151 Project Discussions"
+  - name: "Project Discussions"
     url: "https://github.com/DangLamTung/CO5151/discussions"
-    about: "Thảo luận định hướng nghiên cứu, tài liệu tham khảo và thuật toán đồ án"
+    about: "Research directions, reference papers, and architecture discussions"

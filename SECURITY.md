@@ -1,26 +1,26 @@
-# Chính sách Bảo mật & Threat Model v0 — LegalPilot-VN
+# Security Policy & Threat Model v0 — LegalPilot-VN
 
-## 1. Phạm vi Bảo mật (Security Scope)
+## 1. Security Scope
 
-Hệ thống **LegalPilot-VN** được thiết kế nhằm phục vụ thẩm định tuân thủ pháp lý doanh nghiệp. Do tính chất nhạy cảm của các văn bản hành chính và dữ liệu doanh nghiệp, hệ thống áp dụng mô hình an toàn **Threat Model v0** (Yêu cầu R6 trong Đề cương D1).
+LegalPilot-VN assists corporate legal counsel and compliance officers with statutory assessment. Due to the sensitive nature of regulatory filings and corporate data, the system implements **Threat Model v0** (Requirement R6 from the D1 Proposal).
 
-### 10 Vector Tấn công Được Kiểm soát:
-1. **Zero-width / Hidden Font Injection**: Bóc tách triệt để các ký tự tàng hình và BOM (`[\u200B-\u200D\uFEFF]`) bằng `InputSanitizer`.
-2. **Loophole & Tax Evasion Solicitations**: Tự động từ chối và đính kèm cảnh báo pháp lý từ chối trách nhiệm.
-3. **False Statute Assertions**: Phát hiện khẳng định sai lệch của người dùng để kích hoạt tra cứu thời gian thực bắt buộc trên `vbpl.vn`.
-4. **System Prompt & Secret Extraction**: Ngăn chặn trích xuất system prompt, private keys và API credentials.
-5. **SQL Injection**: Áp dụng 100% Parameterized Queries trên SQLite và phát hiện chuỗi SQL độc hại.
-6. **Fictitious Statutes**: Phát hiện và gắn cờ các điều luật bịa đặt / không tồn tại.
-7. **Courtroom Litigation Defense**: Từ chối đại diện tranh tụng tại tòa án.
-8. **Unauthorized Administrative Filing Execution**: Rào chắn con người (**Human Confirmation Token Gate**) bắt buộc xác thực mã token một lần trước khi nộp hồ sơ.
-9. **Denial of Service (Token Bloat & Infinite Traversal)**: Giới hạn độ dài input ($\le 8,000$ ký tự), độ sâu duyệt đồ thị ($\le 2$ hops) và số lượng văn bản tối đa ($\le 5$).
-10. **Path Traversal**: Chặn các ký tự `../`, tuyệt đối hạn chế phạm vi ghi file trong thư mục `./workspace/dossiers/`.
+### Ten Threat Vectors Covered:
+1. **Zero-width / Hidden Font Injection**: Removes invisible characters and byte order marks (`[\u200B-\u200D\uFEFF]`) via `InputSanitizer`.
+2. **Loophole & Tax Evasion Solicitations**: Automatically refuses circumvention requests and attaches statutory disclaimers.
+3. **False Statute Assertions**: Detects user claims regarding repealed statutes to enforce mandatory live validation against official gazettes (`vbpl.vn`).
+4. **System Prompt & Secret Extraction**: Blocks attempts to reveal system instructions, environment variables, or API keys.
+5. **SQL Injection**: Enforces 100% parameterized queries on SQLite and detects malicious SQL syntax in inputs.
+6. **Fictitious Statutes**: Flags non-existent legal articles and potential model hallucinations.
+7. **Courtroom Litigation Defense**: Declines litigation representation requests with appropriate legal disclaimers.
+8. **Unauthorized Administrative Filing Execution**: Requires an explicit one-time confirmation token from a human compliance officer before executing irreversible actions.
+9. **Denial of Service (Token Bloat & Infinite Traversal)**: Imposes bounds on input length (≤ 8,000 characters), traversal depth (≤ 2 hops), and retrieved documents (≤ 5).
+10. **Path Traversal**: Strips directory traversal sequences (`../`) and strictly confines file export operations to `./workspace/dossiers/`.
 
 ---
 
-## 2. Quy trình Báo cáo Lỗ hổng (Reporting a Vulnerability)
+## 2. Reporting a Vulnerability
 
-Nếu bạn phát hiện lỗ hổng bảo mật hoặc vector tấn công vượt qua được tầng Guardrails hiện tại:
-1. **Không mở issue công khai** trên GitHub.
-2. Gửi thông tin chi tiết (payload kiểm thử, hành vi hệ thống, log) cho nhóm phát triển hoặc tạo bản draft Security Advisory trên GitHub repository.
-3. Nhóm phát triển sẽ xác minh, bổ sung quy tắc vào `configs/threat_model_rules.yaml` và phát hành bản vá trong vòng 48 giờ.
+If you identify a security vulnerability or a prompt injection vector that bypasses current guardrails:
+1. Do not open a public GitHub issue.
+2. Share the details (reproduction payload, observed behavior, logs) directly with the development team or open a draft Security Advisory on GitHub.
+3. The team will investigate, update `configs/threat_model_rules.yaml`, and deploy a mitigation promptly.

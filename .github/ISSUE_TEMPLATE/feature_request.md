@@ -1,18 +1,18 @@
 ---
-name: "🚀 Feature / Enhancement Request"
-about: "Đề xuất tính năng mới hoặc cải tiến cho hệ thống LegalPilot-VN"
+name: "Feature / Enhancement Request"
+about: "Suggest a new feature or improvement for LegalPilot-VN"
 title: "[FEAT] "
 labels: ["enhancement"]
 assignees: ""
 ---
 
-## Bối cảnh & Vấn đề cần giải quyết (Problem Statement)
-<!-- Mô tả vấn đề bạn đang gặp phải hoặc lý do cần có tính năng này -->
+## Problem Statement
+A clear description of the problem or opportunity for improvement.
 
-## Giải pháp đề xuất (Proposed Solution)
-<!-- Mô tả chi tiết tính năng hoặc cải tiến bạn muốn hiện thực -->
+## Proposed Solution
+A detailed explanation of the proposed feature or architectural enhancement.
 
-## Tác động kiến trúc (Architectural Impact)
+## Architectural Impact
 - [ ] Agent Orchestration (LangGraph / Google ADK)
 - [ ] Knowledge Layer (Neo4j / Qdrant / Selective Edge Traversal)
 - [ ] Tooling (MCP Permission Tiers)
@@ -20,5 +20,5 @@ assignees: ""
 - [ ] Security & Guardrails
 - [ ] Web UI / API
 
-## Phương án thay thế đã cân nhắc (Alternatives Considered)
-<!-- Có cách tiếp cận nào khác không? Tại sao chọn giải pháp này? -->
+## Alternatives Considered
+Describe any alternative approaches or designs you considered and why this approach was chosen.
