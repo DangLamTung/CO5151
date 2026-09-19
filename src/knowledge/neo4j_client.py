@@ -121,8 +121,7 @@ class Neo4jClient:
         indexes = [
             (
                 "document_status_idx",
-                "CREATE INDEX document_status_idx IF NOT EXISTS "
-                "FOR (d:Document) ON (d.status)",
+                "CREATE INDEX document_status_idx IF NOT EXISTS FOR (d:Document) ON (d.status)",
             ),
             (
                 "document_effective_date_idx",
@@ -131,8 +130,7 @@ class Neo4jClient:
             ),
             (
                 "document_doc_type_idx",
-                "CREATE INDEX document_doc_type_idx IF NOT EXISTS "
-                "FOR (d:Document) ON (d.doc_type)",
+                "CREATE INDEX document_doc_type_idx IF NOT EXISTS FOR (d:Document) ON (d.doc_type)",
             ),
             (
                 "article_article_number_idx",
@@ -267,7 +265,9 @@ class Neo4jClient:
         """
         valid_rels = {"AMENDS", "GUIDES", "SUPERSEDES", "REFERS_TO", "CONTAINS", "ISSUED_BY"}
         if rel_type not in valid_rels:
-            raise KnowledgeBaseError(f"Invalid relationship type '{rel_type}'. Allowed: {valid_rels}")
+            raise KnowledgeBaseError(
+                f"Invalid relationship type '{rel_type}'. Allowed: {valid_rels}"
+            )
 
         # Note: Cypher doesn't allow parameters for relationship types or labels directly
         props = properties or {}
