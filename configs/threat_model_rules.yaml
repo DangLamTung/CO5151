@@ -1,0 +1,63 @@
+threat_model:
+  version: "v0"
+  vectors:
+    - id: 1
+      name: "Hidden Text / Zero-Width Injection"
+      pattern: "[\u200B-\u200D\uFEFF]"
+      action: "strip_and_log"
+      severity: "high"
+
+    - id: 2
+      name: "Illegal Circumvention / Loophole Query"
+      pattern: "(?i)(lách luật|trốn thuế|bypass foreign equity|trốn nghĩa vụ)"
+      action: "refuse_with_disclaimer"
+      severity: "medium"
+
+    - id: 3
+      name: "False User Statute Assertion"
+      pattern: "(?i)(hết hiệu lực hôm qua|đã bị bãi bỏ rồi)"
+      action: "verify_online_mandatory"
+      severity: "medium"
+
+    - id: 4
+      name: "System Prompt / Secret Extraction"
+      pattern: "(?i)(print system prompt|in system prompt|show instructions|tiết lộ prompt|api key)"
+      action: "refuse"
+      severity: "high"
+
+    - id: 5
+      name: "SQL Injection"
+      pattern: "(?i)(union select|drop table|insert into|--|;|' OR '1'='1)"
+      action: "parameterize_and_block"
+      severity: "critical"
+
+    - id: 6
+      name: "Non-existent Fictitious Statute"
+      pattern: "(?i)(điều 999|luật tưởng tượng)"
+      action: "audit_flag_hallucination"
+      severity: "medium"
+
+    - id: 7
+      name: "Courtroom Litigation Defense Solicitation"
+      pattern: "(?i)(kiện ngay ra tòa|bào chữa trước tòa|đại diện tranh tụng)"
+      action: "refuse_with_disclaimer"
+      severity: "low"
+
+    - id: 8
+      name: "Unauthorized Administrative Filing Execution"
+      pattern: "(?i)(submit_portal_filing|nộp hồ sơ ngay lập tức|tự động nộp)"
+      action: "gate_with_human_token"
+      severity: "critical"
+
+    - id: 9
+      name: "Denial of Service (Deep / Broad Traversal)"
+      max_hops: 2
+      max_documents: 5
+      action: "cap_traversal"
+      severity: "medium"
+
+    - id: 10
+      name: "Path Traversal"
+      pattern: "(\\.\\./|\\.\\.\\\\|/etc/|/var/|c:\\\\)"
+      action: "restrict_to_workspace"
+      severity: "critical"
