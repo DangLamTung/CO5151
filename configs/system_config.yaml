@@ -1,0 +1,37 @@
+system:
+  app_name: "legalpilot-vn"
+  version: "0.1.0"
+  environment: "development"
+
+llm:
+  cloud_model: "gemini-2.5-flash"
+  local_model: "openai/llama3.2"
+  embedding_model: "text-embedding-004"
+  local_embedding_model: "nomic-embed-text"
+  temperature: 0.1
+  max_output_tokens: 2048
+
+agent_orchestration:
+  max_retry_loops: 3
+  enable_claim_auditor: true
+  enable_selective_traversal: true
+  enable_live_update: true
+  timeout_seconds: 15
+
+knowledge:
+  neo4j:
+    max_hops: 2
+    max_traversal_nodes: 10
+  qdrant:
+    top_k: 5
+    score_threshold: 0.65
+
+memory:
+  sqlite_db_path: "data/enterprise_compliance.db"
+  statute_cache_ttl_hours: 24
+
+security:
+  strip_zero_width_chars: true
+  max_input_length: 8000
+  allowed_export_dir: "./workspace/dossiers"
+  guarded_action_requires_token: true
