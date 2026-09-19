@@ -4,9 +4,9 @@ Supports both SQLite-backed persistence (for surviving Streamlit reruns and mult
 and in-memory storage for lightweight operations.
 """
 
-from typing import Any
 import secrets
 import time
+from typing import Any
 
 from src.core.exceptions import GateAuthorizationError
 from src.core.logger import logger
@@ -68,7 +68,9 @@ class HumanTokenGate:
             if not consumed:
                 raise GateAuthorizationError(f"Token {token} has already been consumed")
 
-            logger.info(f"Human Confirmation Token '{token}' verified and consumed for '{action_name}'.")
+            logger.info(
+                f"Human Confirmation Token '{token}' verified and consumed for '{action_name}'."
+            )
             return True
 
         # In-memory fallback
@@ -92,5 +94,7 @@ class HumanTokenGate:
 
         # Token is valid: consume it (one-time use)
         del self._pending_tokens[token]
-        logger.info(f"Human Confirmation Token '{token}' verified and consumed for '{action_name}'.")
+        logger.info(
+            f"Human Confirmation Token '{token}' verified and consumed for '{action_name}'."
+        )
         return True

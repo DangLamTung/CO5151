@@ -1,7 +1,9 @@
 """Tests for HumanTokenGate security mechanism."""
 
 import time
+
 import pytest
+
 from src.core.exceptions import GateAuthorizationError
 from src.security.token_gate import HumanTokenGate
 

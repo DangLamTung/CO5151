@@ -1,7 +1,9 @@
 """Pytest fixtures for LegalPilot-VN test suite."""
 
 from pathlib import Path
+
 import pytest
+
 from src.memory.sqlite_manager import SQLiteMemoryManager
 from src.security.sanitizer import InputSanitizer
 from src.security.token_gate import HumanTokenGate

@@ -4,4 +4,4 @@ from src.security.guardrails import SecurityGuardrails
 from src.security.sanitizer import InputSanitizer
 from src.security.token_gate import HumanTokenGate
 
-__all__ = ["InputSanitizer", "HumanTokenGate", "SecurityGuardrails"]
+__all__ = ["HumanTokenGate", "InputSanitizer", "SecurityGuardrails"]

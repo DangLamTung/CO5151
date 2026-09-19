@@ -2,7 +2,6 @@
 
 import logging
 import sys
-from typing import Any
 
 
 def setup_logger(name: str = "legalpilot", level: str = "INFO") -> logging.Logger:

@@ -6,8 +6,8 @@ Enforces:
 - Input length limits to prevent DoS token bloat.
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
 
 from src.core.exceptions import SecurityViolationError
 
@@ -24,7 +24,9 @@ class InputSanitizer:
         re.IGNORECASE,
     )
 
-    def __init__(self, max_input_length: int = 8000, allowed_export_dir: str = "./workspace/dossiers"):
+    def __init__(
+        self, max_input_length: int = 8000, allowed_export_dir: str = "./workspace/dossiers"
+    ):
         self.max_input_length = max_input_length
         self.allowed_export_dir = Path(allowed_export_dir).resolve()
         self.allowed_export_dir.mkdir(parents=True, exist_ok=True)

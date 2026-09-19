@@ -1,6 +1,7 @@
 """Tests for SQLiteMemoryManager and schema."""
 
 import time
+
 from src.memory.sqlite_manager import SQLiteMemoryManager
 from src.memory.state_models import AuditHistoryRecord, EnterpriseProfile, StatuteCacheEntry
 

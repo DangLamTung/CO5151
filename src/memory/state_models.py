@@ -1,7 +1,8 @@
 """State and memory models for LegalPilot-VN."""
 
-from datetime import datetime, timezone
-from typing import Any, Literal
+from datetime import UTC, datetime
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 
@@ -21,7 +22,7 @@ class EnterpriseProfile(BaseModel):
         default=0.0,
         description="Foreign equity ownership ratio from 0.0 to 1.0",
     )
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class AuditHistoryRecord(BaseModel):
@@ -34,7 +35,7 @@ class AuditHistoryRecord(BaseModel):
     auditor_score: float
     human_token: str | None = None
     approved_at: datetime | None = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class StatuteCacheEntry(BaseModel):
@@ -49,13 +50,13 @@ class StatuteCacheEntry(BaseModel):
         description="Status: 'active', 'expired', 'partially_expired', or 'not_in_force'",
     )
     raw_metadata: dict[str, Any] = Field(default_factory=dict)
-    cached_at: float = Field(default_factory=lambda: datetime.now(timezone.utc).timestamp())
+    cached_at: float = Field(default_factory=lambda: datetime.now(UTC).timestamp())
     ttl_seconds: int = 86400
 
     @property
     def is_expired(self) -> bool:
         """Checks if the cached entry has exceeded its TTL."""
-        elapsed = datetime.now(timezone.utc).timestamp() - self.cached_at
+        elapsed = datetime.now(UTC).timestamp() - self.cached_at
         return elapsed > self.ttl_seconds
 
 

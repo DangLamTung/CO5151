@@ -1,7 +1,9 @@
 """Tests for configuration loading and system settings."""
 
 from pathlib import Path
+
 import pytest
+
 from src.core.config import Settings, load_yaml_config
 from src.core.exceptions import ConfigurationError
 

@@ -28,11 +28,11 @@ jobs:
 
       - name: Run Ruff Linter
         run: |
-          ruff check .
+          ruff check src tests
 
       - name: Run Ruff Formatter Check
         run: |
-          ruff format --check .
+          ruff format --check src tests
 
       - name: Run Mypy Type Check
         run: |

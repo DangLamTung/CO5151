@@ -10,9 +10,10 @@ Evaluates user queries against the 10 threat vectors defined in configs/threat_m
 - Vector 8: Unauthorized administrative filing execution commands
 """
 
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import Any
+
 import yaml
 
 from src.core.exceptions import SecurityViolationError
@@ -37,7 +38,7 @@ class SecurityGuardrails:
         """Loads rules from YAML configuration or falls back to defaults."""
         if self.rules_config_path.exists():
             try:
-                with open(self.rules_config_path, "r", encoding="utf-8") as f:
+                with open(self.rules_config_path, encoding="utf-8") as f:
                     return yaml.safe_load(f) or {}
             except Exception as e:
                 logger.warning(f"Could not load threat rules from {self.rules_config_path}: {e}")

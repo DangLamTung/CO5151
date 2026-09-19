@@ -1,17 +1,18 @@
 """Tests for InputSanitizer security checks."""
 
 import pytest
+
 from src.core.exceptions import SecurityViolationError
 from src.security.sanitizer import InputSanitizer
 
 
 def test_strip_zero_width_characters(sanitizer: InputSanitizer):
     """Verify stripping of zero-width characters (Vector 1)."""
-    text_with_hidden = "Hợp đồng\u200B lao động\u200C hợp lệ\uFEFF."
+    text_with_hidden = "Hợp đồng\u200b lao động\u200c hợp lệ\ufeff."
     cleaned = sanitizer.sanitize_text(text_with_hidden)
     assert cleaned == "Hợp đồng lao động hợp lệ."
-    assert "\u200B" not in cleaned
-    assert "\uFEFF" not in cleaned
+    assert "\u200b" not in cleaned
+    assert "\ufeff" not in cleaned
 
 
 def test_redact_override_tags(sanitizer: InputSanitizer):

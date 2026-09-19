@@ -6,9 +6,10 @@ environment variable overrides.
 
 from pathlib import Path
 from typing import Any
+
+import yaml
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-import yaml
 
 from src.core.exceptions import ConfigurationError
 
@@ -19,7 +20,7 @@ def load_yaml_config(config_path: str | Path) -> dict[str, Any]:
     if not path.exists():
         raise ConfigurationError(f"Config file not found at: {path}")
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return yaml.safe_load(f) or {}
     except Exception as e:
         raise ConfigurationError(f"Failed to parse YAML config at {path}: {e}") from e
@@ -130,7 +131,9 @@ class Settings(BaseSettings):
                 if "llm" in data:
                     self.llm = LLMConfig(**data["llm"])
                 if "agent_orchestration" in data:
-                    self.agent_orchestration = AgentOrchestrationConfig(**data["agent_orchestration"])
+                    self.agent_orchestration = AgentOrchestrationConfig(
+                        **data["agent_orchestration"]
+                    )
                 if "knowledge" in data:
                     self.knowledge = KnowledgeConfig(**data["knowledge"])
                 if "memory" in data:

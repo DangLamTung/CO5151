@@ -1,6 +1,7 @@
 """Tests for SecurityGuardrails threat detection."""
 
 import pytest
+
 from src.core.exceptions import SecurityViolationError
 from src.security.guardrails import SecurityGuardrails
 

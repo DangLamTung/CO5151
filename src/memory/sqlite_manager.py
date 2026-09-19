@@ -6,9 +6,10 @@ Configured with WAL mode and parameterized queries for high concurrency and safe
 """
 
 import json
-from pathlib import Path
 import sqlite3
 import time
+from contextlib import contextmanager
+from pathlib import Path
 from typing import Any
 
 from src.core.logger import logger
@@ -23,7 +24,8 @@ class SQLiteMemoryManager:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self.init_tables()
 
-    def _get_connection(self) -> sqlite3.Connection:
+    @contextmanager
+    def _get_connection(self):
         """Creates a thread-safe connection with row_factory, WAL mode, and busy timeout."""
         conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         conn.row_factory = sqlite3.Row
@@ -31,7 +33,10 @@ class SQLiteMemoryManager:
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("PRAGMA synchronous=NORMAL;")
         conn.execute("PRAGMA foreign_keys=ON;")
-        return conn
+        try:
+            yield conn
+        finally:
+            conn.close()
 
     def init_tables(self) -> None:
         """Initializes tables for profile, audit history, statute cache, and pending tokens."""
@@ -125,9 +130,7 @@ class SQLiteMemoryManager:
         """Retrieves the most recently saved enterprise profile."""
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT * FROM enterprise_profile ORDER BY id DESC LIMIT 1"
-            )
+            cursor.execute("SELECT * FROM enterprise_profile ORDER BY id DESC LIMIT 1")
             row = cursor.fetchone()
             if not row:
                 return None
@@ -269,7 +272,7 @@ class SQLiteMemoryManager:
                 (token,),
             )
             conn.commit()
-            return cursor.rowcount > 0
+            return bool(cursor.rowcount > 0)
 
     # --------------------------------------------------------------------------
     # Audit History Methods
@@ -310,4 +313,4 @@ class SQLiteMemoryManager:
                 (human_token, session_id),
             )
             conn.commit()
-            return cursor.rowcount > 0
+            return bool(cursor.rowcount > 0)

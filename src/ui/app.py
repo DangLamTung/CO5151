@@ -39,5 +39,9 @@ with col1:
     submit_btn = st.button("🚀 Bắt đầu Thẩm định", type="primary", use_container_width=True)
 
 if submit_btn and query:
-    st.info("Hệ thống đang điều phối Multi-Agent (Orchestrator $\\rightarrow$ LawGraph $\\rightarrow$ VBPL $\\rightarrow$ Drafter $\\rightarrow$ Claim Auditor)...")
-    st.warning("⚠️ Foundation mode: Vui lòng khởi động các backend agent để thực hiện truy vấn hoàn chỉnh.")
+    st.info(
+        "Hệ thống đang điều phối Multi-Agent (Orchestrator $\\rightarrow$ LawGraph $\\rightarrow$ VBPL $\\rightarrow$ Drafter $\\rightarrow$ Claim Auditor)..."
+    )
+    st.warning(
+        "⚠️ Foundation mode: Vui lòng khởi động các backend agent để thực hiện truy vấn hoàn chỉnh."
+    )
