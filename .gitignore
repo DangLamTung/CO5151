@@ -90,3 +90,13 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Node & Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
