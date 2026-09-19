@@ -1,0 +1,57 @@
+name: Benchmark & Evaluation Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataset:
+        description: "Benchmark dataset file"
+        required: true
+        default: "data/benchmarks/sbv_100_qa.json"
+        type: string
+      seeds:
+        description: "Random seeds (space-separated)"
+        required: true
+        default: "42 123 999"
+        type: string
+      ablation_mode:
+        description: "Ablation configuration"
+        required: true
+        default: "full"
+        type: choice
+        options:
+          - "full"
+          - "no-auditor"
+          - "no-selective-traversal"
+          - "no-live-update"
+
+jobs:
+  run-evaluation:
+    name: Execute Benchmark Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run evaluation suite
+        run: |
+          mkdir -p reports/evaluation/
+          echo "[+] Running benchmark: dataset=${{ github.event.inputs.dataset }} ablation=${{ github.event.inputs.ablation_mode }} seeds=${{ github.event.inputs.seeds }}"
+          pytest tests/ -v --junitxml=reports/evaluation/test-results.xml
+
+      - name: Upload evaluation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.event.inputs.ablation_mode }}
+          path: reports/evaluation/
