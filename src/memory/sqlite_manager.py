@@ -1,12 +1,14 @@
 """SQLite Enterprise Memory Manager for LegalPilot-VN.
 
-Stores enterprise profile, audit history, and cached statute validities with TTL.
-All queries strictly use parameterized SQL to prevent SQL Injection.
+Stores enterprise profile, audit history, cached statute validities with TTL,
+and persistent confirmation tokens for human-in-the-loop actions.
+Configured with WAL mode and parameterized queries for high concurrency and safety.
 """
 
 import json
 from pathlib import Path
 import sqlite3
+import time
 from typing import Any
 
 from src.core.logger import logger
@@ -22,13 +24,17 @@ class SQLiteMemoryManager:
         self.init_tables()
 
     def _get_connection(self) -> sqlite3.Connection:
-        """Creates a thread-safe connection with row_factory set."""
-        conn = sqlite3.connect(str(self.db_path))
+        """Creates a thread-safe connection with row_factory, WAL mode, and busy timeout."""
+        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         conn.row_factory = sqlite3.Row
+        # Enable WAL mode and foreign keys for multi-agent concurrency
+        conn.execute("PRAGMA journal_mode=WAL;")
+        conn.execute("PRAGMA synchronous=NORMAL;")
+        conn.execute("PRAGMA foreign_keys=ON;")
         return conn
 
     def init_tables(self) -> None:
-        """Initializes tables for profile, audit history, and statute cache."""
+        """Initializes tables for profile, audit history, statute cache, and pending tokens."""
         with self._get_connection() as conn:
             cursor = conn.cursor()
 
@@ -73,6 +79,19 @@ class SQLiteMemoryManager:
                     ttl_seconds INTEGER DEFAULT 86400
                 );
             """)
+
+            # 4. Pending tokens table for guarded actions persistence
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS pending_tokens (
+                    token TEXT PRIMARY KEY,
+                    action_name TEXT NOT NULL,
+                    payload_summary TEXT NOT NULL,
+                    created_at REAL NOT NULL,
+                    expires_at REAL NOT NULL,
+                    is_consumed INTEGER DEFAULT 0
+                );
+            """)
+
             conn.commit()
             logger.debug(f"SQLite tables verified at {self.db_path}")
 
@@ -143,8 +162,6 @@ class SQLiteMemoryManager:
             if not row:
                 return None
 
-            import time
-
             elapsed_seconds = time.time() - float(row["cached_at"])
             if elapsed_seconds > row["ttl_seconds"]:
                 logger.info(f"Cache expired for statute {law_id}. Evicting...")
@@ -193,6 +210,66 @@ class SQLiteMemoryManager:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM statute_cache WHERE law_id = ?", (law_id,))
             conn.commit()
+
+    # --------------------------------------------------------------------------
+    # Pending Confirmation Tokens (Persistence for Guarded Actions)
+    # --------------------------------------------------------------------------
+    def save_pending_token(
+        self,
+        token: str,
+        action_name: str,
+        payload_summary: str,
+        created_at: float,
+        expires_at: float,
+    ) -> None:
+        """Saves a pending human confirmation token to SQLite."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT OR REPLACE INTO pending_tokens (
+                    token, action_name, payload_summary, created_at, expires_at, is_consumed
+                ) VALUES (?, ?, ?, ?, ?, 0)
+            """,
+                (token, action_name, payload_summary, created_at, expires_at),
+            )
+            conn.commit()
+
+    def get_valid_pending_token(self, token: str) -> dict[str, Any] | None:
+        """Retrieves token record if it exists, is not consumed, and has not expired."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT token, action_name, payload_summary, created_at, expires_at, is_consumed
+                FROM pending_tokens
+                WHERE token = ? AND is_consumed = 0
+            """,
+                (token,),
+            )
+            row = cursor.fetchone()
+            if not row:
+                return None
+
+            now = time.time()
+            if now > float(row["expires_at"]):
+                # Mark as expired / delete
+                cursor.execute("DELETE FROM pending_tokens WHERE token = ?", (token,))
+                conn.commit()
+                return None
+
+            return dict(row)
+
+    def consume_pending_token(self, token: str) -> bool:
+        """Marks a pending token as consumed."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE pending_tokens SET is_consumed = 1 WHERE token = ? AND is_consumed = 0",
+                (token,),
+            )
+            conn.commit()
+            return cursor.rowcount > 0
 
     # --------------------------------------------------------------------------
     # Audit History Methods

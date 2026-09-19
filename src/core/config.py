@@ -1,12 +1,72 @@
-"""System configuration module using Pydantic Settings and YAML."""
+"""System configuration module using Pydantic Settings and YAML.
+
+Provides strongly-typed hierarchical settings merging YAML definitions with
+environment variable overrides.
+"""
 
 from pathlib import Path
 from typing import Any
-import yaml
-from pydantic import Field
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import yaml
 
 from src.core.exceptions import ConfigurationError
+
+
+def load_yaml_config(config_path: str | Path) -> dict[str, Any]:
+    """Loads a YAML configuration file safely."""
+    path = Path(config_path)
+    if not path.exists():
+        raise ConfigurationError(f"Config file not found at: {path}")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f) or {}
+    except Exception as e:
+        raise ConfigurationError(f"Failed to parse YAML config at {path}: {e}") from e
+
+
+class LLMConfig(BaseModel):
+    cloud_model: str = "gemini-2.5-flash"
+    local_model: str = "openai/llama3.2"
+    embedding_model: str = "text-embedding-004"
+    local_embedding_model: str = "nomic-embed-text"
+    temperature: float = 0.1
+    max_output_tokens: int = 2048
+
+
+class AgentOrchestrationConfig(BaseModel):
+    max_retry_loops: int = 3
+    enable_claim_auditor: bool = True
+    enable_selective_traversal: bool = True
+    enable_live_update: bool = True
+    timeout_seconds: int = 15
+
+
+class Neo4jConfig(BaseModel):
+    max_hops: int = 2
+    max_traversal_nodes: int = 10
+
+
+class QdrantConfig(BaseModel):
+    top_k: int = 5
+    score_threshold: float = 0.65
+
+
+class KnowledgeConfig(BaseModel):
+    neo4j: Neo4jConfig = Field(default_factory=Neo4jConfig)
+    qdrant: QdrantConfig = Field(default_factory=QdrantConfig)
+
+
+class MemoryConfig(BaseModel):
+    sqlite_db_path: str = "data/enterprise_compliance.db"
+    statute_cache_ttl_hours: int = 24
+
+
+class SecurityConfig(BaseModel):
+    strip_zero_width_chars: bool = True
+    max_input_length: int = 8000
+    allowed_export_dir: str = "./workspace/dossiers"
+    guarded_action_requires_token: bool = True
 
 
 class Settings(BaseSettings):
@@ -53,17 +113,32 @@ class Settings(BaseSettings):
     HUMAN_GATE_REQUIRE_TOKEN: bool = True
     DOS_QUERY_TIMEOUT_SECONDS: int = 12
 
+    # Nested Typed Configs
+    llm: LLMConfig = Field(default_factory=LLMConfig)
+    agent_orchestration: AgentOrchestrationConfig = Field(default_factory=AgentOrchestrationConfig)
+    knowledge: KnowledgeConfig = Field(default_factory=KnowledgeConfig)
+    memory: MemoryConfig = Field(default_factory=MemoryConfig)
+    security: SecurityConfig = Field(default_factory=SecurityConfig)
 
-def load_yaml_config(config_path: str | Path) -> dict[str, Any]:
-    """Loads a YAML configuration file safely."""
-    path = Path(config_path)
-    if not path.exists():
-        raise ConfigurationError(f"Config file not found at: {path}")
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}
-    except Exception as e:
-        raise ConfigurationError(f"Failed to parse YAML config at {path}: {e}") from e
+    def __init__(self, **values: Any):
+        super().__init__(**values)
+        # Attempt to load and merge configs/system_config.yaml if present
+        yaml_path = Path("configs/system_config.yaml")
+        if yaml_path.exists():
+            try:
+                data = load_yaml_config(yaml_path)
+                if "llm" in data:
+                    self.llm = LLMConfig(**data["llm"])
+                if "agent_orchestration" in data:
+                    self.agent_orchestration = AgentOrchestrationConfig(**data["agent_orchestration"])
+                if "knowledge" in data:
+                    self.knowledge = KnowledgeConfig(**data["knowledge"])
+                if "memory" in data:
+                    self.memory = MemoryConfig(**data["memory"])
+                if "security" in data:
+                    self.security = SecurityConfig(**data["security"])
+            except Exception:
+                pass
 
 
 # Global settings instance
