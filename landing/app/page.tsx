@@ -19,6 +19,8 @@ import {
   IconSparkles,
 } from "@tabler/icons-react";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 selection:bg-emerald-950 selection:text-emerald-400">
@@ -130,7 +132,7 @@ export default function Home() {
                 </div>
                 <div className="relative aspect-video w-full bg-zinc-950">
                   <Image
-                    src="/images/hero-agent-trace.jpg"
+                    src={`${basePath}/images/hero-agent-trace.jpg`}
                     alt="Multi-agent legal compliance execution visualization"
                     fill
                     className="object-cover"
@@ -351,7 +353,7 @@ export default function Home() {
                 </div>
                 <div className="relative aspect-video w-full bg-zinc-950">
                   <Image
-                    src="/images/selective-traversal-graph.jpg"
+                    src={`${basePath}/images/selective-traversal-graph.jpg`}
                     alt="Legal knowledge graph showing AMENDS and GUIDES edges"
                     fill
                     className="object-cover"
